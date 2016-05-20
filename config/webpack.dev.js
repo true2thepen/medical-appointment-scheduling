@@ -14,7 +14,7 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 /**
  * Webpack Constants
  */
-const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || '0.0.0.0';
 const PORT = process.env.PORT || 8080;
 const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const HMR = helpers.hasProcessFlag('hot');
