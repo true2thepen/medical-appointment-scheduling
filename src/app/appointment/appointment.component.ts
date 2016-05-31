@@ -1,27 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CORE_DIRECTIVES } from '@angular/common';
-import { AppointmentService } from './appointment.service';
+import { Appointment } from '../api/model/Appointment';
+import { AppointmentApi } from '../api/api/AppointmentApi';
 
 @Component({
-    selector: 'my-item-component',
-    providers: [AppointmentService],
-    template: 'IT WORKS!',
-    directives: [CORE_DIRECTIVES]
+  selector: 'my-item-component',
+  providers: [AppointmentApi],
+  template:
+  `
+  IT WORKS!
+  <ul>
+    <li *ngFor="let appointment of appointments">
+      {{ appointment.title }}
+    </li>
+  </ul>
+  `,
+  directives: [CORE_DIRECTIVES]
 })
 
 export class MyItemComponent implements OnInit {
 
-    constructor(private appointmentService: AppointmentService) { }
+  private appointments: Appointment[];
 
-    ngOnInit() {
-        this.getAllItems();
-    }
+  constructor(private appointmentApi: AppointmentApi) { }
 
-    private getAllItems(): void {
-        this.appointmentService
-            .GetAll()
-            .subscribe((data:any[]) => console.log(data),
-                error => console.log(error),
-                () => console.log('Get all Items complete'));
-    }
+  ngOnInit() {
+    this.getAllItems();
+  }
+
+  private getAllItems(): void {
+    this.appointmentApi
+    .appointmentFind()
+    .subscribe(
+      x => this.appointments = x,
+      e => console.log(e),
+      () => console.log('Get all Items complete')
+    );
+  }
 }
