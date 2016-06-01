@@ -82,7 +82,11 @@
     "@angular/router-deprecated": "2.0.0-rc.1",
 
     "core-js": "^2.4.0",
+    "fullcalendar": "^2.7.2",
+    "jquery": "^2.2.4",
     "normalize.css": "^4.1.1",
+    "primeng": "^1.0.0-beta.8",
+    "primeui": "^4.1.12",
     "rxjs": "5.0.0-beta.6",
     "zone.js": "~0.6.12"
   },
