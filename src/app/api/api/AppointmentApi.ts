@@ -21,7 +21,7 @@ export class AppointmentApi {
 
     /**
      * Count instances of the model matched by where from the data source.
-     *
+     * 
      * @param where Criteria to match model instances
      */
     public appointmentCount (where?: string, extraHttpRequestParams?: any ) : Observable<models.InlineResponse200> {
@@ -45,7 +45,7 @@ export class AppointmentApi {
 
     /**
      * Create a new instance of the model and persist it into the data source.
-     *
+     * 
      * @param data Model instance data
      */
     public appointmentCreate (data?: models.Appointment, extraHttpRequestParams?: any ) : Observable<models.Appointment> {
@@ -66,8 +66,8 @@ export class AppointmentApi {
 
     /**
      * Create a change stream.
-     *
-     * @param options
+     * 
+     * @param options 
      */
     public appointmentCreateChangeStreamGetAppointmentsChangeStream (options?: string, extraHttpRequestParams?: any ) : Observable<any> {
         const path = this.basePath + '/appointments/change-stream';
@@ -90,8 +90,8 @@ export class AppointmentApi {
 
     /**
      * Create a change stream.
-     *
-     * @param options
+     * 
+     * @param options 
      */
     public appointmentCreateChangeStreamPostAppointmentsChangeStream (options?: string, extraHttpRequestParams?: any ) : Observable<any> {
         const path = this.basePath + '/appointments/change-stream';
@@ -117,7 +117,7 @@ export class AppointmentApi {
 
     /**
      * Delete a model instance by id from the data source.
-     *
+     * 
      * @param id Model id
      */
     public appointmentDeleteById (id: string, extraHttpRequestParams?: any ) : Observable<any> {
@@ -142,7 +142,7 @@ export class AppointmentApi {
 
     /**
      * Check whether a model instance exists in the data source.
-     *
+     * 
      * @param id Model id
      */
     public appointmentExistsGetAppointmentsidExists (id: string, extraHttpRequestParams?: any ) : Observable<models.InlineResponse2001> {
@@ -167,7 +167,7 @@ export class AppointmentApi {
 
     /**
      * Check whether a model instance exists in the data source.
-     *
+     * 
      * @param id Model id
      */
     public appointmentExistsHeadAppointmentsid (id: string, extraHttpRequestParams?: any ) : Observable<models.InlineResponse2001> {
@@ -192,7 +192,7 @@ export class AppointmentApi {
 
     /**
      * Find all instances of the model matched by filter from the data source.
-     *
+     * 
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public appointmentFind (filter?: string, extraHttpRequestParams?: any ) : Observable<Array<models.Appointment>> {
@@ -216,7 +216,7 @@ export class AppointmentApi {
 
     /**
      * Find a model instance by id from the data source.
-     *
+     * 
      * @param id Model id
      * @param filter Filter defining fields and include
      */
@@ -246,7 +246,7 @@ export class AppointmentApi {
 
     /**
      * Find first instance of the model matched by filter from the data source.
-     *
+     * 
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public appointmentFindOne (filter?: string, extraHttpRequestParams?: any ) : Observable<models.Appointment> {
@@ -270,7 +270,7 @@ export class AppointmentApi {
 
     /**
      * Update attributes for a model instance and persist it into the data source.
-     *
+     * 
      * @param id PersistedModel id
      * @param data An object of model property name/value pairs
      */
@@ -297,7 +297,7 @@ export class AppointmentApi {
 
     /**
      * Update instances of the model matched by where from the data source.
-     *
+     * 
      * @param where Criteria to match model instances
      * @param data An object of model property name/value pairs
      */
@@ -323,7 +323,7 @@ export class AppointmentApi {
 
     /**
      * Update an existing model instance or insert a new one into the data source.
-     *
+     * 
      * @param data Model instance data
      */
     public appointmentUpsert (data?: models.Appointment, extraHttpRequestParams?: any ) : Observable<models.Appointment> {

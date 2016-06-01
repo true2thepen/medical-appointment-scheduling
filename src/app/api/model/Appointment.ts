@@ -8,9 +8,9 @@ export interface Appointment {
 
     description?: string;
 
-    date?: Date;
+    start?: Date;
 
-    duration?: number;
+    end?: Date;
 
     id?: number;
 
@@ -18,7 +18,7 @@ export interface Appointment {
 
     modified?: Date;
 
-    createdBy?: Date;
+    createdBy?: number;
 
-    modifiedBy?: Date;
+    modifiedBy?: number;
 }
