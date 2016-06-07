@@ -9,7 +9,7 @@ import { Schedule } from 'primeng/primeng';
   providers: [AppointmentApi],
   template:
   `
-  IT WORKS!
+  <md-card x-large>IT WORKS!</md-card>
   <p-schedule [header]="header" [locale]="locale" [events]="appointments"></p-schedule>
   <ul>
   <li *ngFor="let appointment of appointments">

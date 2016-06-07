@@ -8,7 +8,6 @@ import { AppState } from './app.service';
 import { Home } from './home';
 import { RouterActive } from './router-active';
 import { MyItemComponent } from './appointment/appointment.component';
-
 /*
  * App Component
  * Top Level Component
@@ -17,24 +16,44 @@ import { MyItemComponent } from './appointment/appointment.component';
   selector: 'app',
   pipes: [ ],
   providers: [ ],
-  directives: [ RouterActive ],
+  directives: [RouterActive],
   encapsulation: ViewEncapsulation.None,
   styles: [
-    require('./app.css')
   ],
   template: `
+<md-sidenav-layout fullscreen>
+  <md-sidenav #sidenav>
+    <md-nav-list>
+      <a md-list-item *ngFor="let view of views">
+        <md-icon md-list-icon>{{view.icon}}</md-icon>
+        <span md-line>{{view.name}}</span>
+        <span md-line class="secondary">{{view.description}}</span>
+      </a>
+    </md-nav-list>
+  </md-sidenav>
+  <md-toolbar color="primary">
+    <button md-icon-button (click)="sidenav.open()">
+      <md-icon>menu</md-icon>
+    </button>
+    Medical Appointment Scheduling
+  </md-toolbar>
     <span router-active>
-      <button [routerLink]=" ['Index'] ">
+      <button md-raised-button [routerLink]=" ['Index'] ">
         Index
       </button>
     </span>
     <span router-active>
-      <button [routerLink]=" ['Home'] ">
+      <button md-raised-button [routerLink]=" ['Home'] ">
         Home
       </button>
     </span>
     <span router-active>
-      <button [routerLink]=" ['About'] ">
+      <button md-raised-button [routerLink]=" ['Appointments'] ">
+        Appointments
+      </button>
+    </span>
+    <span router-active>
+      <button md-raised-button [routerLink]=" ['About'] ">
         About
       </button>
     </span>
@@ -44,14 +63,15 @@ import { MyItemComponent } from './appointment/appointment.component';
     </main>
 
     <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
-  `
+</md-sidenav-layout>
+`
 })
 @RouteConfig([
   { path: '/',      name: 'Index', component: Home, useAsDefault: true },
   { path: '/home',  name: 'Home',  component: Home },
   // Async load a component using Webpack's require with es6-promise-loader and webpack `require`
   { path: '/about', name: 'About', loader: () => require('es6-promise!./about')('About') },
-  { path: '/appointment', 'name': 'Appointment', component: MyItemComponent }
+  { path: '/appointments', 'name': 'Appointments', component: MyItemComponent }
 ])
 export class App {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
