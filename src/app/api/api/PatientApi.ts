@@ -11,7 +11,10 @@ import 'rxjs/Rx';
 @Injectable()
 export class PatientApi {
     protected basePath = 'http://localhost:3000/api';
-    public defaultHeaders : Headers = new Headers();
+    public defaultHeaders : Headers = new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    });
 
     constructor(protected http: Http, @Optional() basePath: string) {
         if (basePath) {
