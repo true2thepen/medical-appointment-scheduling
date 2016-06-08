@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Validators } from '@angular/common';
 import { Appointment } from '../api/model/Appointment';
 import { AppointmentApi } from '../api/api/AppointmentApi';
+import * as moment from 'moment';
 
 @Component({
   selector: 'new-appointment-form',
@@ -12,27 +13,37 @@ import { AppointmentApi } from '../api/api/AppointmentApi';
 
 export class AppointmentForm {
   private newAppointmentForm: ControlGroup;
-  private newAppointment: Appointment = {title: 'Julia Berger', description: 'Nothing yet.', createdBy: 123, modifiedBy: 123};
 
   constructor(private fb: FormBuilder, private appointmentApi: AppointmentApi) {
     this.newAppointmentForm = fb.group({
       title: ['', Validators.required],
+      description: [''],
       date: ['', Validators.required],
       time: ['', Validators.required],
       duration: ['', Validators.required]
     });
   }
 
-  onSubmit(value: any) : void {
-    // Audit
-    this.newAppointment.created = new Date();
-    this.newAppointment.modified = new Date();
-    this.newAppointment.modifiedBy = 0;
-    this.newAppointment.createdBy = 0;
+  onSubmit(values: any) : void {
+    // Build object
+    let newAppointment: Appointment = {
+      title: values.title,
+      description: values.description,
+    };
+    let start: moment.Moment = moment(values.date + ' ' + values.time);
+    let end: moment.Moment = start.clone();
+    end.add(moment.duration(values.duration));
 
+    newAppointment.start = start.toDate();
+    newAppointment.end = end.toDate();
+    newAppointment.created = new Date();
+    newAppointment.modified = new Date();
+    newAppointment.modifiedBy = 0;
+    newAppointment.createdBy = 0;
+    moment.duration()
 
     this.appointmentApi
-    .appointmentCreate(this.newAppointment)
+    .appointmentCreate(newAppointment)
     .subscribe(
       function(x) { console.log('onNext: %o', x); },
       function(e) { console.log('onError: %o', e); },

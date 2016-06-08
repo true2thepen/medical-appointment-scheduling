@@ -5,10 +5,11 @@
     <md-card>
       <md-card-title>Create new appointment</md-card-title>
       <md-card-content>
-        <md-input [ngFormControl]="newAppointmentForm.controls['title']" [(ngModel)]="newAppointment.title" placeholder="Title"></md-input>
-        <md-input [ngFormControl]="newAppointmentForm.controls['date']" placeholder="Date"></md-input>
-        <md-input [ngFormControl]="newAppointmentForm.controls['time']" placeholder="Time"></md-input>
-        <md-input [ngFormControl]="newAppointmentForm.controls['duration']" placeholder="Duration"></md-input>
+        <md-input [ngFormControl]="newAppointmentForm.controls['title']" placeholder="Title" required="true"></md-input>
+        <md-input [ngFormControl]="newAppointmentForm.controls['description']" placeholder="Description"></md-input>
+        <md-input [ngFormControl]="newAppointmentForm.controls['date']" placeholder="Date" required="true"></md-input>
+        <md-input [ngFormControl]="newAppointmentForm.controls['time']" placeholder="Time" required="true"></md-input>
+        <md-input [ngFormControl]="newAppointmentForm.controls['duration']" placeholder="Duration" required="true"></md-input>
       </md-card-content>
       <md-card-actions align="end">
         <button md-raised-button type="submit" color="accent" [disabled]="!newAppointmentForm.valid">Save</button>
