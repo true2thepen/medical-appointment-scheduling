@@ -8,6 +8,7 @@ import { AppState } from './app.service';
 import { Home } from './home';
 import { RouterActive } from './router-active';
 import { MyItemComponent } from './appointment/appointment.component';
+import { AppointmentForm } from './appointment/new-appointment.component';
 /*
  * App Component
  * Top Level Component
@@ -71,7 +72,8 @@ import { MyItemComponent } from './appointment/appointment.component';
   { path: '/home',  name: 'Home',  component: Home },
   // Async load a component using Webpack's require with es6-promise-loader and webpack `require`
   { path: '/about', name: 'About', loader: () => require('es6-promise!./about')('About') },
-  { path: '/appointments', 'name': 'Appointments', component: MyItemComponent }
+  { path: '/appointments', name: 'Appointments', component: MyItemComponent },
+  { path: '/new-appointment', name: 'New Appointment', component: AppointmentForm }
 ])
 export class App {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
