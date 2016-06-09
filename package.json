@@ -1,14 +1,14 @@
 {
-  "name": "angular2-webpack-starter",
-  "version": "5.0.5",
-  "description": "An Angular 2 Webpack Starter kit featuring Angular 2 (Router, Http, Forms, Services, Tests, E2E, Coverage), Karma, Protractor, Jasmine, Istanbul, TypeScript, and Webpack by AngularClass",
+  "name": "medical-appointment-scheduling",
+  "version": "0.0.2",
+  "description": "Concept showcase for \"Design of a Web-Based Appointment Scheduling System for Small and Medium-Sized Medical Facilities\"",
   "keywords": [
-    "angular2",
-    "webpack",
-    "typescript"
+    "medical",
+    "appointment",
+    "scheduling"
   ],
-  "author": "Patrick Stapleton <patrick@angularclass.com>",
-  "homepage": "https://github.com/angularclass/angular2-webpack-starter",
+  "author": "Sebastian Haas <sebastian@haas.tech>",
+  "homepage": "https://github.com/sebastianhaas/medical-appointment-scheduling",
   "license": "MIT",
   "scripts": {
     "rimraf": "rimraf",
@@ -143,13 +143,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/angularclass/angular2-webpack-starter.git"
+    "url": "https://github.com/sebastianhaas/medical-appointment-scheduling.git"
   },
   "bugs": {
-    "url": "https://github.com/angularclass/angular2-webpack-starter/issues"
+    "url": "https://github.com/sebastianhaas/medical-appointment-scheduling.git/issues"
   },
   "engines": {
-    "node": ">= 4.2.1",
-    "npm": ">= 3"
+    "node": ">= 5.8.0",
+    "npm": ">= 3.9.5"
   }
 }
