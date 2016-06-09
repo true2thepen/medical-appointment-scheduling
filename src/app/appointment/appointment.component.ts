@@ -38,7 +38,7 @@ export class MyItemComponent implements OnInit {
     };
     this.locale = {
       lang: 'de'
-    }
+    };
   }
 
   private getAllItems(): void {

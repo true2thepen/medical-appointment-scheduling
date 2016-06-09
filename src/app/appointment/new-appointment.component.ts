@@ -24,11 +24,11 @@ export class AppointmentForm {
     });
   }
 
-  onSubmit(values: any) : void {
+  onSubmit(values: any): void {
     // Build object
     let newAppointment: Appointment = {
       title: values.title,
-      description: values.description,
+      description: values.description
     };
     let start: moment.Moment = moment(values.date + ' ' + values.time);
     let end: moment.Moment = start.clone();
@@ -40,7 +40,7 @@ export class AppointmentForm {
     newAppointment.modified = new Date();
     newAppointment.modifiedBy = 0;
     newAppointment.createdBy = 0;
-    moment.duration()
+    moment.duration();
 
     this.appointmentApi
     .appointmentCreate(newAppointment)
@@ -49,5 +49,5 @@ export class AppointmentForm {
       function(e) { console.log('onError: %o', e); },
       function() { console.log('onCompleted'); }
     );
-  }
+  };
 }

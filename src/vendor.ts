@@ -33,7 +33,7 @@ import 'rxjs/add/operator/mergeMap';
 // jQuery
 import 'jquery';
 import 'fullcalendar';
-import 'fullcalendar/dist/lang-all.js'
+import 'fullcalendar/dist/lang-all.js';
 
 if ('production' === ENV) {
   // Production
