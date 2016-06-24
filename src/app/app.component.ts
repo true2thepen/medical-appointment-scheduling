@@ -32,7 +32,7 @@ import { AppState } from './app.service';
     </button>
     Medical Appointment Scheduling
   </md-toolbar>
-  
+
     <nav>
       <span>
         <a [routerLink]=" ['./'] ">
