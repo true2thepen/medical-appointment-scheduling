@@ -5,7 +5,7 @@ import { AppointmentApi } from '../api/api/AppointmentApi';
 import { Schedule } from 'primeng/primeng';
 
 @Component({
-  selector: 'my-item-component',
+  selector: 'appointments',
   providers: [AppointmentApi],
   template:
   `
@@ -21,7 +21,7 @@ import { Schedule } from 'primeng/primeng';
   styles: []
 })
 
-export class MyItemComponent implements OnInit {
+export class Appointments implements OnInit {
 
   private appointments: Appointment[];
   private header: any;

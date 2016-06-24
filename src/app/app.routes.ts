@@ -6,6 +6,7 @@ export const routes: RouterConfig = [
   { path: '',      component: Home },
   { path: 'home',  component: Home },
   // make sure you match the component type string to the require in asyncRoutes
+  { path: 'appointments', component: 'Appointments' },
   { path: 'about', component: 'About' },
   { path: '**',    component: NoContent },
 ];
@@ -14,6 +15,7 @@ export const routes: RouterConfig = [
 // asyncRoutes is needed for our @angularclass/webpack-toolkit that will allow us to resolve
 // the component correctly
 export const asyncRoutes: AsyncRoutes = {
+  'Appointments': require('es6-promise-loader!./appointment'),
   'About': require('es6-promise-loader!./about')
 };
 
@@ -21,6 +23,7 @@ export const asyncRoutes: AsyncRoutes = {
 // Optimizations for initial loads
 // An array of callbacks to be invoked after bootstrap to prefetch async routes
 export const prefetchRouteCallbacks: Array<Es6PromiseLoader | Function> = [
+  asyncRoutes['Appointments'], // es6-promise-loader returns a function
   asyncRoutes['About'] // es6-promise-loader returns a function
 ];
 
