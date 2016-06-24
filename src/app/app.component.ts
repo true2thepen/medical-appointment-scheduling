@@ -2,24 +2,18 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
-import { RouteConfig, Router } from '@angular/router-deprecated';
 
 import { AppState } from './app.service';
-import { Home } from './home';
-import { RouterActive } from './router-active';
-import { MyItemComponent } from './appointment/appointment.component';
-import { AppointmentForm } from './appointment/new-appointment.component';
+
 /*
  * App Component
  * Top Level Component
  */
 @Component({
   selector: 'app',
-  pipes: [ ],
-  providers: [ ],
-  directives: [RouterActive],
   encapsulation: ViewEncapsulation.None,
-  styles: [
+  styleUrls: [
+    './app.style.css'
   ],
   template: `
 <md-sidenav-layout fullscreen>
@@ -38,26 +32,33 @@ import { AppointmentForm } from './appointment/new-appointment.component';
     </button>
     Medical Appointment Scheduling
   </md-toolbar>
-    <span router-active>
-      <button md-raised-button [routerLink]=" ['Index'] ">
-        Index
-      </button>
-    </span>
-    <span router-active>
-      <button md-raised-button [routerLink]=" ['Home'] ">
-        Home
-      </button>
-    </span>
-    <span router-active>
-      <button md-raised-button [routerLink]=" ['Appointments'] ">
-        Appointments
-      </button>
-    </span>
-    <span router-active>
-      <button md-raised-button [routerLink]=" ['About'] ">
-        About
-      </button>
-    </span>
+  
+    <nav>
+      <span>
+        <a [routerLink]=" ['./'] ">
+          Index
+        </a>
+      </span>
+      |
+      <span>
+        <a [routerLink]=" ['./home'] ">
+          Home
+        </a>
+      </span>
+      |
+      <span>
+        <a [routerLink]=" ['./appointments'] ">
+          Appointments
+        </a>
+      </span>
+      |
+      <span>
+        <a [routerLink]=" ['./about'] ">
+          About
+        </a>
+      </span>
+    </nav>
+
 
     <main>
       <router-outlet></router-outlet>
@@ -65,19 +66,11 @@ import { AppointmentForm } from './appointment/new-appointment.component';
 
     <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
 </md-sidenav-layout>
-`
+  `
 })
-@RouteConfig([
-  { path: '/',      name: 'Index', component: Home, useAsDefault: true },
-  { path: '/home',  name: 'Home',  component: Home },
-  // Async load a component using Webpack's require with es6-promise-loader and webpack `require`
-  { path: '/about', name: 'About', loader: () => require('es6-promise!./about')('About') },
-  { path: '/appointments', name: 'Appointments', component: MyItemComponent },
-  { path: '/new-appointment', name: 'New Appointment', component: AppointmentForm }
-])
+
 export class App {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
-  loading = false;
   name = 'Angular 2 Webpack Starter';
   url = 'https://twitter.com/AngularClass';
 
