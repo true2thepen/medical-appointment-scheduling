@@ -19,10 +19,18 @@ import { AppState } from './app.service';
 <md-sidenav-layout fullscreen>
   <md-sidenav #sidenav>
     <md-nav-list>
-      <a md-list-item *ngFor="let view of views">
-        <md-icon md-list-icon>{{view.icon}}</md-icon>
-        <span md-line>{{view.name}}</span>
-        <span md-line class="secondary">{{view.description}}</span>
+      <a [routerLink]="['./home']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>home</md-icon>
+        <span md-line>Home</span>
+        <!--<span md-line class="secondary">Take a look at your appointments</span>-->
+      </a>
+      <a [routerLink]="['./appointments']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_week</md-icon>
+        <span md-line>Appointments</span>
+      </a>
+      <a [routerLink]="['./about']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>help</md-icon>
+        <span md-line>Help</span>
       </a>
     </md-nav-list>
   </md-sidenav>
@@ -33,38 +41,11 @@ import { AppState } from './app.service';
     Medical Appointment Scheduling
   </md-toolbar>
 
-    <nav>
-      <span>
-        <a [routerLink]=" ['./'] ">
-          Index
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./home'] ">
-          Home
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./appointments'] ">
-          Appointments
-        </a>
-      </span>
-      |
-      <span>
-        <a [routerLink]=" ['./about'] ">
-          About
-        </a>
-      </span>
-    </nav>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
 
-
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-
-    <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
+  <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
 </md-sidenav-layout>
   `
 })
@@ -74,10 +55,7 @@ export class App {
   name = 'Angular 2 Webpack Starter';
   url = 'https://twitter.com/AngularClass';
 
-  constructor(
-    public appState: AppState) {
-
-  }
+  constructor(public appState: AppState) {}
 
   ngOnInit() {
     console.log('Initial App State', this.appState.state);
