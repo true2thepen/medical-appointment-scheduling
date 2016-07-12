@@ -82,7 +82,7 @@
     "@angular2-material/tabs": "2.0.0-alpha.5-2",
     "@angular2-material/toolbar": "2.0.0-alpha.5-2",
     "core-js": "^2.4.0",
-    "fullcalendar": "^2.7.2",
+    "fullcalendar": "^2.9.0",
     "jquery": "^3.0.0",
     "moment": "^2.13.0",
     "normalize.css": "^4.1.1",
