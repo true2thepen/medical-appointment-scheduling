@@ -40,7 +40,6 @@ import { AppState } from './app.service';
     </button>
     Medical Appointment Scheduling
   </md-toolbar>
-
   <main>
     <router-outlet></router-outlet>
   </main>
