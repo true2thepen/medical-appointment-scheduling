@@ -1,46 +1,42 @@
 import { Component } from '@angular/core';
-import { FORM_DIRECTIVES, FormBuilder, ControlGroup, Validators } from '@angular/common';
-import { Appointment } from '../api/model/Appointment';
-import { AppointmentApi } from '../api/api/AppointmentApi';
+import { NgForm } from '@angular/forms';
+import { Appointment, AppointmentApi } from '../api';
 import * as moment from 'moment';
 
 @Component({
   selector: 'new-appointment-form',
-  directives: [FORM_DIRECTIVES],
   providers: [AppointmentApi],
-  template: require('./new-appointment.html')
+  template: require('./new-appointment.html'),
+  styles: [ require('./new-appointment.style.scss') ]
 })
 
 export class AppointmentForm {
-  private newAppointmentForm: ControlGroup;
 
-  constructor(private fb: FormBuilder, private appointmentApi: AppointmentApi) {
-    this.newAppointmentForm = fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      date: ['', Validators.required],
-      time: ['', Validators.required],
-      duration: ['', Validators.required]
-    });
+  private model = {
+    title: undefined,
+    description: undefined,
+    date: undefined,
+    time: undefined,
+    duration: undefined
+  };
+
+  constructor(private appointmentApi: AppointmentApi) {
   }
 
-  onSubmit(values: any): void {
-    // Build object
-    let newAppointment: Appointment = {
-      title: values.title,
-      description: values.description
+  onSubmit(): void {
+    let newAppointment: Appointment  = {
+      title: this.model.title,
+      description: this.model.description,
+      modified: new Date(),
+      created: new Date(),
+      modifiedBy: 0,
+      createdBy: 0
     };
-    let start: moment.Moment = moment(values.date + ' ' + values.time);
+    let start: moment.Moment = moment(this.model.date + ' ' + this.model.time);
     let end: moment.Moment = start.clone();
-    end.add(moment.duration(values.duration));
-
+    end.add(moment.duration(this.model.duration));
     newAppointment.start = start.toDate();
     newAppointment.end = end.toDate();
-    newAppointment.created = new Date();
-    newAppointment.modified = new Date();
-    newAppointment.modifiedBy = 0;
-    newAppointment.createdBy = 0;
-    moment.duration();
 
     this.appointmentApi
     .appointmentCreate(newAppointment)

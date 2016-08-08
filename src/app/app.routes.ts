@@ -10,6 +10,7 @@ export const routes: RouterConfig = [
   { path: 'home',  component: Home },
   // make sure you match the component type string to the require in asyncRoutes
   { path: 'appointments', component: 'Appointments' },
+  { path: 'new-appointment', component: 'AppointmentForm' },
   { path: 'about', component: 'About',
     resolve: {
       'yourData': DataResolver
@@ -31,6 +32,7 @@ export const asyncRoutes: AsyncRoutes = {
   // we have to use the alternative syntax for es6-promise-loader to grab the routes
   'About': require('es6-promise-loader!./about'),
   'Appointments': require('es6-promise-loader!./appointment'),
+  'AppointmentForm': require('es6-promise-loader!./appointment'),
   'Detail': require('es6-promise-loader!./+detail'),
   'Index': require('es6-promise-loader!./+detail') // must be exported with detail/index.ts
 };
@@ -41,6 +43,7 @@ export const asyncRoutes: AsyncRoutes = {
 export const prefetchRouteCallbacks: Array<IdleCallbacks> = [
   asyncRoutes['About'],
   asyncRoutes['Appointments'],
+  asyncRoutes['AppointmentForm'],
   asyncRoutes['Detail']
   // es6-promise-loader returns a function
 ];

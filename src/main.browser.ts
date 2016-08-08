@@ -9,6 +9,8 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 import { PLATFORM_PROVIDERS } from './platform/browser';
 import { ENV_PROVIDERS, decorateComponentRef } from './platform/environment';
 
+/* Forms */
+import { disableDeprecatedForms, provideForms } from '@angular/forms';
 
 /*
 * App Component
@@ -23,6 +25,8 @@ import { App, APP_PROVIDERS } from './app';
 export function main(initialHmrState?: any): Promise<any> {
 
   return bootstrap(App, [
+    disableDeprecatedForms(),
+    provideForms(),
     // To add more vendor providers please look in the platform/ folder
     ...PLATFORM_PROVIDERS,
     ...ENV_PROVIDERS,
