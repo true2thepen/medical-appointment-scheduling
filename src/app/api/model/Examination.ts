@@ -1,16 +1,12 @@
 'use strict';
 import * as models from './models';
 
-export interface Appointment {
+export interface Examination {
     
 
-    title?: string;
+    name?: string;
 
-    description?: string;
-
-    start?: Date;
-
-    end?: Date;
+    duration?: number;
 
     id?: number;
 
@@ -21,8 +17,4 @@ export interface Appointment {
     createdBy?: number;
 
     modifiedBy?: number;
-
-    patientId?: number;
-
-    roomId?: number;
 }

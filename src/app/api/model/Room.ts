@@ -9,4 +9,12 @@ export interface Room {
     description?: string;
 
     id?: number;
+
+    created?: Date;
+
+    modified?: Date;
+
+    createdBy?: number;
+
+    modifiedBy?: number;
 }
