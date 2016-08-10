@@ -8,6 +8,9 @@
         <md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
         <md-input [(ngModel)]="model.time" placeholder="Time" required="true" name="time"></md-input>
         <md-input [(ngModel)]="model.duration" placeholder="Duration" required="true" name="duration"></md-input>
+        <select [(ngModel)]="model.room" required name="room">
+          <option *ngFor="let r of rooms" [value]="r?.id">{{r?.name}}</option>
+        </select>
       </md-card-content>
       <md-card-actions align="end">
         <button [disabled]="!appointmentForm.form.valid" md-raised-button type="submit" color="accent">Save</button>
