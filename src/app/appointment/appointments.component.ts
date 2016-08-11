@@ -45,6 +45,9 @@ import { Schedule } from 'primeng/primeng';
     {{ appointment.title }}
   </li>
 </ul>
+<button md-fab routerLink="/new-appointment">
+    <md-icon class="md-24">add</md-icon>
+</button>
   `,
   directives: [CORE_DIRECTIVES, Schedule],
   styles: [ require('./appointments.style.scss') ]
