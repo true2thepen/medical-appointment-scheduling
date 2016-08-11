@@ -26,7 +26,10 @@ export class AppointmentForm {
     patient: undefined
   };
 
-  constructor(private appointmentApi: AppointmentApi, private roomApi: RoomApi, private patientApi: PatientApi) {}
+  constructor(
+    private appointmentApi: AppointmentApi,
+    private roomApi: RoomApi,
+    private patientApi: PatientApi) {}
 
   ngOnInit(): void {
     this.getAllRooms();
