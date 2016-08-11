@@ -31,7 +31,7 @@ import { Schedule } from 'primeng/primeng';
           header="false"
           defaultView="agendaDay"
           [locale]="locale"
-          [events]="appointments"
+          [events]="appointmentsByRoom[room.id]"
           [height]="800">
           </p-schedule>
         </md-card-content>
@@ -53,6 +53,7 @@ import { Schedule } from 'primeng/primeng';
 export class Appointments implements OnInit {
 
   private appointments: Appointment[];
+  private appointmentsByRoom: Appointment[][] = [[]];
   private rooms: Room[];
   private header: any;
   private locale: any;
@@ -82,11 +83,26 @@ export class Appointments implements OnInit {
     );
   }
 
+  private getAppointmentsByRoom(room: Room): void {
+    this.appointmentApi
+    .appointmentFind(`{"where": {"roomId": "${room.id}"}}`)
+    .subscribe(
+      x => this.appointmentsByRoom[room.id] = x,
+      e => console.log(e),
+      () => console.log(`Get all appointments for room ${room.name} complete`)
+    );
+  }
+
   private getAllRooms(): void {
     this.roomApi
     .roomFind()
     .subscribe(
-      x => this.rooms = x,
+      x =>  {
+        this.rooms = x;
+        for (let room of x) {
+          this.getAppointmentsByRoom(room);
+        }
+      },
       e => console.log(e),
       () => console.log('Get all rooms complete')
     );
