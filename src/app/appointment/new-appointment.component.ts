@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AutoComplete } from 'primeng/primeng';
-import { Appointment, AppointmentApi, Room, RoomApi, Patient, PatientApi } from '../api';
+import { Appointment, AppointmentApi, Examination, ExaminationApi,
+  Room, RoomApi, Patient, PatientApi } from '../api';
 import * as moment from 'moment';
 
 @Component({
   directives: [AutoComplete],
   selector: 'new-appointment-form',
-  providers: [AppointmentApi, PatientApi, RoomApi],
+  providers: [AppointmentApi, ExaminationApi, PatientApi, RoomApi],
   template: require('./new-appointment.html'),
   styles: [ require('./new-appointment.style.scss') ]
 })
@@ -15,7 +16,8 @@ import * as moment from 'moment';
 export class AppointmentForm {
 
   private rooms: Room[] = undefined;
-  private patients: Patient[] = undefined;
+  private filteredPatients: Patient[] = undefined;
+  private filteredExaminations: Examination[] = undefined;
   private model = {
     title: undefined,
     description: undefined,
@@ -23,11 +25,13 @@ export class AppointmentForm {
     time: undefined,
     duration: undefined,
     room: undefined,
-    patient: undefined
+    patient: undefined,
+    examinations: undefined
   };
 
   constructor(
     private appointmentApi: AppointmentApi,
+    private examinationApi: ExaminationApi,
     private roomApi: RoomApi,
     private patientApi: PatientApi) {}
 
@@ -46,6 +50,7 @@ export class AppointmentForm {
       patientId: this.model.patient.id,
       roomId: this.model.room
     };
+    let examinations: Examination[] = this.model.examinations;
     let start: moment.Moment = moment(this.model.date + ' ' + this.model.time);
     let end: moment.Moment = start.clone();
     end.add(moment.duration(this.model.duration));
@@ -55,9 +60,25 @@ export class AppointmentForm {
     this.appointmentApi
     .appointmentCreate(newAppointment)
     .subscribe(
-      function(x) { console.log('onNext: %o', x); },
-      function(e) { console.log('onError: %o', e); },
-      function() { console.log('onCompleted'); }
+      x => {
+        console.log('onNext: %o', x);
+        for (let i = 0; i < examinations.length; ++i) {
+          this.linkExaminationWithAppointment(x, examinations[i]);
+        }
+      },
+      e => { console.log('onError: %o', e); },
+      () => { console.log('onCompleted'); }
+    );
+  }
+
+  private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
+    this.appointmentApi.appointmentPrototypeLinkExaminations(
+      examination.id.toString(),
+      appointment.id.toString())
+    .subscribe(
+      x => console.log(`Linked examination ${x.examinationId} with appointment ${x.appointmentId}`),
+      e => console.log(e),
+      () => console.log('Completed linking examination with appointment.')
     );
   }
 
@@ -75,9 +96,19 @@ export class AppointmentForm {
     this.patientApi
     .patientFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
-      x => this.patients = x,
+      x => this.filteredPatients = x,
       e => console.log(e),
       () => console.log('Completed querying for patients.')
+    );
+  }
+
+  private findExaminations(event) {
+    this.examinationApi
+    .examinationFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
+    .subscribe(
+      x => this.filteredExaminations = x,
+      e => console.log(e),
+      () => console.log('Completed querying for examinations.')
     );
   }
 }

@@ -3,7 +3,9 @@
     <md-card>
       <md-card-title>Create new appointment</md-card-title>
       <md-card-content>
-        <p-autoComplete [(ngModel)]="model.patient" [suggestions]="patients" (completeMethod)="findPatients($event)" field="name" placeholder="Patient" required="true" name="patient"></p-autoComplete>
+        <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="name" placeholder="Patient" required="true" name="patient"></p-autoComplete>
+        <p-autoComplete [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
+        </p-autoComplete>
         <md-input [(ngModel)]="model.title" placeholder="Title" required="true" name="title"></md-input>
         <md-input [(ngModel)]="model.description" placeholder="Description" name="description"></md-input>
         <md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
