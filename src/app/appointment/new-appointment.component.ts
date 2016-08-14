@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Location } from '@angular/common';
 import { AutoComplete } from 'primeng/primeng';
 import { Appointment, AppointmentApi, Examination, ExaminationApi,
   Room, RoomApi, Patient, PatientApi } from '../api';
@@ -30,6 +31,7 @@ export class AppointmentForm {
   };
 
   constructor(
+    private _location: Location,
     private appointmentApi: AppointmentApi,
     private examinationApi: ExaminationApi,
     private roomApi: RoomApi,
@@ -69,6 +71,8 @@ export class AppointmentForm {
       e => { console.log('onError: %o', e); },
       () => { console.log('onCompleted'); }
     );
+
+    this._location.back();
   }
 
   private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
