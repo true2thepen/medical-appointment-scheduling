@@ -1,21 +1,27 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
-import { AppState } from '../';
+import { AppState } from '../app.service';
 import { AutoComplete } from 'primeng/primeng';
-import { Appointment, AppointmentApi, Examination, ExaminationApi,
-  Room, RoomApi, Patient, PatientApi } from '../api';
+
+import { Appointment }                  from '../api/model/Appointment';
+import { AppointmentApi }               from '../api/api/AppointmentApi';
+import { Examination }                  from '../api/model/Examination';
+import { ExaminationApi }               from '../api/api/ExaminationApi';
+import { Patient }                      from '../api/model/Patient';
+import { PatientApi }                   from '../api/api/PatientApi';
+import { Room }                         from '../api/model/Room';
+import { RoomApi }                      from '../api/api/RoomApi';
+
 import * as moment from 'moment';
 
 @Component({
   directives: [AutoComplete],
-  selector: 'new-appointment-form',
-  providers: [AppointmentApi, ExaminationApi, PatientApi, RoomApi],
-  template: require('./new-appointment.html'),
-  styles: [ require('./new-appointment.style.scss') ]
+  template: require('./appointment-detail.html'),
+  styles: [ require('./appointment-detail.style.scss') ]
 })
 
-export class AppointmentForm {
+export class AppointmentDetailComponent {
 
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;

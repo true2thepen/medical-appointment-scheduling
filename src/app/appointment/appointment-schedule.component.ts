@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { CORE_DIRECTIVES } from '@angular/common';
-import { AppState } from '../';
-import { Appointment, Room } from '../api';
-import { AppointmentApi, RoomApi } from '../api';
+import { AppState } from '../app.service';
+
+import { Appointment }                  from '../api/model/Appointment';
+import { AppointmentApi }               from '../api/api/AppointmentApi';
+import { Room }                         from '../api/model/Room';
+import { RoomApi }                      from '../api/api/RoomApi';
+
 import { Schedule } from 'primeng/primeng';
 
 @Component({
-  selector: 'appointments',
-  providers: [AppointmentApi, RoomApi],
   template:
   `
 <md-tab-group>
@@ -50,11 +51,11 @@ import { Schedule } from 'primeng/primeng';
     <md-icon class="md-24">add</md-icon>
 </button>
   `,
-  directives: [CORE_DIRECTIVES, Schedule],
-  styles: [ require('./appointments.style.scss') ]
+  directives: [Schedule],
+  styles: [ require('./appointment-schedule.style.scss') ]
 })
 
-export class Appointments implements OnInit {
+export class AppointmentScheduleComponent implements OnInit {
 
   private appointments: Appointment[];
   private appointmentsByRoom: Appointment[][] = [[]];
