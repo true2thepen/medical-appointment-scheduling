@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
+import { AppState } from '../';
 import { AutoComplete } from 'primeng/primeng';
 import { Appointment, AppointmentApi, Examination, ExaminationApi,
   Room, RoomApi, Patient, PatientApi } from '../api';
@@ -32,12 +33,14 @@ export class AppointmentForm {
 
   constructor(
     private _location: Location,
+    private _state: AppState,
     private appointmentApi: AppointmentApi,
     private examinationApi: ExaminationApi,
     private roomApi: RoomApi,
     private patientApi: PatientApi) {}
 
   ngOnInit(): void {
+    this._state.title.next('Create new appointment');
     this.getAllRooms();
   }
 

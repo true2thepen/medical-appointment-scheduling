@@ -38,7 +38,7 @@ import { AppState } from './app.service';
     <button md-icon-button (click)="sidenav.open()">
       <md-icon>menu</md-icon>
     </button>
-    Medical Appointment Scheduling
+    {{title}}
   </md-toolbar>
   <main>
     <router-outlet></router-outlet>
@@ -53,10 +53,19 @@ export class App {
   angularclassLogo = 'assets/img/angularclass-avatar.png';
   name = 'Angular 2 Webpack Starter';
   url = 'https://twitter.com/AngularClass';
+  title = 'Medical Appointment Scheduling';
 
   constructor(public appState: AppState) {}
 
   ngOnInit() {
+    this.appState.title.subscribe(
+      title => this.title = title,
+      error => {
+        this.title = 'Medical Appointment Scheduling';
+        console.log('Error getting title for activated route.');
+      },
+      () => console.log('Finished retrieving titles for activated route.')
+    );
     console.log('Initial App State', this.appState.state);
   }
 

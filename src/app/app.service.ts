@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Rx';
 import { HmrState } from 'angular2-hmr';
 
 @Injectable()
@@ -6,9 +7,9 @@ export class AppState {
   // @HmrState() is used by HMR to track the state of any object during HMR (hot module replacement)
   @HmrState() _state = { };
 
-  constructor() {
+  public title: Subject<string> = new Subject<string>();
 
-  }
+  constructor() {}
 
   // already return a clone of the current state
   get state() {

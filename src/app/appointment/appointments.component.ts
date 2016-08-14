@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CORE_DIRECTIVES } from '@angular/common';
+import { AppState } from '../';
 import { Appointment, Room } from '../api';
 import { AppointmentApi, RoomApi } from '../api';
 import { Schedule } from 'primeng/primeng';
@@ -61,9 +62,13 @@ export class Appointments implements OnInit {
   private header: any;
   private locale: any;
 
-  constructor(private appointmentApi: AppointmentApi, private roomApi: RoomApi) { }
+  constructor(
+    private _state: AppState,
+    private appointmentApi: AppointmentApi,
+    private roomApi: RoomApi) {}
 
   ngOnInit() {
+    this._state.title.next('Appointments');
     this.getAllAppointments();
     this.getAllRooms();
     this.header = {
