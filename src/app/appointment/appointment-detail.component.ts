@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { AppState } from '../app.service';
 import { AutoComplete } from 'primeng/primeng';
 
-import { Appointment }                  from '../api/model/Appointment';
-import { AppointmentApi }               from '../api/api/AppointmentApi';
-import { Examination }                  from '../api/model/Examination';
-import { ExaminationApi }               from '../api/api/ExaminationApi';
-import { Patient }                      from '../api/model/Patient';
-import { PatientApi }                   from '../api/api/PatientApi';
-import { Room }                         from '../api/model/Room';
-import { RoomApi }                      from '../api/api/RoomApi';
+import { Appointment }           from '../api/model/appointment';
+import { AppointmentService }    from '../api/api/appointment.service';
+import { Examination }           from '../api/model/examination';
+import { ExaminationService }    from '../api/api/examination.service';
+import { Patient }               from '../api/model/patient';
+import { PatientService }        from '../api/api/patient.service';
+import { Room }                  from '../api/model/room';
+import { RoomService }           from '../api/api/room.service';
 
 import * as moment from 'moment';
 
@@ -38,12 +38,12 @@ export class AppointmentDetailComponent {
   };
 
   constructor(
-    private _location: Location,
     private _state: AppState,
-    private appointmentApi: AppointmentApi,
-    private examinationApi: ExaminationApi,
-    private roomApi: RoomApi,
-    private patientApi: PatientApi) {}
+    private router: Router,
+    private appointmentService: AppointmentService,
+    private examinationService: ExaminationService,
+    private roomService: RoomService,
+    private patientService: PatientService) {}
 
   ngOnInit(): void {
     this._state.title.next('Create new appointment');
@@ -68,7 +68,7 @@ export class AppointmentDetailComponent {
     newAppointment.start = start.toDate();
     newAppointment.end = end.toDate();
 
-    this.appointmentApi
+    this.appointmentService
     .appointmentCreate(newAppointment)
     .subscribe(
       x => {
@@ -80,12 +80,11 @@ export class AppointmentDetailComponent {
       e => { console.log('onError: %o', e); },
       () => { console.log('onCompleted'); }
     );
-
-    this._location.back();
+    this.router.navigateByUrl('appointment');
   }
 
   private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
-    this.appointmentApi.appointmentPrototypeLinkExaminations(
+    this.appointmentService.appointmentPrototypeLinkExaminations(
       examination.id.toString(),
       appointment.id.toString())
     .subscribe(
@@ -96,7 +95,7 @@ export class AppointmentDetailComponent {
   }
 
   private getAllRooms(): void {
-    this.roomApi
+    this.roomService
     .roomFind()
     .subscribe(
       x => this.rooms = x,
@@ -106,7 +105,7 @@ export class AppointmentDetailComponent {
   }
 
   private findPatients(event) {
-    this.patientApi
+    this.patientService
     .patientFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
       x => this.filteredPatients = x,
@@ -116,7 +115,7 @@ export class AppointmentDetailComponent {
   }
 
   private findExaminations(event) {
-    this.examinationApi
+    this.examinationService
     .examinationFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
       x => this.filteredExaminations = x,

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AppState } from '../app.service';
+import { Component, OnInit }  from '@angular/core';
+import { AppState }           from '../app.service';
 
-import { Appointment }                  from '../api/model/Appointment';
-import { AppointmentApi }               from '../api/api/AppointmentApi';
-import { Room }                         from '../api/model/Room';
-import { RoomApi }                      from '../api/api/RoomApi';
+import { Appointment }        from '../api/model/appointment';
+import { AppointmentService } from '../api/api/appointment.service';
+import { Room }               from '../api/model/room';
+import { RoomService }        from '../api/api/room.service';
 
 import { Schedule } from 'primeng/primeng';
 
@@ -47,8 +47,8 @@ import { Schedule } from 'primeng/primeng';
     {{ appointment.title }}
   </li>
 </ul>
-<button md-fab routerLink="/new-appointment">
-    <md-icon class="md-24">add</md-icon>
+<button md-fab routerLink="/appointment/add">
+    <md-icon>add</md-icon>
 </button>
   `,
   directives: [Schedule],
@@ -65,8 +65,8 @@ export class AppointmentScheduleComponent implements OnInit {
 
   constructor(
     private _state: AppState,
-    private appointmentApi: AppointmentApi,
-    private roomApi: RoomApi) {}
+    private appointmentService: AppointmentService,
+    private roomService: RoomService) {}
 
   ngOnInit() {
     this._state.title.next('Appointments');
@@ -83,7 +83,7 @@ export class AppointmentScheduleComponent implements OnInit {
   }
 
   private getAllAppointments(): void {
-    this.appointmentApi
+    this.appointmentService
     .appointmentFind()
     .subscribe(
       x => this.appointments = x,
@@ -93,7 +93,7 @@ export class AppointmentScheduleComponent implements OnInit {
   }
 
   private getAppointmentsByRoom(room: Room): void {
-    this.appointmentApi
+    this.appointmentService
     .appointmentFind(`{"where": {"roomId": "${room.id}"}}`)
     .subscribe(
       x => this.appointmentsByRoom[room.id] = x,
@@ -103,7 +103,7 @@ export class AppointmentScheduleComponent implements OnInit {
   }
 
   private getAllRooms(): void {
-    this.roomApi
+    this.roomService
     .roomFind()
     .subscribe(
       x =>  {
