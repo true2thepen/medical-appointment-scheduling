@@ -1,21 +1,27 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Location } from '@angular/common';
-import { AppState } from '../';
+import { Router } from '@angular/router';
+import { AppState } from '../app.service';
 import { AutoComplete } from 'primeng/primeng';
-import { Appointment, AppointmentApi, Examination, ExaminationApi,
-  Room, RoomApi, Patient, PatientApi } from '../api';
+
+import { Appointment }           from '../api/model/appointment';
+import { AppointmentService }    from '../api/api/appointment.service';
+import { Examination }           from '../api/model/examination';
+import { ExaminationService }    from '../api/api/examination.service';
+import { Patient }               from '../api/model/patient';
+import { PatientService }        from '../api/api/patient.service';
+import { Room }                  from '../api/model/room';
+import { RoomService }           from '../api/api/room.service';
+
 import * as moment from 'moment';
 
 @Component({
   directives: [AutoComplete],
-  selector: 'new-appointment-form',
-  providers: [AppointmentApi, ExaminationApi, PatientApi, RoomApi],
-  template: require('./new-appointment.html'),
-  styles: [ require('./new-appointment.style.scss') ]
+  template: require('./appointment-detail.html'),
+  styles: [ require('./appointment-detail.style.scss') ]
 })
 
-export class AppointmentForm {
+export class AppointmentDetailComponent {
 
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
@@ -32,12 +38,12 @@ export class AppointmentForm {
   };
 
   constructor(
-    private _location: Location,
     private _state: AppState,
-    private appointmentApi: AppointmentApi,
-    private examinationApi: ExaminationApi,
-    private roomApi: RoomApi,
-    private patientApi: PatientApi) {}
+    private router: Router,
+    private appointmentService: AppointmentService,
+    private examinationService: ExaminationService,
+    private roomService: RoomService,
+    private patientService: PatientService) {}
 
   ngOnInit(): void {
     this._state.title.next('Create new appointment');
@@ -62,7 +68,7 @@ export class AppointmentForm {
     newAppointment.start = start.toDate();
     newAppointment.end = end.toDate();
 
-    this.appointmentApi
+    this.appointmentService
     .appointmentCreate(newAppointment)
     .subscribe(
       x => {
@@ -74,12 +80,11 @@ export class AppointmentForm {
       e => { console.log('onError: %o', e); },
       () => { console.log('onCompleted'); }
     );
-
-    this._location.back();
+    this.router.navigateByUrl('appointment');
   }
 
   private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
-    this.appointmentApi.appointmentPrototypeLinkExaminations(
+    this.appointmentService.appointmentPrototypeLinkExaminations(
       examination.id.toString(),
       appointment.id.toString())
     .subscribe(
@@ -90,7 +95,7 @@ export class AppointmentForm {
   }
 
   private getAllRooms(): void {
-    this.roomApi
+    this.roomService
     .roomFind()
     .subscribe(
       x => this.rooms = x,
@@ -100,7 +105,7 @@ export class AppointmentForm {
   }
 
   private findPatients(event) {
-    this.patientApi
+    this.patientService
     .patientFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
       x => this.filteredPatients = x,
@@ -110,7 +115,7 @@ export class AppointmentForm {
   }
 
   private findExaminations(event) {
-    this.examinationApi
+    this.examinationService
     .examinationFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
       x => this.filteredExaminations = x,

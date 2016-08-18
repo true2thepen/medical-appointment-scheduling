@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CORE_DIRECTIVES } from '@angular/common';
-import { AppState } from '../';
-import { Appointment, Room } from '../api';
-import { AppointmentApi, RoomApi } from '../api';
+import { Component, OnInit }  from '@angular/core';
+import { AppState }           from '../app.service';
+
+import { Appointment }        from '../api/model/appointment';
+import { AppointmentService } from '../api/api/appointment.service';
+import { Room }               from '../api/model/room';
+import { RoomService }        from '../api/api/room.service';
+
 import { Schedule } from 'primeng/primeng';
 
 @Component({
-  selector: 'appointments',
-  providers: [AppointmentApi, RoomApi],
   template:
   `
 <md-tab-group>
@@ -46,15 +47,15 @@ import { Schedule } from 'primeng/primeng';
     {{ appointment.title }}
   </li>
 </ul>
-<button md-fab routerLink="/new-appointment">
-    <md-icon class="md-24">add</md-icon>
+<button md-fab routerLink="/appointment/add">
+    <md-icon>add</md-icon>
 </button>
   `,
-  directives: [CORE_DIRECTIVES, Schedule],
-  styles: [ require('./appointments.style.scss') ]
+  directives: [Schedule],
+  styles: [ require('./appointment-schedule.style.scss') ]
 })
 
-export class Appointments implements OnInit {
+export class AppointmentScheduleComponent implements OnInit {
 
   private appointments: Appointment[];
   private appointmentsByRoom: Appointment[][] = [[]];
@@ -64,8 +65,8 @@ export class Appointments implements OnInit {
 
   constructor(
     private _state: AppState,
-    private appointmentApi: AppointmentApi,
-    private roomApi: RoomApi) {}
+    private appointmentService: AppointmentService,
+    private roomService: RoomService) {}
 
   ngOnInit() {
     this._state.title.next('Appointments');
@@ -82,7 +83,7 @@ export class Appointments implements OnInit {
   }
 
   private getAllAppointments(): void {
-    this.appointmentApi
+    this.appointmentService
     .appointmentFind()
     .subscribe(
       x => this.appointments = x,
@@ -92,7 +93,7 @@ export class Appointments implements OnInit {
   }
 
   private getAppointmentsByRoom(room: Room): void {
-    this.appointmentApi
+    this.appointmentService
     .appointmentFind(`{"where": {"roomId": "${room.id}"}}`)
     .subscribe(
       x => this.appointmentsByRoom[room.id] = x,
@@ -102,7 +103,7 @@ export class Appointments implements OnInit {
   }
 
   private getAllRooms(): void {
-    this.roomApi
+    this.roomService
     .roomFind()
     .subscribe(
       x =>  {

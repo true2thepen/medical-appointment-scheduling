@@ -1,30 +1,31 @@
+import { addProviders, async, inject } from '@angular/core/testing';
+import { TestBed }                     from '@angular/core/testing/test_bed';
+import { Component }                   from '@angular/core';
 import {
-  beforeEachProviders,
-  inject,
-  it
-} from '@angular/core/testing';
-import { TestComponentBuilder } from '@angular/compiler/testing';
-import { Component } from '@angular/core';
-import { BaseRequestOptions, Http } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+  HttpModule,
+  XHRBackend,
+  ResponseOptions,
+  Response }                           from '@angular/http';
+import { MockBackend, MockConnection } from '@angular/http/testing/mock_backend';
 
-import { Title } from './title.service';
+import { Title }                       from './title.service';
 
-describe('Title', () => {
-  beforeEachProviders(() => [
-    BaseRequestOptions,
-    MockBackend,
-    {
-      provide: Http,
-      useFactory: function(backend, defaultOptions) {
-        return new Http(backend, defaultOptions);
-      },
-      deps: [MockBackend, BaseRequestOptions]
-    },
+describe('Title service', () => {
 
-    Title
-  ]);
+  let fixture;
 
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpModule],
+      providers: [
+        {
+          provide: XHRBackend,
+          useClass: MockBackend
+        },
+        Title
+      ]
+    });
+  });
 
   it('should have http', inject([ Title ], (title) => {
     expect(!!title.http).toEqual(true);

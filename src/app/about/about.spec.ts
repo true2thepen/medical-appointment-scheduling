@@ -1,30 +1,24 @@
-import { TestComponentBuilder } from '@angular/compiler/testing';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  beforeEachProviders,
-  describe,
-  inject,
-  it
-} from '@angular/core/testing';
+import { addProviders, inject } from '@angular/core/testing';
 
-// Load the implementations that should be tested
 import { About } from './about.component';
 
 describe('About', () => {
-  // provide our implementations or mocks to the dependency injector
-  beforeEachProviders(() => [
-    // provide a better mock
-    {
-      provide: ActivatedRoute,
-      useValue: {
-        data: {
-          subscribe: (fn) => fn({yourData: 'yolo'})
+
+  beforeEach(() => {
+    addProviders([
+      {
+        provide: ActivatedRoute,
+        useValue: {
+          data: {
+            subscribe: (fn) => fn({yourData: 'yolo'})
+          }
         }
-      }
-    },
-    About
-  ]);
+      },
+      About
+    ]);
+  });
 
   it('should log ngOnInit', inject([ About ], (about) => {
     spyOn(console, 'log');
