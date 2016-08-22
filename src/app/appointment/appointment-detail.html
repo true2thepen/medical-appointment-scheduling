@@ -1,5 +1,6 @@
 <div class="form">
-  <form (ngSubmit)="onSubmit()" #appointmentForm="ngForm" class="ui form">
+
+  <form (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
     <md-card>
       <md-card-title>Create new appointment</md-card-title>
       <md-card-content>
@@ -20,4 +21,20 @@
       </md-card-actions>
     </md-card>
   </form>
+
+  <form (ngSubmit)="applySuggestion()" class="ui form">
+    <md-card *ngIf="proposedTimeSlot?.success">
+      <md-card-title>Suggestion</md-card-title>
+      <md-card-content>
+        {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'fullDate'}}
+        {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'shortTime'}}
+        {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].duration}} Minutes
+        {{getRoomNameById(proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0])}}
+      </md-card-content>
+      <md-card-actions align="end">
+        <button md-raised-button type="submit" color="accent">Apply suggestion</button>
+      </md-card-actions>
+    </md-card>
+  </form>
+
 </div>

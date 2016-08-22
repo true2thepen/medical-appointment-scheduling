@@ -26,6 +26,7 @@ export class AppointmentDetailComponent {
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
+  private proposedTimeSlot: any = {};
   private model = {
     title: undefined,
     description: undefined,
@@ -122,5 +123,49 @@ export class AppointmentDetailComponent {
       e => console.log(e),
       () => console.log('Completed querying for examinations.')
     );
+  }
+
+  private findTime(duration?: string, examinationId?: number, roomId?: number) {
+    console.log('Querying for the next free time slot.');
+    this.appointmentService
+    .appointmentFindTime(
+      duration ? duration : 'PT40M', // TODO move to server and replace by configurable default
+      examinationId,
+      roomId)
+    .subscribe(
+      x => this.proposedTimeSlot = x,
+      e => console.log(e),
+      () => console.log('Completed querying for the next free time slot.')
+    );
+  }
+
+  private onFormChange() {
+     // Every time the form changes, use latest information to find a suitable date
+    if(this.model.duration) {
+      this.findTime(
+        this.model.duration,
+        this.model.examinations ? this.model.examinations[0].id : undefined,
+        this.model.room
+      );
+    }
+  }
+
+  private getRoomNameById(roomId: number) {
+    for (var i=0; i < this.rooms.length; i++) {
+      if (this.rooms[i].id === roomId) {
+        return this.rooms[i].name;
+      }
+    }
+  }
+
+  private applySuggestion() {
+    if(this.proposedTimeSlot) {
+      this.model.duration = `PT${this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].duration}M`;
+      let startDate = moment(this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start);
+      this.model.date = startDate.format('Y-MM-DD');
+      this.model.time = startDate.format('HH:mm');
+      this.model.room = this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0];
+      this.proposedTimeSlot = undefined;
+    }
   }
 }
