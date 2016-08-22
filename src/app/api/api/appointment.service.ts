@@ -551,6 +551,69 @@ export class AppointmentService {
     }
 
     /**
+     * Finds free slots for an appointment with the specified duration.
+     * 
+     * @param duration 
+     * @param examinationId 
+     * @param roomId 
+     */
+    public appointmentFindTime(duration: string, examinationId?: number, roomId?: number, extraHttpRequestParams?: any): Observable<any> {
+        const path = this.basePath + `/appointments/findTime`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'duration' is not null or undefined
+        if (duration === null || duration === undefined) {
+            throw new Error('Required parameter duration was null or undefined when calling appointmentFindTime.');
+        }
+        if (duration !== undefined) {
+            queryParameters.set('duration', String(duration));
+        }
+
+        if (examinationId !== undefined) {
+            queryParameters.set('examinationId', String(examinationId));
+        }
+
+        if (roomId !== undefined) {
+            queryParameters.set('roomId', String(roomId));
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
      * Counts examinations of Appointment.
      * 
      * @param id PersistedModel id

@@ -141,7 +141,7 @@ export class AppointmentDetailComponent {
 
   private onFormChange() {
      // Every time the form changes, use latest information to find a suitable date
-    if(this.model.duration) {
+    if (this.model.duration) {
       this.findTime(
         this.model.duration,
         this.model.examinations ? this.model.examinations[0].id : undefined,
@@ -151,7 +151,7 @@ export class AppointmentDetailComponent {
   }
 
   private getRoomNameById(roomId: number) {
-    for (var i=0; i < this.rooms.length; i++) {
+    for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i].id === roomId) {
         return this.rooms[i].name;
       }
@@ -159,12 +159,16 @@ export class AppointmentDetailComponent {
   }
 
   private applySuggestion() {
-    if(this.proposedTimeSlot) {
-      this.model.duration = `PT${this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].duration}M`;
-      let startDate = moment(this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start);
+    if (this.proposedTimeSlot) {
+      let suggestedTimeSlot = this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0];
+      let startDate = moment(suggestedTimeSlot.start);
+
+      this.model.duration = `PT${suggestedTimeSlot.duration}M`;
       this.model.date = startDate.format('Y-MM-DD');
       this.model.time = startDate.format('HH:mm');
-      this.model.room = this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0];
+      this.model.room = suggestedTimeSlot.resources[0];
+
+      // Clear suggestion after it has been applied
       this.proposedTimeSlot = undefined;
     }
   }
