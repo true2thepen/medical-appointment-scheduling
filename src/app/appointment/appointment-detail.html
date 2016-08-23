@@ -3,17 +3,19 @@
   <div *ngIf="!editing">
     <h2>{{model.title}}</h2>
     <p>{{model.patient?.name}}</p>
-    <p>{{model.room}}</p>
+    <p>{{model.roomId}}</p>
     <p>{{model.time}}</p>
     <p>{{model.date}}</p>
     <p>{{model.duration}}</p>
     <p *ngFor="let e of model.examinations">{{e.name}}</p>
     <p>{{model.description}}</p>
+    <button md-icon-button (click)="handleEditClick()">
+      <md-icon class="md-24">edit</md-icon>
+    </button>
   </div>
 
   <form *ngIf="editing" (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
     <md-card>
-      <md-card-title>Create new appointment</md-card-title>
       <md-card-content>
         <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="name" placeholder="Patient" required="true" name="patient"></p-autoComplete>
         <p-autoComplete [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
@@ -23,7 +25,7 @@
         <md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
         <md-input [(ngModel)]="model.time" placeholder="Time" required="true" name="time"></md-input>
         <md-input [(ngModel)]="model.duration" placeholder="Duration" required="true" name="duration"></md-input>
-        <select [(ngModel)]="model.room" required name="room">
+        <select [(ngModel)]="model.roomId" required name="room">
           <option *ngFor="let r of rooms" [value]="r?.id">{{r?.name}}</option>
         </select>
       </md-card-content>
@@ -43,7 +45,7 @@
         {{getRoomNameById(proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0])}}
       </md-card-content>
       <md-card-actions align="end">
-        <button md-raised-button type="submit" color="accent">Apply suggestion</button>
+        <button md-button type="submit" color="accent">Apply suggestion</button>
       </md-card-actions>
     </md-card>
   </form>

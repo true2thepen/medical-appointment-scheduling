@@ -7,7 +7,16 @@ export class AppState {
   // @HmrState() is used by HMR to track the state of any object during HMR (hot module replacement)
   @HmrState() _state = { };
 
+  /**
+   * The title to be displayed.
+   */
   public title: Subject<string> = new Subject<string>();
+
+  /**
+   * If the page to be displayed is a sub-page, setting this value to true will render a back arrow
+   * instead of the menu button, and a click will trigger the browser to go back in history.
+   */
+  public isSubPage: Subject<boolean> = new Subject<boolean>();
 
   constructor() {}
 

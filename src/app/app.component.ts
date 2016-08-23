@@ -2,8 +2,9 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
+import { Location }                     from '@angular/common';
 
-import { AppState } from './app.service';
+import { AppState }                     from './app.service';
 
 /*
  * App Component
@@ -35,8 +36,11 @@ import { AppState } from './app.service';
     </md-nav-list>
   </md-sidenav>
   <md-toolbar color="primary">
-    <button md-icon-button (click)="sidenav.open()">
+    <button *ngIf="!isSubPage" md-icon-button (click)="sidenav.open()">
       <md-icon>menu</md-icon>
+    </button>
+    <button *ngIf="isSubPage" md-icon-button (click)="_location.back()">
+      <md-icon>arrow_back</md-icon>
     </button>
     {{title}}
   </md-toolbar>
@@ -44,21 +48,25 @@ import { AppState } from './app.service';
     <router-outlet></router-outlet>
   </main>
 
-  <pre class="app-state">this.appState.state = {{ appState.state | json }}</pre>
+  <pre class="app-state">this._state.state = {{ _state.state | json }}</pre>
 </md-sidenav-layout>
   `
 })
 
 export class AppComponent {
-  angularclassLogo = 'assets/img/angularclass-avatar.png';
-  name = 'Angular 2 Webpack Starter';
-  url = 'https://twitter.com/AngularClass';
-  title = 'Medical Appointment Scheduling';
 
-  constructor(public appState: AppState) {}
+  private angularclassLogo = 'assets/img/angularclass-avatar.png';
+  private name = 'Angular 2 Webpack Starter';
+  private url = 'https://twitter.com/AngularClass';
+  private title = 'Medical Appointment Scheduling';
+  private isSubPage = false;
+
+  constructor(private _state: AppState, private _location: Location) {}
 
   ngOnInit() {
-    this.appState.title.subscribe(
+
+    // Listen for title changes
+    this._state.title.subscribe(
       title => this.title = title,
       error => {
         this.title = 'Medical Appointment Scheduling';
@@ -66,7 +74,19 @@ export class AppComponent {
       },
       () => console.log('Finished retrieving titles for activated route.')
     );
-    console.log('Initial App State', this.appState.state);
+
+    // Listen for toolbar icon changes
+    this._state.isSubPage.subscribe(
+      isSubPage => this.isSubPage = isSubPage,
+      error => {
+        this.isSubPage = false;
+        console.log('Error getting isSubPage for activated route.');
+      },
+      () => console.log('Finished retrieving isSubPage for activated route.')
+    );
+
+    // TODO debug output app state on console
+    console.log('Initial App State', this._state.state);
   }
 
 }

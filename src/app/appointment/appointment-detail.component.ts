@@ -52,14 +52,16 @@ export class AppointmentDetailComponent {
   ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
 
+    // This is a sub-page
+    this._state.isSubPage.next(true);
+    this._state.title.next('');
+
     // Create new appointment
     if (param === 'add') {
-      this._state.title.next('Create new appointment');
       this.editing = true;
 
     // View or edit existing appointment
     } else if (Number(param) !== NaN) {
-      this._state.title.next('Appointment ' + Number(param));
       this.editing = false;
       console.log('displaying appointment with id: %d', Number(param));
       this.getAppointmentById(Number(param));
@@ -85,18 +87,36 @@ export class AppointmentDetailComponent {
     newAppointment.start = start.toDate();
     newAppointment.end = end.toDate();
 
-    this.appointmentService
-    .appointmentCreate(newAppointment)
-    .subscribe(
-      x => {
-        console.log('onNext: %o', x);
-        for (let i = 0; i < examinations.length; ++i) {
-          this.linkExaminationWithAppointment(x, examinations[i]);
-        }
-      },
-      e => { console.log('onError: %o', e); },
-      () => { console.log('onCompleted'); }
-    );
+    // Add...
+    if (!this.model.id) {
+      this.appointmentService
+      .appointmentCreate(newAppointment)
+      .subscribe(
+        x => {
+          for (let i = 0; i < examinations.length; ++i) {
+            this.linkExaminationWithAppointment(x, examinations[i]);
+          }
+        },
+        e => { console.log('onError: %o', e); },
+        () => { console.log('Completed insert.'); }
+      );
+
+    // ...or update
+    } else {
+      this.appointmentService
+      .appointmentPrototypeUpdateAttributes(this.model.id.toString(), newAppointment)
+      .subscribe(
+        x => {
+          for (let i = 0; i < examinations.length; ++i) {
+            this.linkExaminationWithAppointment(x, examinations[i]);
+          }
+        },
+        e => { console.log('onError: %o', e); },
+        () => { console.log('Completed update.'); }
+      );
+    }
+
+    // Navigate back to schedule view
     this.router.navigateByUrl('appointment');
   }
 
@@ -160,7 +180,8 @@ export class AppointmentDetailComponent {
     if (this.model.duration) {
       this.findTime(
         this.model.duration,
-        this.model.examinations ? this.model.examinations[0].id : undefined,
+        this.model.examinations && this.model.examinations.length > 0 ?
+          this.model.examinations[0].id : undefined,
         this.model.roomId
       );
     }
@@ -179,19 +200,23 @@ export class AppointmentDetailComponent {
       .subscribe(
         x => {
           let startDate = moment(x.start);
+          let endDate = moment(x.end);
+          let duration = moment.duration(endDate.diff(startDate));
           this.model.id = x.id;
           this.model.date = startDate.format('Y-MM-DD');
           this.model.time = startDate.format('HH:mm');
-          this.model.duration = x.end.toString();
+          this.model.duration = duration.toJSON();
           this.model.title = x.title;
           this.model.description = x.description;
           this.model.roomId = x.roomId;
-          this.patientService.patientFindById(x.patientId.toString())
-            .subscribe(
-              y => this.model.patient = y,
-              e => console.log(e),
-              () => console.log('Completed querying for patient by id')
-            );
+          if (x.patientId) {
+            this.patientService.patientFindById(x.patientId.toString())
+              .subscribe(
+                y => this.model.patient = y,
+                e => console.log(e),
+                () => console.log('Completed querying for patient by id')
+              );
+          }
           this.appointmentService.appointmentPrototypeGetExaminations(x.id.toString())
             .subscribe(
               z => this.model.examinations = z,
@@ -217,6 +242,10 @@ export class AppointmentDetailComponent {
       // Clear suggestion after it has been applied
       this.proposedTimeSlot = undefined;
     }
+  }
+
+  private handleEditClick() {
+    this.editing = true;
   }
 }
 

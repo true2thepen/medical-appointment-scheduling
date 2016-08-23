@@ -39,7 +39,8 @@ import { Schedule } from 'primeng/primeng';
           defaultView="agendaDay"
           [locale]="locale"
           [events]="appointmentsByRoom[room.id]"
-          [height]="800">
+          [height]="800"
+          (onEventClick)="handleEventClick($event)">
           </p-schedule>
         </md-card-content>
       </md-card>
@@ -47,11 +48,6 @@ import { Schedule } from 'primeng/primeng';
     </template>
   </md-tab>
 </md-tab-group>
-<ul>
-  <li *ngFor="let appointment of appointments">
-    {{ appointment.title }}
-  </li>
-</ul>
 <button md-fab routerLink="/appointment/add">
     <md-icon>add</md-icon>
 </button>
@@ -75,6 +71,7 @@ export class AppointmentScheduleComponent implements OnInit {
     private roomService: RoomService) {}
 
   ngOnInit() {
+    this._state.isSubPage.next(false);
     this._state.title.next('Appointments');
     this.getAllAppointments();
     this.getAllRooms();

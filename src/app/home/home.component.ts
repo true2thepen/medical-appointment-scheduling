@@ -19,7 +19,8 @@ export class HomeComponent {
 
   ngOnInit() {
     console.log('hello `Home` component');
-    // this.title.getData().subscribe(data => this.data = data);
+    this.appState.isSubPage.next(false);
+    this.appState.title.next('Home');
   }
 
   submitState(value) {
