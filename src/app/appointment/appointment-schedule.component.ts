@@ -1,4 +1,5 @@
 import { Component, OnInit }  from '@angular/core';
+import { Router }             from '@angular/router';
 import { AppState }           from '../app.service';
 
 import { Appointment }        from '../api/model/appointment';
@@ -16,7 +17,11 @@ import { Schedule } from 'primeng/primeng';
     <template md-tab-label>All</template>
     <template md-tab-content>
       <md-card>
-        <p-schedule [header]="header" [locale]="locale" [events]="appointments"></p-schedule>
+        <p-schedule [header]="header"
+                    [locale]="locale"
+                    [events]="appointments"
+                    (onEventClick)="handleEventClick($event)">
+        </p-schedule>
       </md-card>
     </template>
   </md-tab>
@@ -65,6 +70,7 @@ export class AppointmentScheduleComponent implements OnInit {
 
   constructor(
     private _state: AppState,
+    private router: Router,
     private appointmentService: AppointmentService,
     private roomService: RoomService) {}
 
@@ -115,5 +121,9 @@ export class AppointmentScheduleComponent implements OnInit {
       e => console.log(e),
       () => console.log('Get all rooms complete')
     );
+  }
+
+  private handleEventClick(event) {
+    this.router.navigate(['appointment', event.calEvent.id]);
   }
 }

@@ -1,6 +1,17 @@
 <div class="form">
 
-  <form (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
+  <div *ngIf="!editing">
+    <h2>{{model.title}}</h2>
+    <p>{{model.patient?.name}}</p>
+    <p>{{model.room}}</p>
+    <p>{{model.time}}</p>
+    <p>{{model.date}}</p>
+    <p>{{model.duration}}</p>
+    <p *ngFor="let e of model.examinations">{{e.name}}</p>
+    <p>{{model.description}}</p>
+  </div>
+
+  <form *ngIf="editing" (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
     <md-card>
       <md-card-title>Create new appointment</md-card-title>
       <md-card-content>
@@ -22,8 +33,8 @@
     </md-card>
   </form>
 
-  <form (ngSubmit)="applySuggestion()" class="ui form">
-    <md-card *ngIf="proposedTimeSlot?.success">
+  <form *ngIf="proposedTimeSlot?.success" (ngSubmit)="applySuggestion()" class="ui form">
+    <md-card>
       <md-card-title>Suggestion</md-card-title>
       <md-card-content>
         {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'fullDate'}}
