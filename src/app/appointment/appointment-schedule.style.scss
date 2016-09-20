@@ -1,11 +1,1 @@
-$card-width: 85% / 3;
-
-.appointment-by-room-card {
-  width: $card-width;
-  margin: 10px;
-}
-
-.appointment-by-room-container {
-  display: flex;
-  flex-flow: row wrap;
-}
+@import 'appointment.style';

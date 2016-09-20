@@ -1,25 +1,21 @@
-import { addProviders, inject } from '@angular/core/testing';
-import { Location }             from '@angular/common';
-import { SpyLocation }          from '@angular/common/testing';
+import {
+  inject,
+  TestBed
+} from '@angular/core/testing';
 
 // Load the implementations that should be tested
 import { AppComponent } from './app.component';
 import { AppState } from './app.service';
 
-describe('AppComponent and AppState', () => {
-
-  beforeEach(() => {
-    addProviders([
-      AppComponent,
+describe('AppComponent', () => {
+  // provide our implementations or mocks to the dependency injector
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
       AppState,
-      {
-        provide: Location,
-        useClass: SpyLocation
-      }
-    ]);
-  });
+      AppComponent
+    ]}));
 
-  it('should have a url', inject([ AppComponent ], (app) => {
+  it('should have a url', inject([ AppComponent ], (app: AppComponent) => {
     expect(app.url).toEqual('https://twitter.com/AngularClass');
   }));
 

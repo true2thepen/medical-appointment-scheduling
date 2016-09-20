@@ -1,34 +1,44 @@
-import { addProviders, async, inject } from '@angular/core/testing';
-import { TestBed }                     from '@angular/core/testing/test_bed';
-import { Component }                   from '@angular/core';
+import {
+  fakeAsync,
+  inject,
+  tick,
+  TestBed
+} from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { BaseRequestOptions, Http } from '@angular/http';
+import { By } from '@angular/platform-browser/src/dom/debug/by';
+import { MockBackend } from '@angular/http/testing';
 
-import { XLarge }                      from './x-large.directive';
+// Load the implementations that should be tested
+import { XLarge } from './x-large.directive';
 
 describe('x-large directive', () => {
-
-  let fixture;
+  // Create a test component to test directives
+  @Component({
+    template: '<div x-large>Content</div>'
+  })
+  class TestComponent { }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        XLarge,
         TestComponent
       ]
     });
-    fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
   });
 
-  it('should sent font-size to x-large', async(inject([], () => {
-    fixture.whenStable().then(() => {
-      expect(fixture.nativeElement.children[0].style.fontSize).toBe('x-large');
+  it('should sent font-size to x-large', fakeAsync(() => {
+    TestBed.compileComponents().then(() => {
+
+      const fixture = TestBed.createComponent(TestComponent);
+      fixture.detectChanges();
+      tick();
+      const element = fixture.debugElement.query(By.css('div'));
+
+      expect(element.nativeElement.style.fontSize).toBe('x-large');
+
     });
-  })));
+  }));
 
 });
-
-// Create a test component to test directives
-@Component({
-  template: '<div x-large>Content</div>',
-  directives: [ XLarge ]
-})
-class TestComponent {}

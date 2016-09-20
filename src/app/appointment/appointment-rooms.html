@@ -1,0 +1,28 @@
+<button md-icon-button (click)="handlePrevClick()">
+    <md-icon class="md-24">keyboard_arrow_left</md-icon>
+</button>
+<span>{{viewDate.toDate() | date:'fullDate'}}</span>
+<button md-icon-button (click)="handleNextClick()">
+    <md-icon class="md-24">keyboard_arrow_right</md-icon>
+</button>
+<div class="appointment-by-room-container">
+  <md-card *ngFor="let room of rooms" class="appointment-by-room-card">
+    <md-card-title>
+      {{room.name}}
+    </md-card-title>
+    <md-card-content>
+      <p-schedule
+      header="false"
+      defaultView="agendaDay"
+      [locale]="locale"
+      [events]="appointmentsByRoom[room.id]"
+      [height]="800"
+      (onEventClick)="handleEventClick($event)"
+      #or1>
+      </p-schedule>
+    </md-card-content>
+  </md-card>
+</div>
+<button md-fab class="right-lower-corner-fab" routerLink="/appointment/add">
+    <md-icon class="md-24">add</md-icon>
+</button>

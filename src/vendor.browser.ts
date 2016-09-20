@@ -3,15 +3,16 @@ import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
 import '@angular/core';
 import '@angular/common';
+import '@angular/forms';
 import '@angular/http';
 import '@angular/router';
 
-// RxJS
-import 'rxjs';
-
 // AngularClass
-import '@angularclass/webpack-toolkit';
-import '@angularclass/request-idle-callback';
+import '@angularclass/hmr';
+
+// RxJS
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 
 // Angular 2 Material 2
 import '@angular2-material/button';
@@ -33,4 +34,7 @@ import 'jquery';
 
 // Fullcalendar
 import 'fullcalendar';
-import 'fullcalendar/dist/lang-all.js';
+// import 'fullcalendar/dist/lang-all.js';
+
+// PrimeNg
+import 'primeng/primeng';

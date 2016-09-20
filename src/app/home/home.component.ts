@@ -5,7 +5,10 @@ import { Title } from './title';
 import { XLarge } from './x-large';
 
 @Component({
-  directives: [ XLarge ],
+  selector: 'home',
+  providers: [
+    Title
+  ],
   styleUrls: [ './home.style.css' ],
   templateUrl: './home.template.html'
 })

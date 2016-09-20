@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
-import { AutoComplete } from 'primeng/primeng';
 
 import { Appointment }           from '../api/model/appointment';
 import { AppointmentService }    from '../api/api/appointment.service';
@@ -16,7 +15,6 @@ import { RoomService }           from '../api/api/room.service';
 import * as moment from 'moment';
 
 @Component({
-  directives: [AutoComplete],
   template: require('./appointment-detail.html'),
   styles: [ require('./appointment-detail.style.scss') ]
 })

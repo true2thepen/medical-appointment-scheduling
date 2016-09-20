@@ -1,11 +1,6 @@
-import { WebpackAsyncRoute } from '@angularclass/webpack-toolkit';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home';
-import { About } from './about';
-import { Detail } from './+detail';
+import { AboutComponent } from './about';
 import { NoContent } from './no-content';
-
-import { DataResolver } from './app.resolver';
 
 const routes: Routes = [
   {
@@ -13,17 +8,8 @@ const routes: Routes = [
     redirectTo: '/home',
     pathMatch: 'full'
   },
-  { path: 'about', component: About,
-    resolve: {
-      'yourData': DataResolver
-    }
-  },
-  // async components with children routes must use WebpackAsyncRoute
-  { path: 'detail', component: Detail,
-    canActivate: [ WebpackAsyncRoute ],
-    children: [
-      { path: '', component: 'Index' }  // must be included
-    ]},
+  { path: 'about', component: AboutComponent },
+  { path: 'detail', loadChildren: () => System.import('./+detail') },
   { path: '**',    component: NoContent }
 ];
 
