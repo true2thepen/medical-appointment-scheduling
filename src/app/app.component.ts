@@ -3,6 +3,8 @@
  */
 import { Component, ViewEncapsulation } from '@angular/core';
 
+import { Location }                     from '@angular/common';
+
 import { AppState }                     from './app.service';
 
 /*
@@ -22,6 +24,10 @@ import { AppState }                     from './app.service';
         <span md-line>Home</span>
         <!--<span md-line class="secondary">Take a look at your appointments</span>-->
       </a>
+      <a [routerLink]="['./appointment/attendance']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>people</md-icon>
+        <span md-line>Attendance List</span>
+      </a>
       <a [routerLink]="['./appointment']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_agenda</md-icon>
         <span md-line>Appointments</span>
@@ -29,6 +35,10 @@ import { AppState }                     from './app.service';
       <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_week</md-icon>
         <span md-line>Rooms</span>
+      </a>
+      <a [routerLink]="['./appointment/today']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>today</md-icon>
+        <span md-line>Today</span>
       </a>
       <a [routerLink]="['./about']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>help</md-icon>
@@ -74,7 +84,7 @@ export class AppComponent {
   private title = 'Medical Appointment Scheduling';
   private isSubPage = false;
 
-  constructor(private _state: AppState) {}
+  constructor(private _state: AppState, private _location: Location) {}
 
   ngOnInit() {
 

@@ -3,6 +3,9 @@ import {
   TestBed
 } from '@angular/core/testing';
 
+import { Location }    from '@angular/common';
+import { SpyLocation } from '@angular/common/testing';
+
 // Load the implementations that should be tested
 import { AppComponent } from './app.component';
 import { AppState } from './app.service';
@@ -12,7 +15,8 @@ describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       AppState,
-      AppComponent
+      AppComponent,
+      {provide: Location, useClass: SpyLocation}
     ]}));
 
   it('should have a url', inject([ AppComponent ], (app: AppComponent) => {
