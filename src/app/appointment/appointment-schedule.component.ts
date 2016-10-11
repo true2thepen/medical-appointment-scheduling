@@ -76,11 +76,6 @@ export class AppointmentScheduleComponent implements OnInit {
     this.router.navigate(['appointment', event.calEvent.id]);
   }
 
-  private handleEventLimitClick(event) {
-    console.log('event limit clicked');
-    this.router.navigate(['appointment', event.calEvent.id]);
-  }
-
   private handleNextClick() {
     this.viewDate = this.viewDate.add(1, 'month');
     this._state.title.next(this.viewDate.format('MMMM YYYY'));
