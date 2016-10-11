@@ -23,6 +23,8 @@ export class AppointmentRoomsComponent implements OnInit {
   private appointmentsByRoom: Appointment[][] = [[]];
   private rooms: Room[];
   private locale: any;
+  private minTime: moment.Duration = moment.duration('07:00:00');
+  private maxTime: moment.Duration = moment.duration('20:00:00');
   private viewDate: moment.Moment;
   @ViewChildren(Schedule) private schedules: QueryList<Schedule>;
 

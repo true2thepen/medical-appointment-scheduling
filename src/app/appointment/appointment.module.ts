@@ -7,6 +7,7 @@ import { MdCardModule }                   from '@angular2-material/card/card';
 import { MdIconModule }                   from '@angular2-material/icon/icon';
 import { MdInputModule }                  from '@angular2-material/input/input';
 import { MdListModule }                   from '@angular2-material/list/list';
+import { MdGridListModule }             from '@angular2-material/grid-list/grid-list';
 
 import { AutoCompleteModule }             from 'primeng/primeng';
 import { ScheduleModule }                 from 'primeng/primeng';
@@ -32,6 +33,7 @@ import { appointmentRouting }             from './appointment.routing';
     MdIconModule,
     MdInputModule,
     MdListModule,
+    MdGridListModule,
     AutoCompleteModule,
     ScheduleModule
   ],

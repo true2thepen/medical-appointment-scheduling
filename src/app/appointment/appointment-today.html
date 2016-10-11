@@ -1,4 +1,5 @@
 <p-schedule [events]="appointments"
+            [header]="false"
             [defaultView]="defaultView"
             (onEventClick)="handleEventClick($event)"></p-schedule>
 <button md-fab class="right-lower-corner-fab" routerLink="/appointment/add">

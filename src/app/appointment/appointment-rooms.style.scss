@@ -1,13 +1,9 @@
 @import 'appointment.style';
 
-$card-width: 100% / 3;
-
-.appointment-by-room-card {
-  width: $card-width;
-  margin: 10px;
+:host /deep/ figure {
+  align-items: flex-start!important;
 }
 
-.appointment-by-room-container {
-  display: flex;
-  flex-flow: row wrap;
+md-grid-list {
+  margin: 12px;
 }
