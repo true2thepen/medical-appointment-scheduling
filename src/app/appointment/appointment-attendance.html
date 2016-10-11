@@ -1,43 +1,47 @@
-<h2>Scheduled</h2>
-<md-list>
-  <md-list-item *ngFor="let appointment of apppointmentsScheduled">
-    <md-icon md-list-avatar>person</md-icon>
-    <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
-    <p md-line>{{appointment.title}}</p>
-    <p md-line class="waiting-time-label">Waiting 13 minutes</p>
-    <button md-button (click)="checkIn(appointment)">CHECK IN</button>
-  </md-list-item>
-</md-list>
+<div id="wrapper" style="text-align: center">
+  <md-card style="display: inline-block; text-align: left; max-width: 600px; width: 100%; margin-top: 16px;">
+      <h2>Scheduled</h2>
+    <md-list>
+      <md-list-item *ngFor="let appointment of apppointmentsScheduled">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
+        <p md-line>{{appointment.title}}</p>
+        <p md-line class="waiting-time-label">Waiting 13 minutes</p>
+        <button md-button (click)="checkIn(appointment)">CHECK IN</button>
+      </md-list-item>
+    </md-list>
 
-<h2>Waiting</h2>
-<md-list>
-  <md-list-item *ngFor="let appointment of apppointmentsCheckedIn">
-    <md-icon md-list-avatar>person</md-icon>
-    <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
-    <p md-line>{{appointment.title}}</p>
-    <p md-line class="waiting-time-label">Waiting 13 minutes</p>
-    <!-- <button md-button (click)="checkIn(appointment)">CHECK IN</button> -->
-  </md-list-item>
-</md-list>
+    <h2>Waiting</h2>
+    <md-list>
+      <md-list-item *ngFor="let appointment of apppointmentsCheckedIn">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
+        <p md-line>{{appointment.title}}</p>
+        <p md-line class="waiting-time-label">Waiting 13 minutes</p>
+        <!-- <button md-button (click)="checkIn(appointment)">CHECK IN</button> -->
+      </md-list-item>
+    </md-list>
 
-<h2>Under Treatment</h2>
-<md-list>
-  <md-list-item *ngFor="let appointment of apppointmentsUnderTreatment">
-    <md-icon md-list-avatar>person</md-icon>
-    <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
-    <p md-line>{{appointment.title}}</p>
-    <p md-line class="waiting-time-label">Waiting 13 minutes</p>
-    <!-- <button md-button (click)="checkIn(appointment)">CHECK IN</button> -->
-  </md-list-item>
-</md-list>
+    <h2>Under Treatment</h2>
+    <md-list>
+      <md-list-item *ngFor="let appointment of apppointmentsUnderTreatment">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
+        <p md-line>{{appointment.title}}</p>
+        <p md-line class="waiting-time-label">Waiting 13 minutes</p>
+        <!-- <button md-button (click)="checkIn(appointment)">CHECK IN</button> -->
+      </md-list-item>
+    </md-list>
 
-<h2>Finished</h2>
-<md-list>
-  <md-list-item *ngFor="let appointment of apppointmentsFinished">
-    <md-icon md-list-avatar>person</md-icon>
-    <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
-    <p md-line>{{appointment.title}}</p>
-    <p md-line class="waiting-time-label">Waiting 13 minutes</p>
-    <!-- <button md-button (click)="checkIn(appointment)">CHECK IN</button> -->
-  </md-list-item>
-</md-list>
+    <h2>Finished</h2>
+    <md-list>
+      <md-list-item *ngFor="let appointment of apppointmentsFinished">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
+        <p md-line>{{appointment.title}}</p>
+        <p md-line class="waiting-time-label">Waiting 13 minutes</p>
+        <!-- <button md-button (click)="checkIn(appointment)">CHECK IN</button> -->
+      </md-list-item>
+    </md-list>
+  </md-card>
+</div>
