@@ -51,8 +51,9 @@ export class AppointmentAttendanceComponent {
     let start = moment.utc().startOf('day');
     let end = moment.utc().endOf('day');
     this.appointmentService
-    //.appointmentFind(`{"where": {"start":  {"between": ["${start.format()}", "${end.format()}"]}}}`)
-    .appointmentFind(`{"where": {"start":  {"between": ["2016-08-14", "2016-08-16"]}}}`)
+    .appointmentFind(
+      `{"where": {"start":  {"between": ["${start.format()}", "${end.format()}"]}}}`
+    )
     .subscribe(
       x => this.apppointmentsScheduled = x,
       e => console.log(e),

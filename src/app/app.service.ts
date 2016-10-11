@@ -54,6 +54,6 @@ export class AppState {
 }
 
 export interface Action {
-  icon: string,
+  icon: string;
   clickHandler: Function;
 }
