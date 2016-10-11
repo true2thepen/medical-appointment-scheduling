@@ -18,6 +18,11 @@ export class AppState {
    */
   public isSubPage: Subject<boolean> = new Subject<boolean>();
 
+  /**
+   * Toolbar actions for the page
+   */
+  public actions: Subject<Action[]> = new Subject<Action[]>();
+
   constructor() {}
 
   // already return a clone of the current state
@@ -46,4 +51,9 @@ export class AppState {
     // simple object clone
     return JSON.parse(JSON.stringify( object ));
   }
+}
+
+export interface Action {
+  icon: string,
+  clickHandler: Function;
 }

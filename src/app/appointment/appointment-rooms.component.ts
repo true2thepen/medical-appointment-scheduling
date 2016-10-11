@@ -33,11 +33,25 @@ export class AppointmentRoomsComponent implements OnInit {
     private roomService: RoomService) {}
 
   ngOnInit() {
+    this.viewDate = moment();
     this._state.isSubPage.next(false);
-    this._state.title.next('Appointments by Room');
+    this._state.title.next(this.viewDate.format('LL'));
+    this._state.actions.next([
+      {
+        icon: 'keyboard_arrow_left',
+        clickHandler: this.handlePrevClick.bind(this)
+      },
+      {
+        icon: 'today',
+        clickHandler: this.handleTodayClick.bind(this)
+      },
+      {
+        icon: 'keyboard_arrow_right',
+        clickHandler: this.handleNextClick.bind(this)
+      }
+    ]);
     this.getAllRooms();
     this.locale = 'de';
-    this.viewDate = moment();
   }
 
   private getAppointmentsByRoom(room: Room): void {
@@ -71,11 +85,19 @@ export class AppointmentRoomsComponent implements OnInit {
 
   private handleNextClick() {
     this.viewDate = this.viewDate.add(1, 'day');
+    this._state.title.next(this.viewDate.format('LL'));
+    this.schedules.forEach((x) => { x.gotoDate(this.viewDate); });
+  }
+
+  private handleTodayClick() {
+    this.viewDate = moment();
+    this._state.title.next(this.viewDate.format('LL'));
     this.schedules.forEach((x) => { x.gotoDate(this.viewDate); });
   }
 
   private handlePrevClick() {
     this.viewDate = this.viewDate.subtract(1, 'day');
+    this._state.title.next(this.viewDate.format('LL'));
     this.schedules.forEach((x) => { x.gotoDate(this.viewDate); });
   }
 }

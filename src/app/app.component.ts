@@ -5,7 +5,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 
 import { Location }                     from '@angular/common';
 
-import { AppState }                     from './app.service';
+import { AppState, Action }             from './app.service';
 
 /*
  * App Component
@@ -55,22 +55,25 @@ import { AppState }                     from './app.service';
     </button>
     {{title}}
     <span class="md-toolbar-fill-remaining-space"></span>
-  <button md-icon-button [md-menu-trigger-for]="menu">
-     <md-icon>more_vert</md-icon>
-  </button>
 
-  <md-menu x-position="before" #menu="mdMenu">
-      <button md-menu-item> Refresh </button>
-      <button md-menu-item> Settings </button>
-      <button md-menu-item> Help </button>
-      <button md-menu-item disabled> Sign Out </button>
-  </md-menu>
+    <button *ngFor="let action of actions" md-icon-button (click)="toolbarActionsHandler(action)">
+        <md-icon class="md-24">{{action.icon}}</md-icon>
+    </button>
+
+    <button md-icon-button [md-menu-trigger-for]="menu">
+       <md-icon>more_vert</md-icon>
+    </button>
+
+    <md-menu x-position="before" #menu="mdMenu">
+        <button md-menu-item> Refresh </button>
+        <button md-menu-item> Settings </button>
+        <button md-menu-item> Help </button>
+        <button md-menu-item disabled> Sign Out </button>
+    </md-menu>
   </md-toolbar>
   <main>
     <router-outlet></router-outlet>
   </main>
-
-  <pre class="app-state">this._state.state = {{ _state.state | json }}</pre>
 </md-sidenav-layout>
   `
 })
@@ -83,6 +86,7 @@ export class AppComponent {
   private name = 'Angular 2 Webpack Starter';
   private title = 'Medical Appointment Scheduling';
   private isSubPage = false;
+  private actions: Action[];
 
   constructor(private _state: AppState, private _location: Location) {}
 
@@ -108,8 +112,22 @@ export class AppComponent {
       () => console.log('Finished retrieving isSubPage for activated route.')
     );
 
+    // Listen for toolbar action changes
+    this._state.actions.subscribe(
+      actions => this.actions = actions,
+      error => {
+        this.actions = undefined;
+        console.log('Error getting actions for activated route.');
+      },
+      () => console.log('Finished retrieving actions for activated route.')
+    );
+
     // TODO debug output app state on console
     console.log('Initial App State', this._state.state);
+  }
+
+  public toolbarActionsHandler(action: Action) {
+    action.clickHandler();
   }
 
 }

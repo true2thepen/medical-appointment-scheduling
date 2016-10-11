@@ -23,9 +23,10 @@ export class AppointmentAttendanceComponent {
 
   private editing: boolean = false;
   private rooms: Room[] = undefined;
-  private filteredPatients: Patient[] = undefined;
-  private filteredExaminations: Examination[] = undefined;
-  private proposedTimeSlot: any = {};
+  private apppointmentsScheduled: Appointment[] = [];
+  private apppointmentsCheckedIn: Appointment[] = [];
+  private apppointmentsUnderTreatment: Appointment[] = [];
+  private apppointmentsFinished: Appointment[] = [];
 
   constructor(
     private _state: AppState,
@@ -43,36 +44,27 @@ export class AppointmentAttendanceComponent {
     this._state.isSubPage.next(false);
     this._state.title.next('Attendance List');
 
-    this.getAllRooms();
+    this.getTodaysAppointments();
   }
 
-  private getAllRooms(): void {
-    this.roomService
-    .roomFind()
+  private getTodaysAppointments(): void {
+    let start = moment.utc().startOf('day');
+    let end = moment.utc().endOf('day');
+    this.appointmentService
+    //.appointmentFind(`{"where": {"start":  {"between": ["${start.format()}", "${end.format()}"]}}}`)
+    .appointmentFind(`{"where": {"start":  {"between": ["2016-08-14", "2016-08-16"]}}}`)
     .subscribe(
-      x => this.rooms = x,
+      x => this.apppointmentsScheduled = x,
       e => console.log(e),
-      () => console.log('Get all rooms complete.')
+      () => console.log('Get today\'s appointments complete')
     );
   }
 
-  private findPatients(event) {
-    this.patientService
-    .patientFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
-    .subscribe(
-      x => this.filteredPatients = x,
-      e => console.log(e),
-      () => console.log('Completed querying for patients.')
-    );
-  }
-
-  private findExaminations(event) {
-    this.examinationService
-    .examinationFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
-    .subscribe(
-      x => this.filteredExaminations = x,
-      e => console.log(e),
-      () => console.log('Completed querying for examinations.')
-    );
+  private checkIn(appointment: Appointment): void {
+    let index = this.apppointmentsScheduled.indexOf(appointment);
+    if (index > -1) {
+      this.apppointmentsScheduled.splice(index, 1);
+    }
+    this.apppointmentsCheckedIn.push(appointment);
   }
 }

@@ -1,5 +1,10 @@
-<p-schedule [events]=appointments
-            (onEventClick)="handleEventClick($event)"></p-schedule>
+<div class="schedule-container" style="height: calc(100vh - 64px);">
+  <p-schedule [events]=appointments
+              [contentHeight]="auto"
+              [header]="false"
+              [hiddenDays]=hiddenDays
+              (onEventClick)="handleEventClick($event)"></p-schedule>
+</div>
 <button md-fab class="right-lower-corner-fab" routerLink="/appointment/add">
     <md-icon class="md-24">add</md-icon>
 </button>
