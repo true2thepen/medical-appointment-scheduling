@@ -23,6 +23,11 @@ export class AppState {
    */
   public actions: Subject<Action[]> = new Subject<Action[]>();
 
+  /**
+   * Primary actions of the page, displayed as fab.
+   */
+  public primaryAction: Subject<Action> = new Subject<Action>();
+
   constructor() {}
 
   // already return a clone of the current state
@@ -55,5 +60,6 @@ export class AppState {
 
 export interface Action {
   icon: string;
-  clickHandler: Function;
+  clickHandler?: Function;
+  routerLink?: string;
 }

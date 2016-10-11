@@ -49,6 +49,10 @@ export class AppointmentScheduleComponent implements OnInit {
         clickHandler: this.handleNextClick.bind(this)
       }
     ]);
+    this._state.primaryAction.next({
+      icon: 'add',
+      routerLink: 'appointment/add'
+    });
     this.getAllAppointments();
     this.locale = 'de';
     this.hiddenDays = [ 0 ]; // Hide Sundays by default

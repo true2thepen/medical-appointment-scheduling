@@ -54,6 +54,7 @@ export class AppointmentDetailComponent {
     this._state.isSubPage.next(true);
     this._state.title.next();
     this._state.actions.next();
+    this._state.primaryAction.next();
 
     // Create new appointment
     if (param === 'add') {

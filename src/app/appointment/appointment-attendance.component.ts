@@ -39,11 +39,13 @@ export class AppointmentAttendanceComponent {
 
   ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
-
-    // This is a sub-page
     this._state.isSubPage.next(false);
     this._state.title.next('Attendance List');
-
+    this._state.actions.next();
+    this._state.primaryAction.next({
+      icon: 'person',
+      routerLink: 'appointment/attendance/checkin'
+    });
     this.getTodaysAppointments();
   }
 

@@ -56,7 +56,7 @@ import { AppState, Action }             from './app.service';
     {{title}}
     <span class="md-toolbar-fill-remaining-space"></span>
 
-    <button *ngFor="let action of actions" md-icon-button (click)="toolbarActionsHandler(action)">
+    <button *ngFor="let action of actions" md-icon-button (click)="actionsHandler(action)">
         <md-icon class="md-24">{{action.icon}}</md-icon>
     </button>
 
@@ -75,6 +75,13 @@ import { AppState, Action }             from './app.service';
     <router-outlet></router-outlet>
   </main>
 </md-sidenav-layout>
+
+<button *ngIf="primaryAction"
+        md-fab class="right-lower-corner-fab"
+        (click)="actionsHandler(primaryAction)"
+        [routerLink]="primaryAction.routerLink">
+    <md-icon class="md-24">{{primaryAction.icon}}</md-icon>
+</button>
   `
 })
 
@@ -87,6 +94,7 @@ export class AppComponent {
   private title = 'Medical Appointment Scheduling';
   private isSubPage = false;
   private actions: Action[];
+  private primaryAction: Action;
 
   constructor(private _state: AppState, private _location: Location) {}
 
@@ -122,12 +130,26 @@ export class AppComponent {
       () => console.log('Finished retrieving actions for activated route.')
     );
 
+    // Listen for toolbar action changes
+    this._state.primaryAction.subscribe(
+      primaryAction => this.primaryAction = primaryAction,
+      error => {
+        this.primaryAction = undefined;
+        console.log('Error getting primary action for activated route.');
+      },
+      () => console.log('Finished retrieving primary action for activated route.')
+    );
+
     // TODO debug output app state on console
     console.log('Initial App State', this._state.state);
   }
 
-  public toolbarActionsHandler(action: Action) {
-    action.clickHandler();
+  public actionsHandler(action: Action) {
+    if (action) {
+      if (action.clickHandler) {
+        action.clickHandler();
+      }
+    }
   }
 
 }

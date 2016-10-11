@@ -52,6 +52,10 @@ export class AppointmentRoomsComponent implements OnInit {
         clickHandler: this.handleNextClick.bind(this)
       }
     ]);
+    this._state.primaryAction.next({
+      icon: 'add',
+      routerLink: 'appointment/add'
+    });
     this.getAllRooms();
     this.locale = 'de';
   }
