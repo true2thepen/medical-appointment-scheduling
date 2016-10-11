@@ -3,5 +3,7 @@
               [contentHeight]="auto"
               [header]="false"
               [hiddenDays]=hiddenDays
+              [eventLimit]="true"
+              (onEventLimitClick)="handleEventLimitClick($event)"
               (onEventClick)="handleEventClick($event)"></p-schedule>
 </div>

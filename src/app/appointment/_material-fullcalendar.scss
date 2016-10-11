@@ -282,6 +282,12 @@ previous button's border...
   box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 
+/* 6 more events... popover in agenda */
+:host /deep/ .fc-popover.fc-more-popover {
+    background-color: white;
+    padding: 16px;
+}
+
 :host /deep/ .fc-popover .fc-header { /* TODO: be more consistent with fc-head/fc-body */
   padding: 2px 4px;
 }
@@ -776,14 +782,14 @@ tr:first-child > td > .fc-day-grid-event {
 
 /* "more" link that represents hidden events */
 
-a.fc-more {
+:host /deep/ a.fc-more {
   margin: 1px 3px;
   font-size: .85em;
   cursor: pointer;
   text-decoration: none;
 }
 
-a.fc-more:hover {
+:host /deep/ a.fc-more:hover {
   text-decoration: underline;
 }
 
