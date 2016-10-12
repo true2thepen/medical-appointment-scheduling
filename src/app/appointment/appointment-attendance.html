@@ -1,8 +1,9 @@
 <div id="wrapper" style="text-align: center">
   <md-card style="display: inline-block; text-align: left; max-width: 600px; width: 100%; margin-top: 16px;">
-      <h2>Scheduled</h2>
+    <h2>Scheduled</h2>
+    <div *ngIf="!appointmentsScheduled || appointmentsScheduled.length <= 0">No patients scheduled for today.</div>
     <md-list>
-      <md-list-item *ngFor="let appointment of apppointmentsScheduled">
+      <md-list-item *ngFor="let appointment of appointmentsScheduled">
         <md-icon md-list-avatar>person</md-icon>
         <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
         <p md-line>{{appointment.title}}</p>
@@ -13,7 +14,7 @@
 
     <h2>Waiting</h2>
     <md-list>
-      <md-list-item *ngFor="let appointment of apppointmentsCheckedIn">
+      <md-list-item *ngFor="let appointment of appointmentsCheckedIn">
         <md-icon md-list-avatar>person</md-icon>
         <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
         <p md-line>{{appointment.title}}</p>
@@ -24,7 +25,7 @@
 
     <h2>Under Treatment</h2>
     <md-list>
-      <md-list-item *ngFor="let appointment of apppointmentsUnderTreatment">
+      <md-list-item *ngFor="let appointment of appointmentsUnderTreatment">
         <md-icon md-list-avatar>person</md-icon>
         <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
         <p md-line>{{appointment.title}}</p>
@@ -35,7 +36,7 @@
 
     <h2>Finished</h2>
     <md-list>
-      <md-list-item *ngFor="let appointment of apppointmentsFinished">
+      <md-list-item *ngFor="let appointment of appointmentsFinished">
         <md-icon md-list-avatar>person</md-icon>
         <h3 md-line>Herbert Little {{appointment.patientId}}</h3>
         <p md-line>{{appointment.title}}</p>

@@ -23,10 +23,10 @@ export class AppointmentAttendanceComponent {
 
   private editing: boolean = false;
   private rooms: Room[] = undefined;
-  private apppointmentsScheduled: Appointment[] = [];
-  private apppointmentsCheckedIn: Appointment[] = [];
-  private apppointmentsUnderTreatment: Appointment[] = [];
-  private apppointmentsFinished: Appointment[] = [];
+  private appointmentsScheduled: Appointment[] = [];
+  private appointmentsCheckedIn: Appointment[] = [];
+  private appointmentsUnderTreatment: Appointment[] = [];
+  private appointmentsFinished: Appointment[] = [];
 
   constructor(
     private _state: AppState,
@@ -57,17 +57,17 @@ export class AppointmentAttendanceComponent {
       `{"where": {"start":  {"between": ["${start.format()}", "${end.format()}"]}}}`
     )
     .subscribe(
-      x => this.apppointmentsScheduled = x,
+      x => this.appointmentsScheduled = x,
       e => console.log(e),
       () => console.log('Get today\'s appointments complete')
     );
   }
 
   private checkIn(appointment: Appointment): void {
-    let index = this.apppointmentsScheduled.indexOf(appointment);
+    let index = this.appointmentsScheduled.indexOf(appointment);
     if (index > -1) {
-      this.apppointmentsScheduled.splice(index, 1);
+      this.appointmentsScheduled.splice(index, 1);
     }
-    this.apppointmentsCheckedIn.push(appointment);
+    this.appointmentsCheckedIn.push(appointment);
   }
 }
