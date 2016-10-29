@@ -79,8 +79,8 @@ import { RoomService }                  from './api/api/room.service';
         <button md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
         <button md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
         <md-divider></md-divider>
-        <button md-menu-item (click)="createRandomAppointments()">Create random attendances</button>
-        <button md-menu-item (click)="createRandomAttendances()">Create random appointments</button>
+        <button md-menu-item (click)="createRandomAppointments()">Create random appointments</button>
+        <button md-menu-item (click)="createRandomAttendances()">Create random attendances</button>
         <md-divider></md-divider>
         <button md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
         <button md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>

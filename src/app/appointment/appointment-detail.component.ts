@@ -161,7 +161,12 @@ export class AppointmentDetailComponent {
     );
   }
 
-  private findTime(duration?: string, examinationId?: number, roomId?: number, startDate?: moment.Moment) {
+  private findTime(
+    duration?: string,
+    examinationId?: number,
+    roomId?: number,
+    startDate?: moment.Moment
+  ) {
     console.log('Querying for the next free time slot.');
     this.appointmentService
     .appointmentFindTime(

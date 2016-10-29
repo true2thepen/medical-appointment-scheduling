@@ -75,7 +75,7 @@ export class AppointmentAttendanceComponent {
               }
             },
             e => {
-              if (e._body.error.statusCode == 404 && e._body.error.code === 'MODEL_NOT_FOUND') {
+              if (e._body.error.statusCode === 404 && e._body.error.code === 'MODEL_NOT_FOUND') {
                 this.appointmentsScheduled.push(this.allAppointments[i]);
                 console.log('No attendance yet for this appointment.');
               } else {

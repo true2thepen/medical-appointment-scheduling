@@ -16,7 +16,9 @@ export class ViewAppointmentService {
 
   constructor(private appointmentService: AppointmentService) {}
 
-  public appointmentFind(filter?: string, extraHttpRequestParams?: any): Observable<Array<ViewAppointment>> {
+  public appointmentFind(
+    filter?: string, extraHttpRequestParams?: any): Observable<Array<ViewAppointment>> {
+
     return this.appointmentService
     .appointmentFind(filter, extraHttpRequestParams)
     .map((x, idx) => {
@@ -36,9 +38,10 @@ export class ViewAppointmentService {
               // Room
               room: (callback) => {
                 if (viewAppointment.roomId) {
-                  this.appointmentService.appointmentPrototypeGetRoom(viewAppointment.id.toString())
+                  this.appointmentService.appointmentPrototypeGetRoom(
+                    viewAppointment.id.toString())
                   .subscribe(
-                    x => callback(null, x),
+                    rooms => callback(null, rooms),
                     e => callback(e),
                     () => console.log('Completed inner resolving of room for appointment.')
                   );
@@ -50,9 +53,10 @@ export class ViewAppointmentService {
               // Patient
               patient: (callback) => {
                 if (viewAppointment.patientId) {
-                  this.appointmentService.appointmentPrototypeGetPatient(viewAppointment.id.toString())
+                  this.appointmentService.appointmentPrototypeGetPatient(
+                    viewAppointment.id.toString())
                   .subscribe(
-                    x => callback(null, x),
+                    patients => callback(null, patients),
                     e => callback(e),
                     () => console.log('Completed inner resolving of patient for appointment.')
                   );
@@ -63,11 +67,13 @@ export class ViewAppointmentService {
 
               // Attendance
               attendance: (callback) => {
-                this.appointmentService.appointmentPrototypeGetAttendance(viewAppointment.id.toString())
+                this.appointmentService.appointmentPrototypeGetAttendance(
+                  viewAppointment.id.toString())
                 .subscribe(
-                  x => callback(null, x),
+                  attendances => callback(null, attendances),
                   e => {
-                    if (e._body.error.statusCode == 404 && e._body.error.code === 'MODEL_NOT_FOUND') {
+                    if (e._body.error.statusCode === 404 &&
+                     e._body.error.code === 'MODEL_NOT_FOUND') {
                       callback(null, undefined);
                     } else {
                       callback(e);
@@ -79,16 +85,17 @@ export class ViewAppointmentService {
 
               // Examinations
               examinations: (callback) => {
-                this.appointmentService.appointmentPrototypeGetExaminations(viewAppointment.id.toString())
+                this.appointmentService.appointmentPrototypeGetExaminations(
+                  viewAppointment.id.toString())
                 .subscribe(
-                  x => callback(null, x),
+                  examinations => callback(null, examinations),
                   e => callback(e),
                   () => console.log('Completed inner resolving of examinations for appointment.')
                 );
               }
 
             }, function(err, results) {
-              if(err) {
+              if (err) {
                 cb(err);
               } else {
                 viewAppointment.attendance = <Attendance> results['attendance'];

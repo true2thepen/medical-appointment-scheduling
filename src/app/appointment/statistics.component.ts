@@ -9,11 +9,17 @@ import { AppState }           from '../app.service';
 import * as moment from 'moment';
 import * as async  from 'async';
 
+declare var Plotly: any;
+
 @Component({
   template: require('./statistics.html'),
   styles: [ require('./statistics.style.scss') ]
 })
 export class StatisticsComponent implements OnInit {
+
+  private colors: string[] = [
+    '#00bcd4', '#4caf50', '#cddc39', '#ff9800', '#e91e63', '#673ab7', '#9c27b0'
+  ];
 
   constructor(
     private _state: AppState,
@@ -37,11 +43,13 @@ export class StatisticsComponent implements OnInit {
           .subscribe(
             appointment => {
               // Calculate actual offset from planned time in minutes for box plot
-              let offset = moment.duration(moment(attendance.underTreatment).diff(moment(appointment.start))).asMinutes();
-              offset = Math.round( offset * 10 ) / 10;
+              let offset = moment.duration(moment(attendance.underTreatment)
+                .diff(moment(appointment.start)))
+                .asMinutes();
+              offset = Math.round( offset * 10 ) / 10; // Round for better readability in box plot
 
               let dayOfWeek = moment(appointment.start).isoWeekday();
-              if(!data[dayOfWeek]) {
+              if (!data[dayOfWeek]) {
                 data[dayOfWeek] = [];
               }
               data[dayOfWeek].push(offset);
@@ -50,7 +58,7 @@ export class StatisticsComponent implements OnInit {
             () => callback()
           );
         }, (err) => {
-          if( err ) {
+          if ( err ) {
             console.log(err);
           } else {
             this.plot(data);
@@ -92,13 +100,7 @@ export class StatisticsComponent implements OnInit {
 
     Plotly.newPlot('boxplot', plotData, layout, {displayModeBar: false});
   }
-
-  private colors: string[] = [
-    '#00bcd4', '#4caf50', '#cddc39', '#ff9800', '#e91e63', '#673ab7', '#9c27b0'
-  ];
 }
-
-declare var Plotly: any;
 
 declare interface PlotlyTrace {
   y: number[];
