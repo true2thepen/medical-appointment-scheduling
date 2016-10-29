@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-import { Injectable, Optional }                              from '@angular/core';
+import { Inject, Injectable, Optional }                      from '@angular/core';
 import { Http, Headers, URLSearchParams }                    from '@angular/http';
 import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Response, ResponseContentType }                     from '@angular/http';
@@ -30,22 +30,30 @@ import { Response, ResponseContentType }                     from '@angular/http
 import { Observable }                                        from 'rxjs/Observable';
 import '../rxjs-operators';
 
-import { InlineResponse200 }                                 from '../model/inlineResponse200';
-import { Patient }                                           from '../model/patient';
-import { InlineResponse2001 }                                from '../model/inlineResponse2001';
+import { InlineResponse200 } from '../model/inlineResponse200';
+import { Patient } from '../model/patient';
+import { InlineResponse2001 } from '../model/inlineResponse2001';
+import { InlineResponse2002 } from '../model/inlineResponse2002';
+import { InlineResponse2003 } from '../model/inlineResponse2003';
+
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
 
 @Injectable()
 export class PatientService {
-
     protected basePath = 'http://localhost:3000/api';
     public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -55,40 +63,7 @@ export class PatientService {
      * @param where Criteria to match model instances
      */
     public patientCount(where?: string, extraHttpRequestParams?: any): Observable<InlineResponse200> {
-        const path = this.basePath + `/Patients/count`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (where !== undefined) {
-            queryParameters.set('where', String(where));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientCountWithHttpInfo(where, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -104,39 +79,7 @@ export class PatientService {
      * @param data Model instance data
      */
     public patientCreate(data?: Patient, extraHttpRequestParams?: any): Observable<Patient> {
-        const path = this.basePath + `/Patients`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientCreateWithHttpInfo(data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -152,40 +95,7 @@ export class PatientService {
      * @param options 
      */
     public patientCreateChangeStreamGetPatientsChangeStream(options?: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Patients/change-stream`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (options !== undefined) {
-            queryParameters.set('options', String(options));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientCreateChangeStreamGetPatientsChangeStreamWithHttpInfo(options, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -201,43 +111,22 @@ export class PatientService {
      * @param options 
      */
     public patientCreateChangeStreamPostPatientsChangeStream(options?: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Patients/change-stream`;
+        return this.patientCreateChangeStreamPostPatientsChangeStreamWithHttpInfo(options, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        let formParams = new URLSearchParams();
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
-        formParams['options'] = options;
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: formParams.toString(),
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Deletes all data.
+     * 
+     */
+    public patientDeleteAllPatients(extraHttpRequestParams?: any): Observable<InlineResponse2001> {
+        return this.patientDeleteAllPatientsWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -253,40 +142,7 @@ export class PatientService {
      * @param id Model id
      */
     public patientDeleteById(id: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Patients/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patientDeleteById.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Delete,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientDeleteByIdWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -301,41 +157,8 @@ export class PatientService {
      * 
      * @param id Model id
      */
-    public patientExistsGetPatientsidExists(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2001> {
-        const path = this.basePath + `/Patients/${id}/exists`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patientExistsGetPatientsidExists.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    public patientExistsGetPatientsidExists(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2002> {
+        return this.patientExistsGetPatientsidExistsWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -350,41 +173,8 @@ export class PatientService {
      * 
      * @param id Model id
      */
-    public patientExistsHeadPatientsid(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2001> {
-        const path = this.basePath + `/Patients/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patientExistsHeadPatientsid.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Head,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    public patientExistsHeadPatientsid(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2002> {
+        return this.patientExistsHeadPatientsidWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -400,40 +190,7 @@ export class PatientService {
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public patientFind(filter?: string, extraHttpRequestParams?: any): Observable<Array<Patient>> {
-        const path = this.basePath + `/Patients`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientFindWithHttpInfo(filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -450,44 +207,7 @@ export class PatientService {
      * @param filter Filter defining fields and include
      */
     public patientFindById(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Patient> {
-        const path = this.basePath + `/Patients/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patientFindById.');
-        }
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientFindByIdWithHttpInfo(id, filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -503,40 +223,22 @@ export class PatientService {
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public patientFindOne(filter?: string, extraHttpRequestParams?: any): Observable<Patient> {
-        const path = this.basePath + `/Patients/findOne`;
+        return this.patientFindOneWithHttpInfo(filter, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Insert sample data set of test patients.
+     * 
+     */
+    public patientInsertTestData(extraHttpRequestParams?: any): Observable<InlineResponse2003> {
+        return this.patientInsertTestDataWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -553,43 +255,7 @@ export class PatientService {
      * @param data An object of model property name/value pairs
      */
     public patientPrototypeUpdateAttributes(id: string, data?: Patient, extraHttpRequestParams?: any): Observable<Patient> {
-        const path = this.basePath + `/Patients/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patientPrototypeUpdateAttributes.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Put,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.patientPrototypeUpdateAttributesWithHttpInfo(id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -606,12 +272,45 @@ export class PatientService {
      * @param data An object of model property name/value pairs
      */
     public patientUpdateAll(where?: string, data?: Patient, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Patients/update`;
+        return this.patientUpdateAllWithHttpInfo(where, data, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * Update an existing model instance or insert a new one into the data source.
+     * 
+     * @param data Model instance data
+     */
+    public patientUpsert(data?: Patient, extraHttpRequestParams?: any): Observable<Patient> {
+        return this.patientUpsertWithHttpInfo(data, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+
+    /**
+     * Count instances of the model matched by where from the data source.
+     * 
+     * @param where Criteria to match model instances
+     */
+    public patientCountWithHttpInfo(where?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/count`;
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         if (where !== undefined) {
-            queryParameters.set('where', String(where));
+            queryParameters.set('where', <any>where);
         }
 
 
@@ -631,37 +330,32 @@ export class PatientService {
             'application/javascript', 
             'text/javascript'
         ];
+        
+            
 
-        headers.set('Content-Type', 'application/json');
+
 
         let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
+            method: RequestMethod.Get,
             headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
             search: queryParameters,
             responseType: ResponseContentType.Json
         });
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+        return this.http.request(path, requestOptions);
     }
 
     /**
-     * Update an existing model instance or insert a new one into the data source.
+     * Create a new instance of the model and persist it into the data source.
      * 
      * @param data Model instance data
      */
-    public patientUpsert(data?: Patient, extraHttpRequestParams?: any): Observable<Patient> {
+    public patientCreateWithHttpInfo(data?: Patient, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/Patients`;
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
 
         // to determine the Content-Type header
         let consumes: string[] = [
@@ -679,8 +373,525 @@ export class PatientService {
             'application/javascript', 
             'text/javascript'
         ];
+        
+            
 
         headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Create a change stream.
+     * 
+     * @param options 
+     */
+    public patientCreateChangeStreamGetPatientsChangeStreamWithHttpInfo(options?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/change-stream`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (options !== undefined) {
+            queryParameters.set('options', <any>options);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Create a change stream.
+     * 
+     * @param options 
+     */
+    public patientCreateChangeStreamPostPatientsChangeStreamWithHttpInfo(options?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/change-stream`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let formParams = new URLSearchParams();
+
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+        headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
+
+        if (options !== undefined) {
+            formParams.set('options', <any>options); 
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: formParams.toString(),
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Deletes all data.
+     * 
+     */
+    public patientDeleteAllPatientsWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/deleteAll`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Delete a model instance by id from the data source.
+     * 
+     * @param id Model id
+     */
+    public patientDeleteByIdWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patientDeleteById.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check whether a model instance exists in the data source.
+     * 
+     * @param id Model id
+     */
+    public patientExistsGetPatientsidExistsWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/${id}/exists`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patientExistsGetPatientsidExists.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check whether a model instance exists in the data source.
+     * 
+     * @param id Model id
+     */
+    public patientExistsHeadPatientsidWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patientExistsHeadPatientsid.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Head,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find all instances of the model matched by filter from the data source.
+     * 
+     * @param filter Filter defining fields, where, include, order, offset, and limit
+     */
+    public patientFindWithHttpInfo(filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find a model instance by id from the data source.
+     * 
+     * @param id Model id
+     * @param filter Filter defining fields and include
+     */
+    public patientFindByIdWithHttpInfo(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patientFindById.');
+        }
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find first instance of the model matched by filter from the data source.
+     * 
+     * @param filter Filter defining fields, where, include, order, offset, and limit
+     */
+    public patientFindOneWithHttpInfo(filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/findOne`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Insert sample data set of test patients.
+     * 
+     */
+    public patientInsertTestDataWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/insertTestData`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update attributes for a model instance and persist it into the data source.
+     * 
+     * @param id PersistedModel id
+     * @param data An object of model property name/value pairs
+     */
+    public patientPrototypeUpdateAttributesWithHttpInfo(id: string, data?: Patient, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patientPrototypeUpdateAttributes.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
 
         let requestOptions: RequestOptionsArgs = new RequestOptions({
             method: RequestMethod.Put,
@@ -690,14 +901,101 @@ export class PatientService {
             responseType: ResponseContentType.Json
         });
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update instances of the model matched by where from the data source.
+     * 
+     * @param where Criteria to match model instances
+     * @param data An object of model property name/value pairs
+     */
+    public patientUpdateAllWithHttpInfo(where?: string, data?: Patient, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients/update`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (where !== undefined) {
+            queryParameters.set('where', <any>where);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update an existing model instance or insert a new one into the data source.
+     * 
+     * @param data Model instance data
+     */
+    public patientUpsertWithHttpInfo(data?: Patient, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Patients`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

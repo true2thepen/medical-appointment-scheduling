@@ -388,13 +388,24 @@ hr.fc-divider {
 :host /deep/ .fc td {
   border-style: solid;
   border-width: 1px;
-  border-color: lightgrey;
+  border-color: rgba(black, 0.1);
   padding: 0;
   vertical-align: top;
 }
 
 :host /deep/ .fc .fc-month-view .fc-bg td.fc-today {
   background-color: rgba(#009688, 0.1);
+}
+
+:host /deep/ .fc .fc-agendaDay-view th,
+:host /deep/ .fc .fc-agendaDay-view td {
+  border-left-style: none;
+  border-right-style: none;
+}
+
+:host /deep/ .fc .fc-agendaDay-view td.fc-axis.fc-time {
+  text-align: left;
+  color: rgba(black, 0.6);
 }
 
 :host /deep/ .fc td.fc-today .fc-day-number {
@@ -564,9 +575,9 @@ temporary rendered events).
 }
 
 :host /deep/ .fc-event .fc-bg { /* the generic .fc-bg already does position */
-  z-index: 1;
-  background: #fff;
-  opacity: .25;
+  // z-index: 1; // was active
+  // background: #fff; // was active
+  // opacity: .25; // was active
 }
 
 :host /deep/ .fc-event .fc-content {
@@ -1117,7 +1128,9 @@ tr:first-child > td > .fc-day-grid-event {
 }
 
 :host /deep/ .fc-time-grid .fc-slats .fc-minor td {
-  border-top-style: dotted;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: rgba(black, 0.05);
 }
 
 :host /deep/ .fc-time-grid .fc-slats .ui-widget-content { /* for jqui theme */

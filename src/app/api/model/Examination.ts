@@ -25,18 +25,22 @@
 
 
 export interface Examination {
-    name?: string;
+    name: string;
 
-    duration?: number;
+    duration?: string;
+
+    backgroundColor?: string;
+
+    color?: string;
 
     id?: number;
 
-    created?: Date;
+    created: Date;
 
-    modified?: Date;
+    modified: Date;
 
-    createdBy?: number;
+    createdBy: number;
 
-    modifiedBy?: number;
+    modifiedBy: number;
 
 }

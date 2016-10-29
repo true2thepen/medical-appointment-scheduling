@@ -7,6 +7,12 @@ import { Location }                     from '@angular/common';
 
 import { AppState, Action }             from './app.service';
 
+import { ExaminationService }           from './api/api/examination.service';
+import { AttendanceService }            from './api/api/attendance.service';
+import { AppointmentService }           from './api/api/appointment.service';
+import { PatientService }               from './api/api/patient.service';
+import { RoomService }                  from './api/api/room.service';
+
 /*
  * App Component
  * Top Level Component
@@ -40,6 +46,10 @@ import { AppState, Action }             from './app.service';
         <md-icon md-list-icon>today</md-icon>
         <span md-line>Today</span>
       </a>
+      <a [routerLink]="['./appointment/statistics']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>show_chart</md-icon>
+        <span md-line>Statistics</span>
+      </a>
       <a [routerLink]="['./about']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>help</md-icon>
         <span md-line>Help</span>
@@ -65,10 +75,18 @@ import { AppState, Action }             from './app.service';
     </button>
 
     <md-menu x-position="before" #menu="mdMenu">
-        <button md-menu-item> Refresh </button>
-        <button md-menu-item> Settings </button>
-        <button md-menu-item> Help </button>
-        <button md-menu-item disabled> Sign Out </button>
+        <button md-menu-item (click)="insertTestExaminations()">Insert Test-Examinations</button>
+        <button md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
+        <button md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
+        <md-divider></md-divider>
+        <button md-menu-item (click)="createRandomAppointments()">Create random attendances</button>
+        <button md-menu-item (click)="createRandomAttendances()">Create random appointments</button>
+        <md-divider></md-divider>
+        <button md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
+        <button md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
+        <button md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
+        <button md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
+        <button md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
     </md-menu>
   </md-toolbar>
   <main>
@@ -96,7 +114,14 @@ export class AppComponent {
   private actions: Action[];
   private primaryAction: Action;
 
-  constructor(private _state: AppState, private _location: Location) {}
+  constructor(
+    private _state: AppState,
+    private _location: Location,
+    private attendanceService: AttendanceService,
+    private appointmentService: AppointmentService,
+    private examinationService: ExaminationService,
+    private patientService: PatientService,
+    private roomService: RoomService) {}
 
   ngOnInit() {
 
@@ -150,6 +175,96 @@ export class AppComponent {
         action.clickHandler();
       }
     }
+  }
+
+  public deleteAllRooms() {
+    this.roomService.roomDeleteAllRooms()
+    .subscribe(
+      x => console.log(`Deleted all ${x.deletedCount} rooms.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public deleteAllAppointments() {
+    this.appointmentService.appointmentDeleteAllAppointments()
+    .subscribe(
+      x => console.log(`Deleted all ${x.deletedCount} appointments.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public deleteAllExaminations() {
+    this.examinationService.examinationDeleteAllExaminations()
+    .subscribe(
+      x => console.log(`Deleted all ${x.deletedCount} examinations.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public deleteAllAttendances() {
+    this.attendanceService.attendanceDeleteAllAttendances()
+    .subscribe(
+      x => console.log(`Deleted all ${x.deletedCount} attendances.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public deleteAllPatients() {
+    this.patientService.patientDeleteAllPatients()
+    .subscribe(
+      x => console.log(`Deleted all ${x.deletedCount} patients.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public insertTestPatients() {
+    this.patientService.patientInsertTestData()
+    .subscribe(
+      x => console.log(`Inserted ${x.insertCount} test entries for patients.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public insertTestExaminations() {
+    this.examinationService.examinationInsertTestData()
+    .subscribe(
+      x => console.log(`Inserted ${x.insertCount} test entries for examinations.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public insertTestRooms() {
+    this.roomService.roomInsertTestData()
+    .subscribe(
+      x => console.log(`Inserted ${x.insertCount} test entries for rooms.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public createRandomAppointments() {
+    this.appointmentService.appointmentGenerateRandomAppointments()
+    .subscribe(
+      x => console.log(`Created random appointments.`),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  public createRandomAttendances() {
+    this.attendanceService.attendanceGenerateRandomAttendances()
+    .subscribe(
+      x => console.log(`Created random attendances.`),
+      err => console.log(err),
+      () => {}
+    );
   }
 
 }

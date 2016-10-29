@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-import { Injectable, Optional }                              from '@angular/core';
+import { Inject, Injectable, Optional }                      from '@angular/core';
 import { Http, Headers, URLSearchParams }                    from '@angular/http';
 import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Response, ResponseContentType }                     from '@angular/http';
@@ -30,26 +30,35 @@ import { Response, ResponseContentType }                     from '@angular/http
 import { Observable }                                        from 'rxjs/Observable';
 import '../rxjs-operators';
 
-import { InlineResponse200 }                                 from '../model/inlineResponse200';
-import { Appointment }                                       from '../model/appointment';
-import { InlineResponse2001 }                                from '../model/inlineResponse2001';
-import { Examination }                                       from '../model/examination';
-import { Patient }                                           from '../model/patient';
-import { Room }                                              from '../model/room';
-import { AppointmentExamination }                            from '../model/appointmentExamination';
+import { InlineResponse200 } from '../model/inlineResponse200';
+import { Appointment } from '../model/appointment';
+import { InlineResponse2001 } from '../model/inlineResponse2001';
+import { InlineResponse2002 } from '../model/inlineResponse2002';
+import { InlineResponse2004 } from '../model/inlineResponse2004';
+import { Attendance } from '../model/attendance';
+import { Examination } from '../model/examination';
+import { Patient } from '../model/patient';
+import { Room } from '../model/room';
+import { AppointmentExamination } from '../model/appointmentExamination';
+
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
 
 @Injectable()
 export class AppointmentService {
-
     protected basePath = 'http://localhost:3000/api';
     public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -59,40 +68,7 @@ export class AppointmentService {
      * @param where Criteria to match model instances
      */
     public appointmentCount(where?: string, extraHttpRequestParams?: any): Observable<InlineResponse200> {
-        const path = this.basePath + `/appointments/count`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (where !== undefined) {
-            queryParameters.set('where', String(where));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentCountWithHttpInfo(where, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -108,39 +84,7 @@ export class AppointmentService {
      * @param data Model instance data
      */
     public appointmentCreate(data?: Appointment, extraHttpRequestParams?: any): Observable<Appointment> {
-        const path = this.basePath + `/appointments`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentCreateWithHttpInfo(data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -156,40 +100,7 @@ export class AppointmentService {
      * @param options 
      */
     public appointmentCreateChangeStreamGetAppointmentsChangeStream(options?: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/appointments/change-stream`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (options !== undefined) {
-            queryParameters.set('options', String(options));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentCreateChangeStreamGetAppointmentsChangeStreamWithHttpInfo(options, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -205,43 +116,22 @@ export class AppointmentService {
      * @param options 
      */
     public appointmentCreateChangeStreamPostAppointmentsChangeStream(options?: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/appointments/change-stream`;
+        return this.appointmentCreateChangeStreamPostAppointmentsChangeStreamWithHttpInfo(options, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        let formParams = new URLSearchParams();
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
-        formParams['options'] = options;
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: formParams.toString(),
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Deletes all data.
+     * 
+     */
+    public appointmentDeleteAllAppointments(extraHttpRequestParams?: any): Observable<InlineResponse2001> {
+        return this.appointmentDeleteAllAppointmentsWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -257,40 +147,7 @@ export class AppointmentService {
      * @param id Model id
      */
     public appointmentDeleteById(id: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/appointments/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentDeleteById.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Delete,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentDeleteByIdWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -305,41 +162,8 @@ export class AppointmentService {
      * 
      * @param id Model id
      */
-    public appointmentExistsGetAppointmentsidExists(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2001> {
-        const path = this.basePath + `/appointments/${id}/exists`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentExistsGetAppointmentsidExists.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    public appointmentExistsGetAppointmentsidExists(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2002> {
+        return this.appointmentExistsGetAppointmentsidExistsWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -354,41 +178,8 @@ export class AppointmentService {
      * 
      * @param id Model id
      */
-    public appointmentExistsHeadAppointmentsid(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2001> {
-        const path = this.basePath + `/appointments/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentExistsHeadAppointmentsid.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Head,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    public appointmentExistsHeadAppointmentsid(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2002> {
+        return this.appointmentExistsHeadAppointmentsidWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -404,40 +195,7 @@ export class AppointmentService {
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public appointmentFind(filter?: string, extraHttpRequestParams?: any): Observable<Array<Appointment>> {
-        const path = this.basePath + `/appointments`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentFindWithHttpInfo(filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -454,44 +212,7 @@ export class AppointmentService {
      * @param filter Filter defining fields and include
      */
     public appointmentFindById(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Appointment> {
-        const path = this.basePath + `/appointments/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentFindById.');
-        }
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentFindByIdWithHttpInfo(id, filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -507,40 +228,7 @@ export class AppointmentService {
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public appointmentFindOne(filter?: string, extraHttpRequestParams?: any): Observable<Appointment> {
-        const path = this.basePath + `/appointments/findOne`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentFindOneWithHttpInfo(filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -556,54 +244,28 @@ export class AppointmentService {
      * @param duration 
      * @param examinationId 
      * @param roomId 
+     * @param startDate 
      */
-    public appointmentFindTime(duration: string, examinationId?: number, roomId?: number, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/appointments/findTime`;
+    public appointmentFindTime(duration: string, examinationId?: number, roomId?: number, startDate?: Date, extraHttpRequestParams?: any): Observable<any> {
+        return this.appointmentFindTimeWithHttpInfo(duration, examinationId, roomId, startDate, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'duration' is not null or undefined
-        if (duration === null || duration === undefined) {
-            throw new Error('Required parameter duration was null or undefined when calling appointmentFindTime.');
-        }
-        if (duration !== undefined) {
-            queryParameters.set('duration', String(duration));
-        }
-
-        if (examinationId !== undefined) {
-            queryParameters.set('examinationId', String(examinationId));
-        }
-
-        if (roomId !== undefined) {
-            queryParameters.set('roomId', String(roomId));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Deletes all data.
+     * 
+     * @param freeDays 
+     * @param startDate 
+     * @param endDate 
+     */
+    public appointmentGenerateRandomAppointments(freeDays?: string, startDate?: Date, endDate?: Date, extraHttpRequestParams?: any): Observable<InlineResponse2004> {
+        return this.appointmentGenerateRandomAppointmentsWithHttpInfo(freeDays, startDate, endDate, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -620,44 +282,24 @@ export class AppointmentService {
      * @param where Criteria to match model instances
      */
     public appointmentPrototypeCountExaminations(id: string, where?: string, extraHttpRequestParams?: any): Observable<InlineResponse200> {
-        const path = this.basePath + `/appointments/${id}/examinations/count`;
+        return this.appointmentPrototypeCountExaminationsWithHttpInfo(id, where, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeCountExaminations.');
-        }
-        if (where !== undefined) {
-            queryParameters.set('where', String(where));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Creates a new instance in attendance of this model.
+     * 
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeCreateAttendance(id: string, data?: Attendance, extraHttpRequestParams?: any): Observable<Attendance> {
+        return this.appointmentPrototypeCreateAttendanceWithHttpInfo(id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -674,43 +316,7 @@ export class AppointmentService {
      * @param data 
      */
     public appointmentPrototypeCreateExaminations(id: string, data?: Examination, extraHttpRequestParams?: any): Observable<Examination> {
-        const path = this.basePath + `/appointments/${id}/examinations`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeCreateExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeCreateExaminationsWithHttpInfo(id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -726,40 +332,23 @@ export class AppointmentService {
      * @param id PersistedModel id
      */
     public appointmentPrototypeDeleteExaminations(id: string, extraHttpRequestParams?: any): Observable<{}> {
-        const path = this.basePath + `/appointments/${id}/examinations`;
+        return this.appointmentPrototypeDeleteExaminationsWithHttpInfo(id, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeDeleteExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Delete,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Deletes attendance of this model.
+     * 
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeDestroyAttendance(id: string, extraHttpRequestParams?: any): Observable<{}> {
+        return this.appointmentPrototypeDestroyAttendanceWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -776,44 +365,7 @@ export class AppointmentService {
      * @param id PersistedModel id
      */
     public appointmentPrototypeDestroyByIdExaminations(fk: string, id: string, extraHttpRequestParams?: any): Observable<{}> {
-        const path = this.basePath + `/appointments/${id}/examinations/${fk}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'fk' is not null or undefined
-        if (fk === null || fk === undefined) {
-            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeDestroyByIdExaminations.');
-        }
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeDestroyByIdExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Delete,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeDestroyByIdExaminationsWithHttpInfo(fk, id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -830,44 +382,7 @@ export class AppointmentService {
      * @param id PersistedModel id
      */
     public appointmentPrototypeExistsExaminations(fk: string, id: string, extraHttpRequestParams?: any): Observable<boolean> {
-        const path = this.basePath + `/appointments/${id}/examinations/rel/${fk}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'fk' is not null or undefined
-        if (fk === null || fk === undefined) {
-            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeExistsExaminations.');
-        }
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeExistsExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Head,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeExistsExaminationsWithHttpInfo(fk, id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -884,44 +399,24 @@ export class AppointmentService {
      * @param id PersistedModel id
      */
     public appointmentPrototypeFindByIdExaminations(fk: string, id: string, extraHttpRequestParams?: any): Observable<Examination> {
-        const path = this.basePath + `/appointments/${id}/examinations/${fk}`;
+        return this.appointmentPrototypeFindByIdExaminationsWithHttpInfo(fk, id, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'fk' is not null or undefined
-        if (fk === null || fk === undefined) {
-            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeFindByIdExaminations.');
-        }
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeFindByIdExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Fetches hasOne relation attendance.
+     * 
+     * @param id PersistedModel id
+     * @param refresh 
+     */
+    public appointmentPrototypeGetAttendance(id: string, refresh?: boolean, extraHttpRequestParams?: any): Observable<Attendance> {
+        return this.appointmentPrototypeGetAttendanceWithHttpInfo(id, refresh, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -938,44 +433,7 @@ export class AppointmentService {
      * @param filter 
      */
     public appointmentPrototypeGetExaminations(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Array<Examination>> {
-        const path = this.basePath + `/appointments/${id}/examinations`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetExaminations.');
-        }
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeGetExaminationsWithHttpInfo(id, filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -992,44 +450,7 @@ export class AppointmentService {
      * @param refresh 
      */
     public appointmentPrototypeGetPatient(id: string, refresh?: boolean, extraHttpRequestParams?: any): Observable<Patient> {
-        const path = this.basePath + `/appointments/${id}/patient`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetPatient.');
-        }
-        if (refresh !== undefined) {
-            queryParameters.set('refresh', String(refresh));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeGetPatientWithHttpInfo(id, refresh, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -1046,44 +467,7 @@ export class AppointmentService {
      * @param refresh 
      */
     public appointmentPrototypeGetRoom(id: string, refresh?: boolean, extraHttpRequestParams?: any): Observable<Room> {
-        const path = this.basePath + `/appointments/${id}/room`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetRoom.');
-        }
-        if (refresh !== undefined) {
-            queryParameters.set('refresh', String(refresh));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeGetRoomWithHttpInfo(id, refresh, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -1101,47 +485,7 @@ export class AppointmentService {
      * @param data 
      */
     public appointmentPrototypeLinkExaminations(fk: string, id: string, data?: AppointmentExamination, extraHttpRequestParams?: any): Observable<AppointmentExamination> {
-        const path = this.basePath + `/appointments/${id}/examinations/rel/${fk}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'fk' is not null or undefined
-        if (fk === null || fk === undefined) {
-            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeLinkExaminations.');
-        }
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeLinkExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Put,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeLinkExaminationsWithHttpInfo(fk, id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -1158,44 +502,24 @@ export class AppointmentService {
      * @param id PersistedModel id
      */
     public appointmentPrototypeUnlinkExaminations(fk: string, id: string, extraHttpRequestParams?: any): Observable<{}> {
-        const path = this.basePath + `/appointments/${id}/examinations/rel/${fk}`;
+        return this.appointmentPrototypeUnlinkExaminationsWithHttpInfo(fk, id, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'fk' is not null or undefined
-        if (fk === null || fk === undefined) {
-            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeUnlinkExaminations.');
-        }
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUnlinkExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Delete,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Update attendance of this model.
+     * 
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeUpdateAttendance(id: string, data?: Attendance, extraHttpRequestParams?: any): Observable<Attendance> {
+        return this.appointmentPrototypeUpdateAttendanceWithHttpInfo(id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -1212,43 +536,7 @@ export class AppointmentService {
      * @param data An object of model property name/value pairs
      */
     public appointmentPrototypeUpdateAttributes(id: string, data?: Appointment, extraHttpRequestParams?: any): Observable<Appointment> {
-        const path = this.basePath + `/appointments/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUpdateAttributes.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Put,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeUpdateAttributesWithHttpInfo(id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -1266,47 +554,7 @@ export class AppointmentService {
      * @param data 
      */
     public appointmentPrototypeUpdateByIdExaminations(fk: string, id: string, data?: Examination, extraHttpRequestParams?: any): Observable<Examination> {
-        const path = this.basePath + `/appointments/${id}/examinations/${fk}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'fk' is not null or undefined
-        if (fk === null || fk === undefined) {
-            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeUpdateByIdExaminations.');
-        }
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUpdateByIdExaminations.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Put,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.appointmentPrototypeUpdateByIdExaminationsWithHttpInfo(fk, id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -1323,12 +571,45 @@ export class AppointmentService {
      * @param data An object of model property name/value pairs
      */
     public appointmentUpdateAll(where?: string, data?: Appointment, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/appointments/update`;
+        return this.appointmentUpdateAllWithHttpInfo(where, data, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * Update an existing model instance or insert a new one into the data source.
+     * 
+     * @param data Model instance data
+     */
+    public appointmentUpsert(data?: Appointment, extraHttpRequestParams?: any): Observable<Appointment> {
+        return this.appointmentUpsertWithHttpInfo(data, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+
+    /**
+     * Count instances of the model matched by where from the data source.
+     * 
+     * @param where Criteria to match model instances
+     */
+    public appointmentCountWithHttpInfo(where?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/count`;
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         if (where !== undefined) {
-            queryParameters.set('where', String(where));
+            queryParameters.set('where', <any>where);
         }
 
 
@@ -1348,37 +629,32 @@ export class AppointmentService {
             'application/javascript', 
             'text/javascript'
         ];
+        
+            
 
-        headers.set('Content-Type', 'application/json');
+
 
         let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
+            method: RequestMethod.Get,
             headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
             search: queryParameters,
             responseType: ResponseContentType.Json
         });
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+        return this.http.request(path, requestOptions);
     }
 
     /**
-     * Update an existing model instance or insert a new one into the data source.
+     * Create a new instance of the model and persist it into the data source.
      * 
      * @param data Model instance data
      */
-    public appointmentUpsert(data?: Appointment, extraHttpRequestParams?: any): Observable<Appointment> {
+    public appointmentCreateWithHttpInfo(data?: Appointment, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/appointments`;
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
 
         // to determine the Content-Type header
         let consumes: string[] = [
@@ -1396,8 +672,1209 @@ export class AppointmentService {
             'application/javascript', 
             'text/javascript'
         ];
+        
+            
 
         headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Create a change stream.
+     * 
+     * @param options 
+     */
+    public appointmentCreateChangeStreamGetAppointmentsChangeStreamWithHttpInfo(options?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/change-stream`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (options !== undefined) {
+            queryParameters.set('options', <any>options);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Create a change stream.
+     * 
+     * @param options 
+     */
+    public appointmentCreateChangeStreamPostAppointmentsChangeStreamWithHttpInfo(options?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/change-stream`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let formParams = new URLSearchParams();
+
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+        headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
+
+        if (options !== undefined) {
+            formParams.set('options', <any>options); 
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: formParams.toString(),
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Deletes all data.
+     * 
+     */
+    public appointmentDeleteAllAppointmentsWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/deleteAll`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Delete a model instance by id from the data source.
+     * 
+     * @param id Model id
+     */
+    public appointmentDeleteByIdWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentDeleteById.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check whether a model instance exists in the data source.
+     * 
+     * @param id Model id
+     */
+    public appointmentExistsGetAppointmentsidExistsWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/exists`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentExistsGetAppointmentsidExists.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check whether a model instance exists in the data source.
+     * 
+     * @param id Model id
+     */
+    public appointmentExistsHeadAppointmentsidWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentExistsHeadAppointmentsid.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Head,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find all instances of the model matched by filter from the data source.
+     * 
+     * @param filter Filter defining fields, where, include, order, offset, and limit
+     */
+    public appointmentFindWithHttpInfo(filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find a model instance by id from the data source.
+     * 
+     * @param id Model id
+     * @param filter Filter defining fields and include
+     */
+    public appointmentFindByIdWithHttpInfo(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentFindById.');
+        }
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find first instance of the model matched by filter from the data source.
+     * 
+     * @param filter Filter defining fields, where, include, order, offset, and limit
+     */
+    public appointmentFindOneWithHttpInfo(filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/findOne`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Finds free slots for an appointment with the specified duration.
+     * 
+     * @param duration 
+     * @param examinationId 
+     * @param roomId 
+     * @param startDate 
+     */
+    public appointmentFindTimeWithHttpInfo(duration: string, examinationId?: number, roomId?: number, startDate?: Date, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/findTime`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'duration' is not null or undefined
+        if (duration === null || duration === undefined) {
+            throw new Error('Required parameter duration was null or undefined when calling appointmentFindTime.');
+        }
+        if (duration !== undefined) {
+            queryParameters.set('duration', <any>duration);
+        }
+        if (examinationId !== undefined) {
+            queryParameters.set('examinationId', <any>examinationId);
+        }
+        if (roomId !== undefined) {
+            queryParameters.set('roomId', <any>roomId);
+        }
+        if (startDate !== undefined) {
+            queryParameters.set('startDate', <any>startDate);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Deletes all data.
+     * 
+     * @param freeDays 
+     * @param startDate 
+     * @param endDate 
+     */
+    public appointmentGenerateRandomAppointmentsWithHttpInfo(freeDays?: string, startDate?: Date, endDate?: Date, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/generateRandomAppointments`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (freeDays !== undefined) {
+            queryParameters.set('freeDays', <any>freeDays);
+        }
+        if (startDate !== undefined) {
+            queryParameters.set('startDate', <any>startDate);
+        }
+        if (endDate !== undefined) {
+            queryParameters.set('endDate', <any>endDate);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Counts examinations of Appointment.
+     * 
+     * @param id PersistedModel id
+     * @param where Criteria to match model instances
+     */
+    public appointmentPrototypeCountExaminationsWithHttpInfo(id: string, where?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/count`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeCountExaminations.');
+        }
+        if (where !== undefined) {
+            queryParameters.set('where', <any>where);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Creates a new instance in attendance of this model.
+     * 
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeCreateAttendanceWithHttpInfo(id: string, data?: Attendance, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/attendance`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeCreateAttendance.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Creates a new instance in examinations of this model.
+     * 
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeCreateExaminationsWithHttpInfo(id: string, data?: Examination, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeCreateExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Deletes all examinations of this model.
+     * 
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeDeleteExaminationsWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeDeleteExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Deletes attendance of this model.
+     * 
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeDestroyAttendanceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/attendance`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeDestroyAttendance.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Delete a related item by id for examinations.
+     * 
+     * @param fk Foreign key for examinations
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeDestroyByIdExaminationsWithHttpInfo(fk: string, id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/${fk}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'fk' is not null or undefined
+        if (fk === null || fk === undefined) {
+            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeDestroyByIdExaminations.');
+        }
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeDestroyByIdExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check the existence of examinations relation to an item by id.
+     * 
+     * @param fk Foreign key for examinations
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeExistsExaminationsWithHttpInfo(fk: string, id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/rel/${fk}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'fk' is not null or undefined
+        if (fk === null || fk === undefined) {
+            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeExistsExaminations.');
+        }
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeExistsExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Head,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find a related item by id for examinations.
+     * 
+     * @param fk Foreign key for examinations
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeFindByIdExaminationsWithHttpInfo(fk: string, id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/${fk}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'fk' is not null or undefined
+        if (fk === null || fk === undefined) {
+            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeFindByIdExaminations.');
+        }
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeFindByIdExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Fetches hasOne relation attendance.
+     * 
+     * @param id PersistedModel id
+     * @param refresh 
+     */
+    public appointmentPrototypeGetAttendanceWithHttpInfo(id: string, refresh?: boolean, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/attendance`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetAttendance.');
+        }
+        if (refresh !== undefined) {
+            queryParameters.set('refresh', <any>refresh);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Queries examinations of Appointment.
+     * 
+     * @param id PersistedModel id
+     * @param filter 
+     */
+    public appointmentPrototypeGetExaminationsWithHttpInfo(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetExaminations.');
+        }
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Fetches belongsTo relation patient.
+     * 
+     * @param id PersistedModel id
+     * @param refresh 
+     */
+    public appointmentPrototypeGetPatientWithHttpInfo(id: string, refresh?: boolean, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/patient`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetPatient.');
+        }
+        if (refresh !== undefined) {
+            queryParameters.set('refresh', <any>refresh);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Fetches belongsTo relation room.
+     * 
+     * @param id PersistedModel id
+     * @param refresh 
+     */
+    public appointmentPrototypeGetRoomWithHttpInfo(id: string, refresh?: boolean, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/room`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeGetRoom.');
+        }
+        if (refresh !== undefined) {
+            queryParameters.set('refresh', <any>refresh);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Add a related item by id for examinations.
+     * 
+     * @param fk Foreign key for examinations
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeLinkExaminationsWithHttpInfo(fk: string, id: string, data?: AppointmentExamination, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/rel/${fk}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'fk' is not null or undefined
+        if (fk === null || fk === undefined) {
+            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeLinkExaminations.');
+        }
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeLinkExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
 
         let requestOptions: RequestOptionsArgs = new RequestOptions({
             method: RequestMethod.Put,
@@ -1407,14 +1884,308 @@ export class AppointmentService {
             responseType: ResponseContentType.Json
         });
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Remove the examinations relation to an item by id.
+     * 
+     * @param fk Foreign key for examinations
+     * @param id PersistedModel id
+     */
+    public appointmentPrototypeUnlinkExaminationsWithHttpInfo(fk: string, id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/rel/${fk}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'fk' is not null or undefined
+        if (fk === null || fk === undefined) {
+            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeUnlinkExaminations.');
+        }
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUnlinkExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update attendance of this model.
+     * 
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeUpdateAttendanceWithHttpInfo(id: string, data?: Attendance, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/attendance`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUpdateAttendance.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update attributes for a model instance and persist it into the data source.
+     * 
+     * @param id PersistedModel id
+     * @param data An object of model property name/value pairs
+     */
+    public appointmentPrototypeUpdateAttributesWithHttpInfo(id: string, data?: Appointment, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUpdateAttributes.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update a related item by id for examinations.
+     * 
+     * @param fk Foreign key for examinations
+     * @param id PersistedModel id
+     * @param data 
+     */
+    public appointmentPrototypeUpdateByIdExaminationsWithHttpInfo(fk: string, id: string, data?: Examination, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/${id}/examinations/${fk}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'fk' is not null or undefined
+        if (fk === null || fk === undefined) {
+            throw new Error('Required parameter fk was null or undefined when calling appointmentPrototypeUpdateByIdExaminations.');
+        }
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling appointmentPrototypeUpdateByIdExaminations.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update instances of the model matched by where from the data source.
+     * 
+     * @param where Criteria to match model instances
+     * @param data An object of model property name/value pairs
+     */
+    public appointmentUpdateAllWithHttpInfo(where?: string, data?: Appointment, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments/update`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (where !== undefined) {
+            queryParameters.set('where', <any>where);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update an existing model instance or insert a new one into the data source.
+     * 
+     * @param data Model instance data
+     */
+    public appointmentUpsertWithHttpInfo(data?: Appointment, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/appointments`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

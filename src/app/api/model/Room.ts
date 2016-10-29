@@ -25,18 +25,18 @@
 
 
 export interface Room {
-    name?: string;
+    name: string;
 
     description?: string;
 
     id?: number;
 
-    created?: Date;
+    created: Date;
 
-    modified?: Date;
+    modified: Date;
 
-    createdBy?: number;
+    createdBy: number;
 
-    modifiedBy?: number;
+    modifiedBy: number;
 
 }

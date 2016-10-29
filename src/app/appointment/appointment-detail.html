@@ -1,53 +1,69 @@
-<div class="form">
+<div class="card-centered-wrapper">
 
-  <div *ngIf="!editing">
-    <h2>{{model.title}}</h2>
-    <p>{{model.patient?.name}}</p>
-    <p>{{model.roomId}}</p>
-    <p>{{model.time}}</p>
-    <p>{{model.date}}</p>
-    <p>{{model.duration}}</p>
-    <p *ngFor="let e of model.examinations">{{e.name}}</p>
-    <p>{{model.description}}</p>
-    <button md-icon-button (click)="handleEditClick()">
-      <md-icon class="md-24">edit</md-icon>
-    </button>
-  </div>
+  <md-card *ngIf="!editing" class="card-centered-600">
+    <md-card-title>{{model.patient?.name}}</md-card-title>
+    <md-card-content>
+      <p>{{model.title}}</p>
+      <p>{{model.roomId}}</p>
+      <p>{{model.time}}</p>
+      <p>{{model.date}}</p>
+      <p>{{model.duration}}</p>
+      <p *ngFor="let e of model.examinations">{{e.name}}</p>
+      <p>{{model.description}}</p>
+    </md-card-content>
+    <md-card-actions align="end">
+      <button md-button (click)="handleEditClick()">EDIT</button>
+    </md-card-actions>
+  </md-card>
 
   <form *ngIf="editing" (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
-    <md-card>
+    <md-card class="card-centered-600">
+    <md-card-title>New Appointment</md-card-title>
       <md-card-content>
-        <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="name" placeholder="Patient" required="true" name="patient"></p-autoComplete>
-        <p-autoComplete [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
-        </p-autoComplete>
-        <md-input [(ngModel)]="model.title" placeholder="Title" required="true" name="title"></md-input>
+
+        <div>
+          <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="name" placeholder="Patient" required="true" name="patient"></p-autoComplete>
+        </div>
+
+        <div class="examinations-container">
+          <span class="label">Examinations:</span>
+          <p-autoComplete [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
+          </p-autoComplete>
+        </div>
+
+        <div><md-input [(ngModel)]="model.duration" placeholder="Duration" required="true" name="duration"></md-input></div>
+
+        <div><md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
+        <md-input [(ngModel)]="model.time" placeholder="Time" required="true" name="time"></md-input></div>
+
+        <md-input [(ngModel)]="model.title" placeholder="Title" name="title"></md-input>
         <md-input [(ngModel)]="model.description" placeholder="Description" name="description"></md-input>
-        <md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
-        <md-input [(ngModel)]="model.time" placeholder="Time" required="true" name="time"></md-input>
-        <md-input [(ngModel)]="model.duration" placeholder="Duration" required="true" name="duration"></md-input>
-        <select [(ngModel)]="model.roomId" required name="room">
-          <option *ngFor="let r of rooms" [value]="r?.id">{{r?.name}}</option>
-        </select>
+
+        <div>
+          <span class="label">Room: *</span>
+          <select [(ngModel)]="model.roomId" required name="room">
+            <option *ngFor="let r of rooms" [value]="r?.id">{{r?.name}}</option>
+          </select>
+        </div>
+
       </md-card-content>
       <md-card-actions align="end">
-        <button [disabled]="!appointmentForm.form.valid" md-raised-button type="submit" color="accent">Save</button>
+        <button [disabled]="!appointmentForm.form.valid" md-button type="submit">SAVE</button>
       </md-card-actions>
     </md-card>
   </form>
 
-  <form *ngIf="proposedTimeSlot?.success" (ngSubmit)="applySuggestion()" class="ui form">
-    <md-card>
-      <md-card-title>Suggestion</md-card-title>
+  <div *ngFor="let timeSlot of proposedTimeSlots">
+    <md-card class="card-centered-600">
+      <md-card-subtitle>In {{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | amTimeAgo:true}}</md-card-subtitle>
+      <md-card-title>{{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'fullDate'}}</md-card-title>
       <md-card-content>
-        {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'fullDate'}}
-        {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'shortTime'}}
-        {{proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].duration}} Minutes
-        {{getRoomNameById(proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0])}}
+        <div>{{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'shortTime'}}, {{timeSlot.scheduledTasks.NewAppointment.schedule[0].duration}} Minutes</div>
+        <div>{{getRoomNameById(timeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0])}}</div>
       </md-card-content>
       <md-card-actions align="end">
-        <button md-button type="submit" color="accent">Apply suggestion</button>
+        <button md-button type="submit" (click)="applySuggestion(timeSlot.scheduledTasks.NewAppointment.schedule[0])">APPLY SUGGESTION</button>
       </md-card-actions>
     </md-card>
-  </form>
-
+  </div>
 </div>

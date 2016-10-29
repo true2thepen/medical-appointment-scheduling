@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-import { Injectable, Optional }                              from '@angular/core';
+import { Inject, Injectable, Optional }                      from '@angular/core';
 import { Http, Headers, URLSearchParams }                    from '@angular/http';
 import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Response, ResponseContentType }                     from '@angular/http';
@@ -30,22 +30,30 @@ import { Response, ResponseContentType }                     from '@angular/http
 import { Observable }                                        from 'rxjs/Observable';
 import '../rxjs-operators';
 
-import { InlineResponse200 }                                 from '../model/inlineResponse200';
-import { Room }                                              from '../model/room';
-import { InlineResponse2001 }                                from '../model/inlineResponse2001';
+import { InlineResponse200 } from '../model/inlineResponse200';
+import { Room } from '../model/room';
+import { InlineResponse2001 } from '../model/inlineResponse2001';
+import { InlineResponse2002 } from '../model/inlineResponse2002';
+import { InlineResponse2003 } from '../model/inlineResponse2003';
+
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
 
 @Injectable()
 export class RoomService {
-
     protected basePath = 'http://localhost:3000/api';
     public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -55,40 +63,7 @@ export class RoomService {
      * @param where Criteria to match model instances
      */
     public roomCount(where?: string, extraHttpRequestParams?: any): Observable<InlineResponse200> {
-        const path = this.basePath + `/Rooms/count`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (where !== undefined) {
-            queryParameters.set('where', String(where));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomCountWithHttpInfo(where, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -104,39 +79,7 @@ export class RoomService {
      * @param data Model instance data
      */
     public roomCreate(data?: Room, extraHttpRequestParams?: any): Observable<Room> {
-        const path = this.basePath + `/Rooms`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomCreateWithHttpInfo(data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -152,40 +95,7 @@ export class RoomService {
      * @param options 
      */
     public roomCreateChangeStreamGetRoomsChangeStream(options?: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Rooms/change-stream`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (options !== undefined) {
-            queryParameters.set('options', String(options));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomCreateChangeStreamGetRoomsChangeStreamWithHttpInfo(options, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -201,43 +111,22 @@ export class RoomService {
      * @param options 
      */
     public roomCreateChangeStreamPostRoomsChangeStream(options?: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Rooms/change-stream`;
+        return this.roomCreateChangeStreamPostRoomsChangeStreamWithHttpInfo(options, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        let formParams = new URLSearchParams();
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
-        formParams['options'] = options;
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
-            headers: headers,
-            body: formParams.toString(),
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Deletes all data.
+     * 
+     */
+    public roomDeleteAllRooms(extraHttpRequestParams?: any): Observable<InlineResponse2001> {
+        return this.roomDeleteAllRoomsWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -253,40 +142,7 @@ export class RoomService {
      * @param id Model id
      */
     public roomDeleteById(id: string, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Rooms/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling roomDeleteById.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Delete,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomDeleteByIdWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -301,41 +157,8 @@ export class RoomService {
      * 
      * @param id Model id
      */
-    public roomExistsGetRoomsidExists(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2001> {
-        const path = this.basePath + `/Rooms/${id}/exists`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling roomExistsGetRoomsidExists.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    public roomExistsGetRoomsidExists(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2002> {
+        return this.roomExistsGetRoomsidExistsWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -350,41 +173,8 @@ export class RoomService {
      * 
      * @param id Model id
      */
-    public roomExistsHeadRoomsid(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2001> {
-        const path = this.basePath + `/Rooms/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling roomExistsHeadRoomsid.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Head,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    public roomExistsHeadRoomsid(id: string, extraHttpRequestParams?: any): Observable<InlineResponse2002> {
+        return this.roomExistsHeadRoomsidWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -400,40 +190,7 @@ export class RoomService {
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public roomFind(filter?: string, extraHttpRequestParams?: any): Observable<Array<Room>> {
-        const path = this.basePath + `/Rooms`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomFindWithHttpInfo(filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -450,44 +207,7 @@ export class RoomService {
      * @param filter Filter defining fields and include
      */
     public roomFindById(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Room> {
-        const path = this.basePath + `/Rooms/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling roomFindById.');
-        }
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomFindByIdWithHttpInfo(id, filter, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -503,40 +223,22 @@ export class RoomService {
      * @param filter Filter defining fields, where, include, order, offset, and limit
      */
     public roomFindOne(filter?: string, extraHttpRequestParams?: any): Observable<Room> {
-        const path = this.basePath + `/Rooms/findOne`;
+        return this.roomFindOneWithHttpInfo(filter, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        if (filter !== undefined) {
-            queryParameters.set('filter', String(filter));
-        }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Get,
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+    /**
+     * Insert sample data set of test rooms.
+     * 
+     */
+    public roomInsertTestData(extraHttpRequestParams?: any): Observable<InlineResponse2003> {
+        return this.roomInsertTestDataWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -553,43 +255,7 @@ export class RoomService {
      * @param data An object of model property name/value pairs
      */
     public roomPrototypeUpdateAttributes(id: string, data?: Room, extraHttpRequestParams?: any): Observable<Room> {
-        const path = this.basePath + `/Rooms/${id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling roomPrototypeUpdateAttributes.');
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json', 
-            'application/x-www-form-urlencoded', 
-            'application/xml', 
-            'text/xml'
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            'application/json', 
-            'application/xml', 
-            'text/xml', 
-            'application/javascript', 
-            'text/javascript'
-        ];
-
-        headers.set('Content-Type', 'application/json');
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Put,
-            headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions)
+        return this.roomPrototypeUpdateAttributesWithHttpInfo(id, data, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -606,12 +272,45 @@ export class RoomService {
      * @param data An object of model property name/value pairs
      */
     public roomUpdateAll(where?: string, data?: Room, extraHttpRequestParams?: any): Observable<any> {
-        const path = this.basePath + `/Rooms/update`;
+        return this.roomUpdateAllWithHttpInfo(where, data, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * Update an existing model instance or insert a new one into the data source.
+     * 
+     * @param data Model instance data
+     */
+    public roomUpsert(data?: Room, extraHttpRequestParams?: any): Observable<Room> {
+        return this.roomUpsertWithHttpInfo(data, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+
+    /**
+     * Count instances of the model matched by where from the data source.
+     * 
+     * @param where Criteria to match model instances
+     */
+    public roomCountWithHttpInfo(where?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/count`;
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         if (where !== undefined) {
-            queryParameters.set('where', String(where));
+            queryParameters.set('where', <any>where);
         }
 
 
@@ -631,37 +330,32 @@ export class RoomService {
             'application/javascript', 
             'text/javascript'
         ];
+        
+            
 
-        headers.set('Content-Type', 'application/json');
+
 
         let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: RequestMethod.Post,
+            method: RequestMethod.Get,
             headers: headers,
-            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
             search: queryParameters,
             responseType: ResponseContentType.Json
         });
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+        return this.http.request(path, requestOptions);
     }
 
     /**
-     * Update an existing model instance or insert a new one into the data source.
+     * Create a new instance of the model and persist it into the data source.
      * 
      * @param data Model instance data
      */
-    public roomUpsert(data?: Room, extraHttpRequestParams?: any): Observable<Room> {
+    public roomCreateWithHttpInfo(data?: Room, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/Rooms`;
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.values()); // https://github.com/angular/angular/issues/6845
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
 
         // to determine the Content-Type header
         let consumes: string[] = [
@@ -679,8 +373,525 @@ export class RoomService {
             'application/javascript', 
             'text/javascript'
         ];
+        
+            
 
         headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Create a change stream.
+     * 
+     * @param options 
+     */
+    public roomCreateChangeStreamGetRoomsChangeStreamWithHttpInfo(options?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/change-stream`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (options !== undefined) {
+            queryParameters.set('options', <any>options);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Create a change stream.
+     * 
+     * @param options 
+     */
+    public roomCreateChangeStreamPostRoomsChangeStreamWithHttpInfo(options?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/change-stream`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let formParams = new URLSearchParams();
+
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+        headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
+
+        if (options !== undefined) {
+            formParams.set('options', <any>options); 
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: formParams.toString(),
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Deletes all data.
+     * 
+     */
+    public roomDeleteAllRoomsWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/deleteAll`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Delete a model instance by id from the data source.
+     * 
+     * @param id Model id
+     */
+    public roomDeleteByIdWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling roomDeleteById.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check whether a model instance exists in the data source.
+     * 
+     * @param id Model id
+     */
+    public roomExistsGetRoomsidExistsWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/${id}/exists`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling roomExistsGetRoomsidExists.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Check whether a model instance exists in the data source.
+     * 
+     * @param id Model id
+     */
+    public roomExistsHeadRoomsidWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling roomExistsHeadRoomsid.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Head,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find all instances of the model matched by filter from the data source.
+     * 
+     * @param filter Filter defining fields, where, include, order, offset, and limit
+     */
+    public roomFindWithHttpInfo(filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find a model instance by id from the data source.
+     * 
+     * @param id Model id
+     * @param filter Filter defining fields and include
+     */
+    public roomFindByIdWithHttpInfo(id: string, filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling roomFindById.');
+        }
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Find first instance of the model matched by filter from the data source.
+     * 
+     * @param filter Filter defining fields, where, include, order, offset, and limit
+     */
+    public roomFindOneWithHttpInfo(filter?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/findOne`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (filter !== undefined) {
+            queryParameters.set('filter', <any>filter);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Insert sample data set of test rooms.
+     * 
+     */
+    public roomInsertTestDataWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/insertTestData`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update attributes for a model instance and persist it into the data source.
+     * 
+     * @param id PersistedModel id
+     * @param data An object of model property name/value pairs
+     */
+    public roomPrototypeUpdateAttributesWithHttpInfo(id: string, data?: Room, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/${id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling roomPrototypeUpdateAttributes.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
 
         let requestOptions: RequestOptionsArgs = new RequestOptions({
             method: RequestMethod.Put,
@@ -690,14 +901,101 @@ export class RoomService {
             responseType: ResponseContentType.Json
         });
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update instances of the model matched by where from the data source.
+     * 
+     * @param where Criteria to match model instances
+     * @param data An object of model property name/value pairs
+     */
+    public roomUpdateAllWithHttpInfo(where?: string, data?: Room, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms/update`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (where !== undefined) {
+            queryParameters.set('where', <any>where);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Update an existing model instance or insert a new one into the data source.
+     * 
+     * @param data Model instance data
+     */
+    public roomUpsertWithHttpInfo(data?: Room, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/Rooms`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json', 
+            'application/x-www-form-urlencoded', 
+            'application/xml', 
+            'text/xml'
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json', 
+            'application/xml', 
+            'text/xml', 
+            'application/javascript', 
+            'text/javascript'
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: data == null ? '' : JSON.stringify(data), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

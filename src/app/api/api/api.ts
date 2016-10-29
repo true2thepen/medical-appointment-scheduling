@@ -1,4 +1,5 @@
 export * from './appointment.service';
+export * from './attendance.service';
 export * from './auditLogEntry.service';
 export * from './examination.service';
 export * from './patient.service';

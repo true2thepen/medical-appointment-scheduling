@@ -24,13 +24,7 @@
 
 
 
-export interface Patient {
-    name: string;
-
-    dateOfBirth: Date;
-
-    svn: number;
-
-    id?: number;
+export interface InlineResponse2003 {
+    insertCount?: number;
 
 }

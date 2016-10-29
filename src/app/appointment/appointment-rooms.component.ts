@@ -5,7 +5,7 @@ import { Router }             from '@angular/router';
 import { AppState }           from '../app.service';
 
 import { Appointment }        from '../api/model/appointment';
-import { AppointmentService } from '../api/api/appointment.service';
+import { ViewAppointmentService } from './appointment.service';
 import { Room }               from '../api/model/room';
 import { RoomService }        from '../api/api/room.service';
 
@@ -31,7 +31,7 @@ export class AppointmentRoomsComponent implements OnInit {
   constructor(
     private _state: AppState,
     private router: Router,
-    private appointmentService: AppointmentService,
+    private viewAppointmentService: ViewAppointmentService,
     private roomService: RoomService) {}
 
   ngOnInit() {
@@ -61,7 +61,7 @@ export class AppointmentRoomsComponent implements OnInit {
   }
 
   private getAppointmentsByRoom(room: Room): void {
-    this.appointmentService
+    this.viewAppointmentService
     .appointmentFind(`{"where": {"roomId": "${room.id}"}}`)
     .subscribe(
       x => this.appointmentsByRoom[room.id] = x,

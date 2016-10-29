@@ -7,10 +7,11 @@ import { MdCardModule }                   from '@angular2-material/card/card';
 import { MdIconModule }                   from '@angular2-material/icon/icon';
 import { MdInputModule }                  from '@angular2-material/input/input';
 import { MdListModule }                   from '@angular2-material/list/list';
-import { MdGridListModule }             from '@angular2-material/grid-list/grid-list';
+import { MdGridListModule }               from '@angular2-material/grid-list/grid-list';
 
 import { AutoCompleteModule }             from 'primeng/primeng';
 import { ScheduleModule }                 from 'primeng/primeng';
+import { MomentModule }                   from 'angular2-moment';
 
 import { ApiModule }                      from '../api/api.module';
 
@@ -21,6 +22,8 @@ import { AppointmentRoomsComponent }      from './appointment-rooms.component';
 import { AppointmentTodayComponent }      from './appointment-today.component';
 import { AppointmentAttendanceComponent } from './appointment-attendance.component';
 import { appointmentRouting }             from './appointment.routing';
+import { ViewAppointmentService }         from './appointment.service';
+import { StatisticsComponent }            from './statistics.component';
 
 @NgModule({
   imports: [
@@ -35,7 +38,8 @@ import { appointmentRouting }             from './appointment.routing';
     MdListModule,
     MdGridListModule,
     AutoCompleteModule,
-    ScheduleModule
+    ScheduleModule,
+    MomentModule
   ],
   declarations: [
     AppointmentComponent,
@@ -43,7 +47,11 @@ import { appointmentRouting }             from './appointment.routing';
     AppointmentDetailComponent,
     AppointmentRoomsComponent,
     AppointmentTodayComponent,
-    AppointmentAttendanceComponent
+    AppointmentAttendanceComponent,
+    StatisticsComponent
+  ],
+  providers: [
+    ViewAppointmentService
   ]
 })
 export class AppointmentModule {}

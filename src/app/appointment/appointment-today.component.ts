@@ -4,7 +4,7 @@ import { Router }             from '@angular/router';
 import { AppState }           from '../app.service';
 
 import { Appointment }        from '../api/model/appointment';
-import { AppointmentService } from '../api/api/appointment.service';
+import { ViewAppointmentService } from './appointment.service';
 
 import * as moment            from 'moment';
 
@@ -16,13 +16,13 @@ import * as moment            from 'moment';
 export class AppointmentTodayComponent implements OnInit {
 
   private appointments: Appointment[];
-  private locale: any;
+  private locale: string;
   private defaultView: string;
 
   constructor(
     private _state: AppState,
     private router: Router,
-    private appointmentService: AppointmentService) {}
+    private viewAppointmentService: ViewAppointmentService) {}
 
   ngOnInit() {
     this._state.isSubPage.next(false);
@@ -30,14 +30,14 @@ export class AppointmentTodayComponent implements OnInit {
     this._state.actions.next();
     this._state.primaryAction.next();
     this.getTodaysAppointments();
-    this.locale = 'de';
+    this.locale = "en";
     this.defaultView = 'basicDay';
   }
 
   private getTodaysAppointments(): void {
     let start = moment.utc().startOf('day');
     let end = moment.utc().endOf('day');
-    this.appointmentService
+    this.viewAppointmentService
     .appointmentFind(`{"where": {"start":  {"between": ["${start.format()}", "${end.format()}"]}}}`)
     .subscribe(
       x => this.appointments = x,

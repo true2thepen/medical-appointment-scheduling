@@ -34,7 +34,7 @@ import 'jquery';
 
 // Fullcalendar
 import 'fullcalendar';
-// import 'fullcalendar/dist/lang-all.js';
+import 'fullcalendar/dist/locale-all.js';
 
 // PrimeNg
 import 'primeng/primeng';

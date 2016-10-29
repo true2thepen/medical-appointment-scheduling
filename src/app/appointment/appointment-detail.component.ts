@@ -25,7 +25,7 @@ export class AppointmentDetailComponent {
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
-  private proposedTimeSlot: any = {};
+  private proposedTimeSlots: any[] = [];
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
@@ -161,15 +161,16 @@ export class AppointmentDetailComponent {
     );
   }
 
-  private findTime(duration?: string, examinationId?: number, roomId?: number) {
+  private findTime(duration?: string, examinationId?: number, roomId?: number, startDate?: moment.Moment) {
     console.log('Querying for the next free time slot.');
     this.appointmentService
     .appointmentFindTime(
       duration ? duration : 'PT40M', // TODO move to server and replace by configurable default
       examinationId,
-      roomId)
+      roomId,
+      startDate ? startDate.toDate() : undefined)
     .subscribe(
-      x => this.proposedTimeSlot = x,
+      x => this.proposedTimeSlots.push(x),
       e => console.log(e),
       () => console.log('Completed querying for the next free time slot.')
     );
@@ -178,11 +179,34 @@ export class AppointmentDetailComponent {
   private onFormChange() {
      // Every time the form changes, use latest information to find a suitable date
     if (this.model.duration) {
+      this.proposedTimeSlots = [];
       this.findTime(
         this.model.duration,
         this.model.examinations && this.model.examinations.length > 0 ?
           this.model.examinations[0].id : undefined,
-        this.model.roomId
+        this.model.roomId,
+        moment()
+      );
+      this.findTime(
+        this.model.duration,
+        this.model.examinations && this.model.examinations.length > 0 ?
+          this.model.examinations[0].id : undefined,
+        this.model.roomId,
+        moment().add(1, 'day')
+      );
+      this.findTime(
+        this.model.duration,
+        this.model.examinations && this.model.examinations.length > 0 ?
+          this.model.examinations[0].id : undefined,
+        this.model.roomId,
+        moment().add(1, 'week')
+      );
+      this.findTime(
+        this.model.duration,
+        this.model.examinations && this.model.examinations.length > 0 ?
+          this.model.examinations[0].id : undefined,
+        this.model.roomId,
+        moment().add(1, 'month')
       );
     }
   }
@@ -229,18 +253,17 @@ export class AppointmentDetailComponent {
       );
   }
 
-  private applySuggestion() {
-    if (this.proposedTimeSlot) {
-      let suggestedTimeSlot = this.proposedTimeSlot.scheduledTasks.NewAppointment.schedule[0];
-      let startDate = moment(suggestedTimeSlot.start);
-
-      this.model.duration = `PT${suggestedTimeSlot.duration}M`;
+  private applySuggestion(timeSlot: any) {
+    if (timeSlot) {
+      console.log(timeSlot);
+      let startDate = moment(timeSlot.start);
+      this.model.duration = `PT${timeSlot.duration}M`;
       this.model.date = startDate.format('Y-MM-DD');
       this.model.time = startDate.format('HH:mm');
-      this.model.roomId = suggestedTimeSlot.resources[0];
+      this.model.roomId = timeSlot.resources[0];
 
-      // Clear suggestion after it has been applied
-      this.proposedTimeSlot = undefined;
+      // Clear suggestions
+      this.proposedTimeSlots = [];
     }
   }
 

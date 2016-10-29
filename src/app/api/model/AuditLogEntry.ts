@@ -25,11 +25,11 @@
 
 
 export interface AuditLogEntry {
-    objectId?: number;
+    objectId: number;
 
-    author?: number;
+    author: number;
 
-    timestamp?: Date;
+    timestamp: Date;
 
     id?: number;
 

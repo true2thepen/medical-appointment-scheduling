@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpModule }   from '@angular/http';
 
 import { AppointmentService } from './api/appointment.service';
+import { AttendanceService } from './api/attendance.service';
 import { AuditLogEntryService } from './api/auditLogEntry.service';
 import { ExaminationService } from './api/examination.service';
 import { PatientService } from './api/patient.service';
@@ -12,6 +13,6 @@ import { RoomService } from './api/room.service';
   imports:      [ CommonModule, HttpModule ],
   declarations: [],
   exports:      [],
-  providers:    [ AppointmentService, AuditLogEntryService, ExaminationService, PatientService, RoomService ]
+  providers:    [ AppointmentService, AttendanceService, AuditLogEntryService, ExaminationService, PatientService, RoomService ]
 })
-export class ApiModule { }
+export class ApiModule {}

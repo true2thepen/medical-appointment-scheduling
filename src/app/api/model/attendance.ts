@@ -24,13 +24,15 @@
 
 
 
-export interface Patient {
-    name: string;
+export interface Attendance {
+    checkedIn?: Date;
 
-    dateOfBirth: Date;
+    underTreatment?: Date;
 
-    svn: number;
+    finished?: Date;
 
     id?: number;
+
+    appointmentId?: number;
 
 }

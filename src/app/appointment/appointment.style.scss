@@ -1,1 +1,17 @@
 @import 'material-fullcalendar';
+
+.card-centered-600 {
+  display: inline-block;
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.card-centered-wrapper {
+  text-align: center;
+}
+
+.md-list-third-line {
+  opacity: 0.6;
+}

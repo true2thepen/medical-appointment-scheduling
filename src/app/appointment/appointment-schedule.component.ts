@@ -3,9 +3,10 @@ import { ViewChild }          from '@angular/core';
 import { Router }             from '@angular/router';
 import { AppState }           from '../app.service';
 
+import { ViewAppointment }    from './appointment.viewmodel';
 import { Appointment }        from '../api/model/appointment';
-import { AppointmentService } from '../api/api/appointment.service';
-import { PatientService }        from '../api/api/patient.service';
+import { ViewAppointmentService } from './appointment.service';
+import { PatientService }     from '../api/api/patient.service';
 
 import * as moment            from 'moment';
 
@@ -19,7 +20,7 @@ import { Schedule }           from 'primeng/primeng';
 
 export class AppointmentScheduleComponent implements OnInit {
 
-  private appointments: Appointment[];
+  private appointments: ViewAppointment[];
   private locale: any;
   private hiddenDays: number[];
   private viewDate: moment.Moment;
@@ -28,7 +29,7 @@ export class AppointmentScheduleComponent implements OnInit {
   constructor(
     private _state: AppState,
     private router: Router,
-    private appointmentService: AppointmentService,
+    private viewAppointmentService: ViewAppointmentService,
     private patientService: PatientService) {}
 
   ngOnInit() {
@@ -59,7 +60,7 @@ export class AppointmentScheduleComponent implements OnInit {
   }
 
   private getAllAppointments(): void {
-    this.appointmentService
+    this.viewAppointmentService
     .appointmentFind()
     .subscribe(
       x => this.appointments = x,

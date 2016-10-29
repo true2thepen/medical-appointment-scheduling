@@ -6,6 +6,7 @@ import { AppointmentDetailComponent }     from './appointment-detail.component';
 import { AppointmentRoomsComponent }      from './appointment-rooms.component';
 import { AppointmentTodayComponent }      from './appointment-today.component';
 import { AppointmentAttendanceComponent } from './appointment-attendance.component';
+import { StatisticsComponent }            from './statistics.component';
 
 const appointmentRoutes: Routes = [
   {
@@ -15,6 +16,7 @@ const appointmentRoutes: Routes = [
       { path: 'today', component: AppointmentTodayComponent },
       { path: 'rooms', component: AppointmentRoomsComponent },
       { path: 'attendance', component: AppointmentAttendanceComponent },
+      { path: 'statistics', component: StatisticsComponent },
       { path: ':id', component: AppointmentDetailComponent },
       { path: '', component: AppointmentScheduleComponent }
     ]
