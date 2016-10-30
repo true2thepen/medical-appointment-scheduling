@@ -54,7 +54,9 @@
     "preversion": "npm test",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
-    "docker": "docker"
+    "docker": "docker",
+    "heroku-postbuild": "npm run build:prod && mv dist/index.html dist/200.html",
+    "heroku-start": "harp server ./dist --port $PORT"
   },
   "dependencies": {
     "@angular/common": "^2.0.0",
@@ -94,6 +96,7 @@
     "core-js": "^2.4.1",
     "fullcalendar": "^3.0.0",
     "google-material-color": "^1.2.6",
+    "harp": "^0.21.0",
     "http-server": "^0.9.0",
     "ie-shim": "^0.1.0",
     "jquery": "^3.1.0",
@@ -119,6 +122,7 @@
     "awesome-typescript-loader": "^2.2.0",
     "codelyzer": "0.0.28",
     "commander": "^2.9.0",
+    "compression-webpack-plugin": "^0.3.2",
     "copy-webpack-plugin": "^3.0.1",
     "css-loader": "^0.25.0",
     "csv-parse": "^1.1.7",

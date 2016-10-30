@@ -1,7 +1,3 @@
-/**
- * @author: @AngularClass
- */
-
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
@@ -11,26 +7,26 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  */
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /**
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-const HOST = process.env.HOST || '0.0.0.0';
+const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const METADATA = webpackMerge(commonConfig.metadata, {
   host: HOST,
   port: PORT,
-  ENV: ENV,
-  HMR: false
+  ENV: ENV
 });
 
-module.exports = webpackMerge(commonConfig, {
+module.exports = function(env) {
+  return webpackMerge(commonConfig({env: ENV}), {
 
   /**
    * Switch loaders to debug mode.
@@ -110,7 +106,11 @@ module.exports = webpackMerge(commonConfig, {
      * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
      * See: https://github.com/webpack/docs/wiki/optimization#deduplication
      */
-    new DedupePlugin(),
+     // new DedupePlugin(), https://github.com/webpack/webpack/issues/2644 ??
+
+     new CopyWebpackPlugin([
+      { from: 'src/index.html', to: '200.html' }
+     ]),
 
     /**
      * Plugin: DefinePlugin
@@ -127,8 +127,7 @@ module.exports = webpackMerge(commonConfig, {
       'HMR': METADATA.HMR,
       'process.env': {
         'ENV': JSON.stringify(METADATA.ENV),
-        'NODE_ENV': JSON.stringify(METADATA.ENV),
-        'HMR': METADATA.HMR,
+        'NODE_ENV': JSON.stringify(METADATA.ENV)
       }
     }),
 
@@ -155,33 +154,19 @@ module.exports = webpackMerge(commonConfig, {
       // }, // debug
       // comments: true, //debug
 
-
       beautify: false, //prod
-      mangle: { screw_ie8 : true }, //prod
-      compress: { screw_ie8: true }, //prod
+
+      mangle: {
+        screw_ie8 : true,
+        keep_fnames: true
+      }, //prod
+
+      compress: {
+        screw_ie8: true
+      }, //prod
+
       comments: false //prod
     }),
-
-    /**
-     * Plugin: NormalModuleReplacementPlugin
-     * Description: Replace resources that matches resourceRegExp with newResource
-     *
-     * See: http://webpack.github.io/docs/list-of-plugins.html#normalmodulereplacementplugin
-     */
-
-    new NormalModuleReplacementPlugin(
-      /angular2-hmr/,
-      helpers.root('config/modules/angular2-hmr-prod.js')
-    ),
-
-    /**
-     * Plugin: IgnorePlugin
-     * Description: Don’t generate modules for requests matching the provided RegExp.
-     *
-     * See: http://webpack.github.io/docs/list-of-plugins.html#ignoreplugin
-     */
-
-    // new IgnorePlugin(/angular2-hmr/),
 
     /**
      * Plugin: CompressionPlugin
@@ -190,11 +175,10 @@ module.exports = webpackMerge(commonConfig, {
      *
      * See: https://github.com/webpack/compression-webpack-plugin
      */
-    //  install compression-webpack-plugin
-    // new CompressionPlugin({
-    //   regExp: /\.css$|\.html$|\.js$|\.map$/,
-    //   threshold: 2 * 1024
-    // })
+    new CompressionPlugin({
+      regExp: /\.css$|\.html$|\.js$|\.map$/,
+      threshold: 2 * 1024
+    })
 
   ],
 
@@ -206,7 +190,7 @@ module.exports = webpackMerge(commonConfig, {
    */
   tslint: {
     emitErrors: true,
-    failOnHint: true,
+    failOnHint: false, // PETRO changed this from true to false
     resourcePath: 'src'
   },
 
@@ -244,3 +228,4 @@ module.exports = webpackMerge(commonConfig, {
   }
 
 });
+}

@@ -21,7 +21,7 @@ export class AppointmentAttendanceComponent {
 
   private editing: boolean = false;
   private rooms: Room[] = undefined;
-  private allAppointments: Appointment[] = [];
+  private allAppointments: any[] = []; // TODO Fix any ViewAppointment
   private appointmentsScheduled: Appointment[] = [];
   private appointmentsCheckedIn: Appointment[] = [];
   private appointmentsUnderTreatment: Appointment[] = [];
@@ -110,7 +110,7 @@ export class AppointmentAttendanceComponent {
     );
   }
 
-  private checkIn(appointment: Appointment): void {
+  private checkIn(appointment: any): void { // TODO Fix any ViewAppointment
     // Prepare data
     let data: Attendance = {
       checkedIn: new Date()
@@ -136,7 +136,7 @@ export class AppointmentAttendanceComponent {
     );
   }
 
-  private underTreatment(appointment: Appointment): void {
+  private underTreatment(appointment: any): void { // TODO Fix any ViewAppointment
     // Prepare data
     let data: Attendance = {
       underTreatment: new Date()
@@ -162,7 +162,7 @@ export class AppointmentAttendanceComponent {
     );
   }
 
-  private checkOut(appointment: Appointment): void {
+  private checkOut(appointment: any): void { // TODO Fix any ViewAppointment
     // Prepare data
     let data: Attendance = {
       finished: new Date()
