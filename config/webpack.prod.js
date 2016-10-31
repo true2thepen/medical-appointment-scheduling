@@ -22,7 +22,8 @@ const PORT = process.env.PORT || 8080;
 const METADATA = webpackMerge(commonConfig.metadata, {
   host: HOST,
   port: PORT,
-  ENV: ENV
+  ENV: ENV,
+  API_BASE_PATH: 'https://scheduling-server.herokuapp.com/api'
 });
 
 module.exports = function(env) {
@@ -128,7 +129,8 @@ module.exports = function(env) {
       'process.env': {
         'ENV': JSON.stringify(METADATA.ENV),
         'NODE_ENV': JSON.stringify(METADATA.ENV)
-      }
+      },
+      'API_BASE_PATH': JSON.stringify(METADATA.API_BASE_PATH)
     }),
 
     /**

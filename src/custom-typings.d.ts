@@ -51,6 +51,8 @@ declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
 
+declare var API_BASE_PATH: string;
+
 interface SystemJS {
   import: (path?: string) => Promise<any>;
 }
