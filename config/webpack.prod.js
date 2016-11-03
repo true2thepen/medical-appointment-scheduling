@@ -23,7 +23,8 @@ const METADATA = webpackMerge(commonConfig.metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
-  API_BASE_PATH: 'https://scheduling-server.herokuapp.com/api'
+  API_BASE_PATH: 'https://scheduling-server.herokuapp.com/api',
+  CANTY_HOST_URL: 'https://scheduling-server.herokuapp.com'
 });
 
 module.exports = function(env) {
@@ -130,7 +131,8 @@ module.exports = function(env) {
         'ENV': JSON.stringify(METADATA.ENV),
         'NODE_ENV': JSON.stringify(METADATA.ENV)
       },
-      'API_BASE_PATH': JSON.stringify(METADATA.API_BASE_PATH)
+      'API_BASE_PATH': JSON.stringify(METADATA.API_BASE_PATH),
+      'CANTY_HOST_URL': JSON.stringify(METADATA.CANTY_HOST_URL)
     }),
 
     /**

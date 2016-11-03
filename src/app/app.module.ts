@@ -10,11 +10,13 @@ import { MdButtonModule }               from '@angular2-material/button/button';
 import { MdMenuModule }                 from '@angular2-material/menu/menu';
 
 import { BASE_PATH }                    from './api/variables';
+import { CANTY_CTI_HOST }               from './cantyCti.service';
 
 import { AppComponent }                 from './app.component';
 import { AppState }                     from './app.service';
 import { routing }                      from './app.routing';
 import { appRoutingProviders }          from './app.routing';
+import { CantyCTIService }              from './cantyCti.service';
 
 import { AppointmentModule }            from './appointment/appointment.module';
 import { HomeModule }                   from './home/home.module';
@@ -45,11 +47,16 @@ import { XLarge }                       from './home/x-large';
   ],
   providers: [
     AppState,
+    CantyCTIService,
     appRoutingProviders,
     MdIconRegistry,
     {
       provide: BASE_PATH, // Used in apis as base path.
       useValue: API_BASE_PATH // Declared in custom-typings.d.ts, set by webpack's DefinePlugin
+    },
+    {
+      provide: CANTY_CTI_HOST,
+      useValue: CANTY_HOST_URL // Declared in custom-typings.d.ts, set by webpack's DefinePlugin
     }
   ],
   bootstrap: [ AppComponent ]

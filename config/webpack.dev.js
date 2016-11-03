@@ -24,7 +24,8 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   port: PORT,
   ENV: ENV,
   HMR: HMR,
-  API_BASE_PATH: 'http://localhost:3000/api'
+  API_BASE_PATH: 'http://localhost:3000/api',
+  CANTY_HOST_URL: 'http://localhost:3000'
 });
 
 /**
@@ -118,7 +119,8 @@ module.exports = function(options) {
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
         },
-        'API_BASE_PATH': JSON.stringify(METADATA.API_BASE_PATH)
+        'API_BASE_PATH': JSON.stringify(METADATA.API_BASE_PATH),
+        'CANTY_HOST_URL': JSON.stringify(METADATA.CANTY_HOST_URL)
       }),
 
       /**

@@ -52,6 +52,7 @@ declare var HMR: boolean;
 declare var System: SystemJS;
 
 declare var API_BASE_PATH: string;
+declare var CANTY_HOST_URL: string;
 
 interface SystemJS {
   import: (path?: string) => Promise<any>;

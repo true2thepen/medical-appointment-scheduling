@@ -12,6 +12,7 @@
     "paths": [
     ],
     "types": [
+      "async",
       "core-js",
       "hammerjs",
       "jasmine",
@@ -19,6 +20,7 @@
       "protractor",
       "selenium-webdriver",
       "source-map",
+      "socket.io-client",
       "uglify-js",
       "webpack"
     ]

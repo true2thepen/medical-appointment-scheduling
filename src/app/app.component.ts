@@ -12,6 +12,7 @@ import { AttendanceService }            from './api/api/attendance.service';
 import { AppointmentService }           from './api/api/appointment.service';
 import { PatientService }               from './api/api/patient.service';
 import { RoomService }                  from './api/api/room.service';
+import { CantyCTIService }              from './cantyCti.service';
 
 /*
  * App Component
@@ -123,7 +124,8 @@ export class AppComponent {
     private appointmentService: AppointmentService,
     private examinationService: ExaminationService,
     private patientService: PatientService,
-    private roomService: RoomService) {}
+    private roomService: RoomService,
+    private cantyCTIService: CantyCTIService) {}
 
   ngOnInit() {
 
