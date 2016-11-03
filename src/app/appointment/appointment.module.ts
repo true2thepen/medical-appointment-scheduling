@@ -1,13 +1,7 @@
 import { NgModule }                       from '@angular/core';
 import { FormsModule }                    from '@angular/forms';
 import { CommonModule }                   from '@angular/common';
-
-import { MdTabsModule }                   from '@angular2-material/tabs/tabs';
-import { MdCardModule }                   from '@angular2-material/card/card';
-import { MdIconModule }                   from '@angular2-material/icon/icon';
-import { MdInputModule }                  from '@angular2-material/input/input';
-import { MdListModule }                   from '@angular2-material/list/list';
-import { MdGridListModule }               from '@angular2-material/grid-list/grid-list';
+import { MaterialModule }                 from '@angular/material';
 
 import { AutoCompleteModule }             from 'primeng/primeng';
 import { ScheduleModule }                 from 'primeng/primeng';
@@ -29,14 +23,9 @@ import { StatisticsComponent }            from './statistics.component';
   imports: [
     CommonModule,
     FormsModule,
+    MaterialModule,
     ApiModule,
     appointmentRouting,
-    MdTabsModule,
-    MdCardModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdGridListModule,
     AutoCompleteModule,
     ScheduleModule,
     MomentModule

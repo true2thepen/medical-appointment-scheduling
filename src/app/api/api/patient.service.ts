@@ -236,9 +236,10 @@ export class PatientService {
     /**
      * Insert sample data set of test patients.
      * 
+     * @param locale 
      */
-    public patientInsertTestData(extraHttpRequestParams?: any): Observable<InlineResponse2003> {
-        return this.patientInsertTestDataWithHttpInfo(extraHttpRequestParams)
+    public patientInsertTestData(locale?: string, extraHttpRequestParams?: any): Observable<InlineResponse2003> {
+        return this.patientInsertTestDataWithHttpInfo(locale, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -815,12 +816,16 @@ export class PatientService {
     /**
      * Insert sample data set of test patients.
      * 
+     * @param locale 
      */
-    public patientInsertTestDataWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+    public patientInsertTestDataWithHttpInfo(locale?: string, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/Patients/insertTestData`;
 
         let queryParameters = new URLSearchParams();
         let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (locale !== undefined) {
+            queryParameters.set('locale', <any>locale);
+        }
 
 
         // to determine the Content-Type header

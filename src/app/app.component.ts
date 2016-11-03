@@ -2,8 +2,9 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
-
+import { ViewContainerRef }             from '@angular/core';
 import { Location }                     from '@angular/common';
+import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
 
 import { AppState, Action }             from './app.service';
 
@@ -116,6 +117,7 @@ export class AppComponent {
   private isSubPage = false;
   private actions: Action[];
   private primaryAction: Action;
+  private snackBarConfig: MdSnackBarConfig;
 
   constructor(
     private _state: AppState,
@@ -125,9 +127,12 @@ export class AppComponent {
     private examinationService: ExaminationService,
     private patientService: PatientService,
     private roomService: RoomService,
-    private cantyCTIService: CantyCTIService) {}
+    private cantyCTIService: CantyCTIService,
+    private snackBar: MdSnackBar,
+    private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {
+    this.snackBarConfig = new MdSnackBarConfig(this.viewContainerRef);
 
     // Listen for title changes
     this._state.title.subscribe(
@@ -167,6 +172,33 @@ export class AppComponent {
         console.log('Error getting primary action for activated route.');
       },
       () => console.log('Finished retrieving primary action for activated route.')
+    );
+
+    // Listen for CantyCTI events
+    this.cantyCTIService.incomingCall.subscribe(
+      incomingCall => {
+        const filter = {
+          where: {
+            phone: incomingCall.phoneNumber
+          }
+        };
+        this.patientService.patientFindOne(JSON.stringify(filter))
+        .subscribe(
+          patient => this.snackBar.open(
+            `Incoming call from ${patient.givenName} ${patient.surname}`,
+            'Open',
+            this.snackBarConfig),
+          err => {
+            this.snackBar.open(
+              `Incoming call from ${incomingCall.phoneNumber}`,
+              'OK',
+              this.snackBarConfig);
+            console.log(err);
+          }
+        );
+      },
+      err => console.log(err),
+      () => console.log('CantyCTI has finished broadcasting incoming calls.')
     );
 
     // TODO debug output app state on console

@@ -33,6 +33,8 @@ export interface Examination {
 
     color?: string;
 
+    code?: string;
+
     id?: number;
 
     created: Date;

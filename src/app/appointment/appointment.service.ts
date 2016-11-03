@@ -113,7 +113,8 @@ export class ViewAppointmentService {
                 // Event title display
                 if (!viewAppointment.title) {
                   if (viewAppointment.patient) {
-                    viewAppointment.title = viewAppointment.patient.name;
+                    viewAppointment.title =
+                    `${viewAppointment.patient.givenName} ${viewAppointment.patient.surname}`;
                   }
                 }
 

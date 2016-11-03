@@ -1,7 +1,7 @@
 <div class="card-centered-wrapper">
 
   <md-card *ngIf="!editing" class="card-centered-600">
-    <md-card-title>{{model.patient?.name}}</md-card-title>
+    <md-card-title>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</md-card-title>
     <md-card-content>
       <p>{{model.title}}</p>
       <p>{{model.roomId}}</p>
@@ -22,7 +22,11 @@
       <md-card-content>
 
         <div>
-          <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="name" placeholder="Patient" required="true" name="patient"></p-autoComplete>
+          <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="surname" placeholder="Patient" required="true" name="patient">
+            <template let-patient>
+              <span>{{patient?.givenName}} {{patient?.surname}}, {{patient?.dateOfBirth | date:'shortDate'}}</span>
+            </template>
+          </p-autoComplete>
         </div>
 
         <div class="examinations-container">

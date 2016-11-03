@@ -143,7 +143,7 @@ export class AppointmentDetailComponent {
 
   private findPatients(event) {
     this.patientService
-    .patientFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
+    .patientFind(`{"where": {"surname": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
       x => this.filteredPatients = x,
       e => console.log(e),

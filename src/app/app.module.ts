@@ -2,12 +2,7 @@ import { NgModule }                     from '@angular/core';
 import { BrowserModule }                from '@angular/platform-browser';
 import { FormsModule }                  from '@angular/forms';
 import { HttpModule }                   from '@angular/http';
-import { MdSidenavModule }              from '@angular2-material/sidenav/sidenav';
-import { MdToolbarModule }              from '@angular2-material/toolbar/toolbar';
-import { MdListModule }                 from '@angular2-material/list/list';
-import { MdIconModule, MdIconRegistry } from '@angular2-material/icon/icon';
-import { MdButtonModule }               from '@angular2-material/button/button';
-import { MdMenuModule }                 from '@angular2-material/menu/menu';
+import { MaterialModule }               from '@angular/material';
 
 import { BASE_PATH }                    from './api/variables';
 import { CANTY_CTI_HOST }               from './cantyCti.service';
@@ -32,12 +27,7 @@ import { XLarge }                       from './home/x-large';
     routing,
     AppointmentModule,
     HomeModule,
-    MdSidenavModule,
-    MdToolbarModule,
-    MdListModule,
-    MdIconModule,
-    MdButtonModule,
-    MdMenuModule.forRoot()
+    MaterialModule.forRoot()
   ],
   declarations: [
     AppComponent,
@@ -49,7 +39,6 @@ import { XLarge }                       from './home/x-large';
     AppState,
     CantyCTIService,
     appRoutingProviders,
-    MdIconRegistry,
     {
       provide: BASE_PATH, // Used in apis as base path.
       useValue: API_BASE_PATH // Declared in custom-typings.d.ts, set by webpack's DefinePlugin

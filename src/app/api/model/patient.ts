@@ -25,7 +25,23 @@
 
 
 export interface Patient {
-    name: string;
+    givenName: string;
+
+    surname: string;
+
+    gender: string;
+
+    streetAddress?: string;
+
+    city?: string;
+
+    country?: string;
+
+    zipCode?: string;
+
+    email?: string;
+
+    phone?: string;
 
     dateOfBirth: Date;
 

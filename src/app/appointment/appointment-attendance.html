@@ -5,7 +5,7 @@
     <md-list>
       <md-list-item *ngFor="let appointment of appointmentsScheduled">
         <md-icon md-list-avatar>person</md-icon>
-        <h3 md-line>{{appointment?.patient?.name}}</h3>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line">Scheduled for {{appointment.start | date:'shortTime'}}, {{appointment.start | amTimeAgo}}</p>
         <button md-icon-button>
@@ -19,7 +19,7 @@
     <md-list>
       <md-list-item *ngFor="let appointment of appointmentsCheckedIn">
         <md-icon md-list-avatar>person</md-icon>
-        <h3 md-line>{{appointment.patient?.name}}</h3>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line">Waiting since {{appointment?.attendance?.checkedIn | amTimeAgo:true}}</p>
         <button md-button (click)="underTreatment(appointment)">UNDER TREATMENT</button>
@@ -30,7 +30,7 @@
     <md-list>
       <md-list-item *ngFor="let appointment of appointmentsUnderTreatment">
         <md-icon md-list-avatar>person</md-icon>
-        <h3 md-line>{{appointment.patient?.name}}</h3>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line">Under treatment since {{appointment?.attendance?.underTreatment | amTimeAgo:true}}</p>
         <button md-button (click)="checkOut(appointment)">CHECK OUT</button>
@@ -41,7 +41,7 @@
     <md-list>
       <md-list-item *ngFor="let appointment of appointmentsFinished">
         <md-icon md-list-avatar>person</md-icon>
-        <h3 md-line>{{appointment.patient?.name}}</h3>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line">Has been under treatment for {{appointment?.attendance?.finished | amDifference : appointment?.attendance?.underTreatment : 'minutes'}} minutes</p>
       </md-list-item>

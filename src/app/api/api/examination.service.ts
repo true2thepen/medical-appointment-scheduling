@@ -236,9 +236,10 @@ export class ExaminationService {
     /**
      * Insert sample data set of test examinations.
      * 
+     * @param language 
      */
-    public examinationInsertTestData(extraHttpRequestParams?: any): Observable<InlineResponse2003> {
-        return this.examinationInsertTestDataWithHttpInfo(extraHttpRequestParams)
+    public examinationInsertTestData(language?: string, extraHttpRequestParams?: any): Observable<InlineResponse2003> {
+        return this.examinationInsertTestDataWithHttpInfo(language, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -815,12 +816,16 @@ export class ExaminationService {
     /**
      * Insert sample data set of test examinations.
      * 
+     * @param language 
      */
-    public examinationInsertTestDataWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+    public examinationInsertTestDataWithHttpInfo(language?: string, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/Examinations/insertTestData`;
 
         let queryParameters = new URLSearchParams();
         let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        if (language !== undefined) {
+            queryParameters.set('language', <any>language);
+        }
 
 
         // to determine the Content-Type header
