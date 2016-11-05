@@ -48,6 +48,13 @@ select {
   margin-top: 10px;
 }
 
+.description {
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(black, 0.4);
+  margin-left: 10px;
+}
+
 /* do not group these rules */
 *::-webkit-input-placeholder {
     color: red;

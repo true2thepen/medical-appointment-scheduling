@@ -83,7 +83,7 @@ export class AppointmentDetailComponent {
     let examinations: Examination[] = this.model.examinations;
     let start: moment.Moment = moment(this.model.date + ' ' + this.model.time);
     let end: moment.Moment = start.clone();
-    end.add(moment.duration(this.model.duration));
+    end.add(moment.duration('PT' + this.model.duration));
     newAppointment.start = start.toDate();
     newAppointment.end = end.toDate();
 
@@ -170,7 +170,7 @@ export class AppointmentDetailComponent {
     console.log('Querying for the next free time slot.');
     this.appointmentService
     .appointmentFindTime(
-      duration ? duration : 'PT40M', // TODO move to server and replace by configurable default
+      duration ? 'PT' + duration : 'PT40M', // TODO move to server and replace by config-default
       examinationId,
       roomId,
       startDate ? startDate.toDate() : undefined)
@@ -234,7 +234,7 @@ export class AppointmentDetailComponent {
           this.model.id = x.id;
           this.model.date = startDate.format('Y-MM-DD');
           this.model.time = startDate.format('HH:mm');
-          this.model.duration = duration.toJSON();
+          this.model.duration = duration.toJSON().substring(2);
           this.model.title = x.title;
           this.model.description = x.description;
           if (x.patientId) {
@@ -262,7 +262,8 @@ export class AppointmentDetailComponent {
     if (timeSlot) {
       console.log(timeSlot);
       let startDate = moment(timeSlot.start);
-      this.model.duration = `PT${timeSlot.duration}M`;
+      this.model.duration =
+        `${moment.duration(timeSlot.duration, 'minutes').toJSON().substring(2)}`;
       this.model.date = startDate.format('Y-MM-DD');
       this.model.time = startDate.format('HH:mm');
       this.model.roomId = timeSlot.resources[0];
@@ -277,7 +278,7 @@ export class AppointmentDetailComponent {
   }
 
   private humanizeDuration(durationString: String): String {
-    return moment.duration(durationString).humanize();
+    return moment.duration('PT' + durationString).humanize();
   }
 }
 
