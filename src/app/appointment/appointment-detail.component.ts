@@ -237,7 +237,6 @@ export class AppointmentDetailComponent {
           this.model.duration = duration.toJSON();
           this.model.title = x.title;
           this.model.description = x.description;
-          this.model.roomId = x.roomId;
           if (x.patientId) {
             this.patientService.patientFindById(x.patientId.toString())
               .subscribe(
@@ -246,6 +245,7 @@ export class AppointmentDetailComponent {
                 () => console.log('Completed querying for patient by id')
               );
           }
+          this.model.roomId = x.roomId;
           this.appointmentService.appointmentPrototypeGetExaminations(x.id.toString())
             .subscribe(
               z => this.model.examinations = z,
@@ -274,6 +274,10 @@ export class AppointmentDetailComponent {
 
   private handleEditClick() {
     this.editing = true;
+  }
+
+  private humanizeDuration(durationString: String): String {
+    return moment.duration(durationString).humanize();
   }
 }
 

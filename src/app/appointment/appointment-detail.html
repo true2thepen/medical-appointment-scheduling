@@ -1,14 +1,15 @@
 <div class="card-centered-wrapper">
 
   <md-card *ngIf="!editing" class="card-centered-600">
-    <md-card-title>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</md-card-title>
+    <md-card-title>{{model?.patient?.givenName}} {{model?.patient?.surname}}</md-card-title>
+    <md-card-subtitle *ngIf="model.title">{{model.title}}</md-card-subtitle>
     <md-card-content>
-      <p>{{model.title}}</p>
-      <p>{{model.roomId}}</p>
-      <p>{{model.time}}</p>
-      <p>{{model.date}}</p>
-      <p>{{model.duration}}</p>
-      <p *ngFor="let e of model.examinations">{{e.name}}</p>
+      <p *ngIf="model.roomId && rooms">{{getRoomNameById(model.roomId)}}</p>
+      <p>On {{model.date}} at {{model.time}}</p>
+      <p>{{humanizeDuration(model.duration)}}</p>
+      <ul>
+        <li *ngFor="let e of model.examinations"><span>{{e.name}}</span></li>
+      </ul>
       <p>{{model.description}}</p>
     </md-card-content>
     <md-card-actions align="end">
