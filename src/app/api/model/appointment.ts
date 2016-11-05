@@ -33,6 +33,11 @@ export interface Appointment {
 
     end?: Date;
 
+    /**
+     * This field allows the auto-appointment service to block appointments.
+     */
+    autoAppointmentBlockedSecret?: string;
+
     id?: number;
 
     created: Date;

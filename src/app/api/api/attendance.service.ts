@@ -237,7 +237,7 @@ export class AttendanceService {
      * Generates random attendances for all past events.
      *
      */
-    public attendanceGenerateRandomAttendances(extraHttpRequestParams?: any): Observable<Array<Attendance>> {
+    public attendanceGenerateRandomAttendances(extraHttpRequestParams?: any): Observable<Array<any>> {
         return this.attendanceGenerateRandomAttendancesWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
