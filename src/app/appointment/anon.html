@@ -1,0 +1,14 @@
+<div class="schedule-container" style="height: calc(100vh - 64px);">
+  <p-schedule *ngIf="!refreshCalendar"
+              [events]=appointments
+              [contentHeight]="auto"
+              [header]="false"
+              [defaultView]=viewMode
+              [hiddenDays]=hiddenDays
+              [eventLimit]="true"
+              [locale]="locale"
+              [minTime]=minTime
+              [maxTime]=maxTime
+              [defaultDate]=viewDate
+              timezone="local"></p-schedule>
+</div>

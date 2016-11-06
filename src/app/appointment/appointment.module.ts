@@ -17,6 +17,7 @@ import { AppointmentTodayComponent }      from './appointment-today.component';
 import { AppointmentAttendanceComponent } from './appointment-attendance.component';
 import { WeekComponent }                  from './week.component';
 import { WalkInCheckInComponent }         from './walk-in-check-in.component';
+import { AnonComponent }                  from './anon.component';
 import { appointmentRouting }             from './appointment.routing';
 import { ViewAppointmentService }         from './appointment.service';
 import { StatisticsComponent }            from './statistics.component';
@@ -46,7 +47,8 @@ import { CantyCTIService }                from '../cantyCti.service';
     StatisticsComponent,
     PatientCancelAppointmentDialog,
     WeekComponent,
-    WalkInCheckInComponent
+    WalkInCheckInComponent,
+    AnonComponent
   ],
   providers: [
     ViewAppointmentService,

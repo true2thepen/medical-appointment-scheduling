@@ -10,6 +10,8 @@ import { WeekComponent }                  from './week.component';
 import { WalkInCheckInComponent }         from './walk-in-check-in.component';
 import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
+import { AnonComponent }                  from './anon.component';
+
 
 const appointmentRoutes: Routes = [
   {
@@ -23,6 +25,7 @@ const appointmentRoutes: Routes = [
       { path: 'rooms', component: AppointmentRoomsComponent },
       { path: 'attendance', component: AppointmentAttendanceComponent },
       { path: 'statistics', component: StatisticsComponent },
+      { path: 'anon', component: AnonComponent },
       { path: ':id', component: AppointmentDetailComponent },
       { path: '', component: AppointmentScheduleComponent }
     ]
