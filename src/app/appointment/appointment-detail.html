@@ -1,7 +1,12 @@
 <div class="card-centered-wrapper">
 
   <md-card *ngIf="!editing" class="card-centered-600">
-    <md-card-title>{{model?.patient?.givenName}} {{model?.patient?.surname}}</md-card-title>
+    <md-card-title>
+      {{model?.patient?.givenName}} {{model?.patient?.surname}}
+      <button *ngIf="model.patient" md-icon-button [routerLink]="['/appointment/patient', model.patient.id]">
+        <md-icon class="md-24">person</md-icon>
+      </button>
+    </md-card-title>
     <md-card-subtitle *ngIf="model.title">{{model.title}}</md-card-subtitle>
     <md-card-content>
       <p *ngIf="model.roomId && rooms">{{getRoomNameById(model.roomId)}}</p>

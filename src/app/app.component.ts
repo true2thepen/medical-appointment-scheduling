@@ -1,19 +1,26 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
-import { ViewContainerRef }             from '@angular/core';
-import { Location }                     from '@angular/common';
-import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
+import { Component, ViewEncapsulation }   from '@angular/core';
+import { ViewContainerRef }               from '@angular/core';
+import { Location }                       from '@angular/common';
+import { MdSnackBar, MdSnackBarConfig }   from '@angular/material';
+import { MdSnackBarRef }                  from '@angular/material';
+import { MdDialogRef, MdDialog,
+ MdDialogConfig }                         from '@angular/material';
+import { Router }                         from '@angular/router';
 
-import { AppState, Action }             from './app.service';
+import { Subscription }                   from 'rxjs/Subscription';
 
-import { ExaminationService }           from './api/api/examination.service';
-import { AttendanceService }            from './api/api/attendance.service';
-import { AppointmentService }           from './api/api/appointment.service';
-import { PatientService }               from './api/api/patient.service';
-import { RoomService }                  from './api/api/room.service';
-import { CantyCTIService }              from './cantyCti.service';
+import { AppState, Action }               from './app.service';
+import { ExaminationService }             from './api/api/examination.service';
+import { AttendanceService }              from './api/api/attendance.service';
+import { AppointmentService }             from './api/api/appointment.service';
+import { PatientService }                 from './api/api/patient.service';
+import { RoomService }                    from './api/api/room.service';
+import { CantyCTIService,
+  IncomingCallState }                     from './cantyCti.service';
+
 
 /*
  * App Component
@@ -118,10 +125,13 @@ export class AppComponent {
   private actions: Action[];
   private primaryAction: Action;
   private snackBarConfig: MdSnackBarConfig;
+  private snackBarRef: any;
+  private snackBarDismissSubscription: Subscription;
 
   constructor(
     private _state: AppState,
     private _location: Location,
+    private router: Router,
     private attendanceService: AttendanceService,
     private appointmentService: AppointmentService,
     private examinationService: ExaminationService,
@@ -177,25 +187,43 @@ export class AppComponent {
     // Listen for CantyCTI events
     this.cantyCTIService.incomingCall.subscribe(
       incomingCall => {
-        const filter = {
-          where: {
-            phone: incomingCall.phoneNumber
-          }
-        };
-        this.patientService.patientFindOne(JSON.stringify(filter))
-        .subscribe(
-          patient => this.snackBar.open(
-            `Incoming call from ${patient.givenName} ${patient.surname}`,
-            'Open',
-            this.snackBarConfig),
-          err => {
-            this.snackBar.open(
-              `Incoming call from ${incomingCall.phoneNumber}`,
-              'OK',
-              this.snackBarConfig);
-            console.log(err);
-          }
-        );
+        if (incomingCall.callState === IncomingCallState.RINGING) {
+          const filter = {
+            where: {
+              phone: incomingCall.phoneNumber
+            }
+          };
+          this.patientService.patientFindOne(JSON.stringify(filter))
+          .subscribe(
+            patient => {
+              this.snackBarRef = this.snackBar.open(
+                `Incoming call from ${patient.givenName} ${patient.surname}`,
+                'Open',
+                this.snackBarConfig
+              );
+              this.snackBarDismissSubscription = this.snackBarRef.afterDismissed()
+              .subscribe(
+                null,
+                null,
+                () => this.router.navigate(['appointment', 'patient', patient.id])
+              );
+            },
+            err => {
+              this.snackBar.open(
+                `Incoming call from ${incomingCall.phoneNumber}`,
+                'OK',
+                this.snackBarConfig);
+              console.log(err);
+            }
+          );
+        } else if (incomingCall.callState === IncomingCallState.OFFHOOK) {
+          // Nothing to do here, just keep displaying the snack bar
+        } else { // Hang up, IDLE
+          this.snackBarDismissSubscription.unsubscribe();
+          this.snackBarRef.dismiss(); // No probleme here if already dismissed
+          this.snackBarDismissSubscription = null;
+          this.snackBarRef = null;
+        }
       },
       err => console.log(err),
       () => console.log('CantyCTI has finished broadcasting incoming calls.')
@@ -302,5 +330,4 @@ export class AppComponent {
       () => {}
     );
   }
-
 }

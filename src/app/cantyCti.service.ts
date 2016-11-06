@@ -15,7 +15,7 @@ export const CANTY_CTI_HOST = new OpaqueToken('cantyCtiHost');
 const EVENT_KEY_INCOMING_CALL = 'incoming call';
 const EVENT_KEY_CALL_REQUEST = 'call request';
 
-enum IncomingCallState {
+export enum IncomingCallState {
   RINGING = 0,
   OFFHOOK = 1,
   IDLE = 2

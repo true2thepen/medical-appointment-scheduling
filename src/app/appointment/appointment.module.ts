@@ -18,6 +18,8 @@ import { AppointmentAttendanceComponent } from './appointment-attendance.compone
 import { appointmentRouting }             from './appointment.routing';
 import { ViewAppointmentService }         from './appointment.service';
 import { StatisticsComponent }            from './statistics.component';
+import { PatientComponent }               from './patient.component';
+import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
 
 @NgModule({
   imports: [
@@ -37,10 +39,15 @@ import { StatisticsComponent }            from './statistics.component';
     AppointmentRoomsComponent,
     AppointmentTodayComponent,
     AppointmentAttendanceComponent,
-    StatisticsComponent
+    PatientComponent,
+    StatisticsComponent,
+    PatientCancelAppointmentDialog
   ],
   providers: [
     ViewAppointmentService
+  ],
+  entryComponents: [
+    PatientCancelAppointmentDialog
   ]
 })
 export class AppointmentModule {}
