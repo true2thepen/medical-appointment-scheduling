@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppState } from '../app.service';
+import { Observable }            from 'rxjs/Observable';
+import { AppState }              from '../app.service';
 
+import { Attendance }            from '../api/model/attendance';
 import { Appointment }           from '../api/model/appointment';
 import { AppointmentService }    from '../api/api/appointment.service';
 import { Examination }           from '../api/model/examination';
@@ -15,24 +17,21 @@ import { RoomService }           from '../api/api/room.service';
 import * as moment from 'moment';
 
 @Component({
-  template: require('./appointment-detail.html'),
-  styles: [ require('./appointment-detail.style.scss') ]
+  template: require('./walk-in-check-in.html'),
+  styles: [ require('./walk-in-check-in.style.scss') ]
 })
 
-export class AppointmentDetailComponent {
-
-  private editing: boolean = false;
+export class WalkInCheckInComponent {
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
-  private proposedTimeSlots: any[] = [];
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
-    description: undefined,
-    date: undefined,
-    time: undefined,
-    duration: undefined,
+    description: 'Walk-in patient',
+    date: moment().format('Y-MM-DD'),
+    time: moment().format('HH:mm'),
+    duration: '30M',
     roomId: undefined,
     patient: undefined,
     examinations: undefined
@@ -48,24 +47,11 @@ export class AppointmentDetailComponent {
     private patientService: PatientService) {}
 
   ngOnInit(): void {
-    let param: string = this.route.snapshot.params['id'];
-
     // This is a sub-page
     this._state.isSubPage.next(true);
-    this._state.title.next();
+    this._state.title.next('Walk-In Patient Check-In');
     this._state.actions.next();
     this._state.primaryAction.next();
-
-    // Create new appointment
-    if (param === 'add') {
-      this.editing = true;
-
-    // View or edit existing appointment
-    } else if (Number(param) !== NaN) {
-      this.editing = false;
-      console.log('displaying appointment with id: %d', Number(param));
-      this.getAppointmentById(Number(param));
-    }
     this.getAllRooms();
   }
 
@@ -87,39 +73,30 @@ export class AppointmentDetailComponent {
     newAppointment.start = start.toDate();
     newAppointment.end = end.toDate();
 
-    // Add...
-    if (!this.model.id) {
-      this.appointmentService
-      .appointmentCreate(newAppointment)
-      .subscribe(
-        x => {
-          if (examinations && examinations.length > 0) {
-            for (let i = 0; i < examinations.length; ++i) {
-              this.linkExaminationWithAppointment(x, examinations[i]);
-            }
-          }
-        },
-        e => { console.log('onError: %o', e); },
-        () => { console.log('Completed insert.'); }
-      );
-
-    // ...or update
-    } else {
-      this.appointmentService
-      .appointmentPrototypeUpdateAttributes(this.model.id.toString(), newAppointment)
-      .subscribe(
-        x => {
+    // Add appointment
+    this.appointmentService
+    .appointmentCreate(newAppointment)
+    .subscribe(
+      x => {
+        // Link examinations
+        if (examinations && examinations.length > 0) {
           for (let i = 0; i < examinations.length; ++i) {
             this.linkExaminationWithAppointment(x, examinations[i]);
           }
-        },
-        e => { console.log('onError: %o', e); },
-        () => { console.log('Completed update.'); }
-      );
-    }
-
-    // Navigate back to schedule view
-    this.router.navigateByUrl('appointment');
+        }
+        // Complete check-in
+        this.checkIn(x).subscribe(
+          null,
+          err => console.log(err),
+          () => {
+            // Navigate back to schedule view
+            this.router.navigateByUrl('appointment/attendance');
+          }
+        );
+      },
+      e => { console.log('onError: %o', e); },
+      () => { console.log('Completed insert.'); }
+    );
   }
 
   private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
@@ -137,7 +114,12 @@ export class AppointmentDetailComponent {
     this.roomService
     .roomFind()
     .subscribe(
-      x => this.rooms = x,
+      x => {
+        this.rooms = x;
+        if (x && x.length > 0) { // If we got rooms, use the first as default
+          this.model.roomId = x[0].id;
+        }
+      },
       e => console.log(e),
       () => console.log('Get all rooms complete.')
     );
@@ -161,61 +143,6 @@ export class AppointmentDetailComponent {
       e => console.log(e),
       () => console.log('Completed querying for examinations.')
     );
-  }
-
-  private findTime(
-    duration?: string,
-    examinationId?: number,
-    roomId?: number,
-    startDate?: moment.Moment
-  ) {
-    console.log('Querying for the next free time slot.');
-    this.appointmentService
-    .appointmentFindTime(
-      duration ? 'PT' + duration : 'PT40M', // TODO move to server and replace by config-default
-      examinationId,
-      roomId,
-      startDate ? startDate.toDate() : undefined)
-    .subscribe(
-      x => this.proposedTimeSlots.push(x),
-      e => console.log(e),
-      () => console.log('Completed querying for the next free time slot.')
-    );
-  }
-
-  private onFormChange() {
-     // Every time the form changes, use latest information to find a suitable date
-    if (this.model.duration) {
-      this.proposedTimeSlots = [];
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment()
-      );
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment().add(1, 'day')
-      );
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment().add(1, 'week')
-      );
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment().add(1, 'month')
-      );
-    }
   }
 
   private getRoomNameById(roomId: number) {
@@ -260,23 +187,18 @@ export class AppointmentDetailComponent {
       );
   }
 
-  private applySuggestion(timeSlot: any) {
-    if (timeSlot) {
-      console.log(timeSlot);
-      let startDate = moment(timeSlot.start);
-      this.model.duration =
-        `${moment.duration(timeSlot.duration, 'minutes').toJSON().substring(2)}`;
-      this.model.date = startDate.format('Y-MM-DD');
-      this.model.time = startDate.format('HH:mm');
-      this.model.roomId = timeSlot.resources[0];
+  private checkIn(appointment: any): Observable<Attendance> { // TODO Fix any ViewAppointment
+    // Prepare data
+    let data: Attendance = {
+      checkedIn: new Date()
+    };
 
-      // Clear suggestions
-      this.proposedTimeSlots = [];
-    }
-  }
+    // TODO check if this patient is already checked in, and allow/deny
+    // this operation. Maybe we want to allow this, but in that case, we
+    // would have to set checkedIn = underTreatment = new Date().
 
-  private handleEditClick() {
-    this.editing = true;
+    return this.appointmentService
+      .appointmentPrototypeCreateAttendance(appointment.id.toString(), data);
   }
 
   private humanizeDuration(durationString: String): String {

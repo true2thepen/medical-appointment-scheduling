@@ -7,6 +7,7 @@ import { AppointmentRoomsComponent }      from './appointment-rooms.component';
 import { AppointmentTodayComponent }      from './appointment-today.component';
 import { AppointmentAttendanceComponent } from './appointment-attendance.component';
 import { WeekComponent }                  from './week.component';
+import { WalkInCheckInComponent }         from './walk-in-check-in.component';
 import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
 
@@ -17,6 +18,7 @@ const appointmentRoutes: Routes = [
     children: [
       { path: 'today', component: AppointmentTodayComponent },
       { path: 'week', component: WeekComponent },
+      { path: 'walk-in-check-in', component: WalkInCheckInComponent },
       { path: 'patient/:id', component: PatientComponent },
       { path: 'rooms', component: AppointmentRoomsComponent },
       { path: 'attendance', component: AppointmentAttendanceComponent },

@@ -1,0 +1,44 @@
+<div class="card-centered-wrapper">
+
+  <form (ngSubmit)="onSubmit()" #appointmentForm="ngForm" class="ui form">
+    <md-card class="card-centered-600">
+    <md-card-title>Check in walk-in patient</md-card-title>
+      <md-card-content>
+
+        <div>
+          <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="surname" placeholder="Patient" required="true" name="patient">
+            <template let-patient>
+              <span>{{patient?.givenName}} {{patient?.surname}}, {{patient?.dateOfBirth | date:'shortDate'}}</span>
+            </template>
+          </p-autoComplete>
+        </div>
+
+        <div class="examinations-container">
+          <span class="label">Examinations:</span>
+          <p-autoComplete [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
+          </p-autoComplete>
+        </div>
+
+        <div><md-input [(ngModel)]="model.duration" placeholder="Duration" required="true" name="duration"></md-input><span class="description">E.g.: 30M, 1H, 1H40M etc.</span></div>
+
+        <div><md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
+        <md-input [(ngModel)]="model.time" placeholder="Time" required="true" name="time"></md-input></div>
+
+        <md-input [(ngModel)]="model.title" placeholder="Title" name="title"></md-input>
+        <md-input [(ngModel)]="model.description" placeholder="Description" name="description"></md-input>
+
+        <div>
+          <span class="label">Room: *</span>
+          <select [(ngModel)]="model.roomId" required name="room">
+            <option *ngFor="let r of rooms" [value]="r?.id">{{r?.name}}</option>
+          </select>
+        </div>
+
+      </md-card-content>
+      <md-card-actions align="end">
+        <button [disabled]="!appointmentForm.form.valid" md-button type="submit">SAVE &amp; CHECK IN</button>
+      </md-card-actions>
+    </md-card>
+  </form>
+
+</div>

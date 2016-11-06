@@ -42,8 +42,8 @@ export class AppointmentAttendanceComponent {
     this._state.title.next('Attendance List');
     this._state.actions.next();
     this._state.primaryAction.next({
-      icon: 'person',
-      routerLink: 'appointment/attendance/checkin'
+      icon: 'person_add',
+      routerLink: 'appointment/walk-in-check-in'
     });
     this.getTodaysAppointments();
   }
