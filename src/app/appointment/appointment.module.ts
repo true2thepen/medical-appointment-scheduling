@@ -20,6 +20,7 @@ import { ViewAppointmentService }         from './appointment.service';
 import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
 import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
+import { CantyCTIService }                from '../cantyCti.service';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dia
     PatientCancelAppointmentDialog
   ],
   providers: [
-    ViewAppointmentService
+    ViewAppointmentService,
+    CantyCTIService
   ],
   entryComponents: [
     PatientCancelAppointmentDialog

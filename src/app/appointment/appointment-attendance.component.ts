@@ -3,6 +3,8 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
 
+import { CantyCTIService }       from '../cantyCti.service';
+
 import { Appointment }           from '../api/model/appointment';
 import { Attendance }            from '../api/model/attendance';
 import { AppointmentService }    from '../api/api/appointment.service';
@@ -31,7 +33,8 @@ export class AppointmentAttendanceComponent {
     private _state: AppState,
     private route: ActivatedRoute,
     private router: Router,
-    private appointmentService: AppointmentService) {}
+    private appointmentService: AppointmentService,
+    private cantyCTIService: CantyCTIService) {}
 
   ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
@@ -186,5 +189,9 @@ export class AppointmentAttendanceComponent {
         this.appointmentsFinished.push(appointment);
       }
     );
+  }
+
+  private requestCall(phoneNumber: String) {
+    this.cantyCTIService.requestCall(phoneNumber);
   }
 }
