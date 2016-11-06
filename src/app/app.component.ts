@@ -45,7 +45,11 @@ import { CantyCTIService,
       </a>
       <a [routerLink]="['./appointment']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_agenda</md-icon>
-        <span md-line>Appointments</span>
+        <span md-line>Month</span>
+      </a>
+      <a [routerLink]="['./appointment/week']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_week</md-icon>
+        <span md-line>Week</span>
       </a>
       <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_week</md-icon>

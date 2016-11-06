@@ -15,6 +15,7 @@ import { AppointmentDetailComponent }     from './appointment-detail.component';
 import { AppointmentRoomsComponent }      from './appointment-rooms.component';
 import { AppointmentTodayComponent }      from './appointment-today.component';
 import { AppointmentAttendanceComponent } from './appointment-attendance.component';
+import { WeekComponent }                  from './week.component';
 import { appointmentRouting }             from './appointment.routing';
 import { ViewAppointmentService }         from './appointment.service';
 import { StatisticsComponent }            from './statistics.component';
@@ -42,7 +43,8 @@ import { CantyCTIService }                from '../cantyCti.service';
     AppointmentAttendanceComponent,
     PatientComponent,
     StatisticsComponent,
-    PatientCancelAppointmentDialog
+    PatientCancelAppointmentDialog,
+    WeekComponent
   ],
   providers: [
     ViewAppointmentService,
