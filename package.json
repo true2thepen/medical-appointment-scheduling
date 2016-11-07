@@ -55,6 +55,7 @@
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "docker": "docker",
+    "postinstall": "sh bin/third-party-fixes.sh",
     "heroku-postbuild": "npm run build:prod && mv dist/index.html dist/200.html",
     "heroku-start": "harp server ./dist --port $PORT"
   },
