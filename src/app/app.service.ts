@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Rx';
 import { HmrState } from 'angular2-hmr';
 
+declare var navigator: any; // navigator.languages not available yet
+
 @Injectable()
 export class AppState {
   // @HmrState() is used by HMR to track the state of any object during HMR (hot module replacement)
@@ -49,6 +51,15 @@ export class AppState {
   set(prop: string, value: any) {
     // internally mutate our state
     return this._state[prop] = value;
+  }
+
+  public ensureLocale() {
+    if (!localStorage.getItem('locale')) {
+      let locale = navigator.languages
+        ? navigator.languages[0]
+        : (navigator.language || navigator.userLanguage);
+      localStorage.setItem('locale', locale);
+    }
   }
 
 

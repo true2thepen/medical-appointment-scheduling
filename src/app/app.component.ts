@@ -146,6 +146,8 @@ export class AppComponent {
     private viewContainerRef: ViewContainerRef) {}
 
   ngOnInit() {
+    this._state.ensureLocale(); // Make sure locale is set
+    console.log('Locale is %s', localStorage.getItem('locale'));
     this.snackBarConfig = new MdSnackBarConfig(this.viewContainerRef);
 
     // Listen for title changes
@@ -291,7 +293,7 @@ export class AppComponent {
   }
 
   public insertTestPatients() {
-    this.patientService.patientInsertTestData()
+    this.patientService.patientInsertTestData(localStorage.getItem('locale'))
     .subscribe(
       x => console.log(`Inserted ${x.insertCount} test entries for patients.`),
       err => console.log(err),
@@ -300,7 +302,7 @@ export class AppComponent {
   }
 
   public insertTestExaminations() {
-    this.examinationService.examinationInsertTestData()
+    this.examinationService.examinationInsertTestData(localStorage.getItem('locale'))
     .subscribe(
       x => console.log(`Inserted ${x.insertCount} test entries for examinations.`),
       err => console.log(err),
@@ -309,7 +311,7 @@ export class AppComponent {
   }
 
   public insertTestRooms() {
-    this.roomService.roomInsertTestData()
+    this.roomService.roomInsertTestData(localStorage.getItem('locale'))
     .subscribe(
       x => console.log(`Inserted ${x.insertCount} test entries for rooms.`),
       err => console.log(err),
