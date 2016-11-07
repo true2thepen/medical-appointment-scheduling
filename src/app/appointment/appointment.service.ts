@@ -32,7 +32,7 @@ export class ViewAppointmentService {
           }
           // Render blocked appointments differently
           if (x[i].autoAppointmentBlockedSecret) {
-            x[i].title = 'Offered Appointment';
+            x[i].title = 'Auto-Offered';
             x[i].color = '#000000';
             x[i].backgroundColor = '#ffffff';
             x[i].borderColor = '#000000';
