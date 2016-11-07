@@ -236,10 +236,10 @@ export class ExaminationService {
     /**
      * Insert sample data set of test examinations.
      * 
-     * @param language 
+     * @param locale 
      */
-    public examinationInsertTestData(language?: string, extraHttpRequestParams?: any): Observable<InlineResponse2003> {
-        return this.examinationInsertTestDataWithHttpInfo(language, extraHttpRequestParams)
+    public examinationInsertTestData(locale?: string, extraHttpRequestParams?: any): Observable<InlineResponse2003> {
+        return this.examinationInsertTestDataWithHttpInfo(locale, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -816,15 +816,15 @@ export class ExaminationService {
     /**
      * Insert sample data set of test examinations.
      * 
-     * @param language 
+     * @param locale 
      */
-    public examinationInsertTestDataWithHttpInfo(language?: string, extraHttpRequestParams?: any): Observable<Response> {
+    public examinationInsertTestDataWithHttpInfo(locale?: string, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/Examinations/insertTestData`;
 
         let queryParameters = new URLSearchParams();
         let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-        if (language !== undefined) {
-            queryParameters.set('language', <any>language);
+        if (locale !== undefined) {
+            queryParameters.set('locale', <any>locale);
         }
 
 
