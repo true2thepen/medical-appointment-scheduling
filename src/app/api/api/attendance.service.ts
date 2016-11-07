@@ -34,7 +34,6 @@ import { InlineResponse200 } from '../model/inlineResponse200';
 import { Attendance } from '../model/attendance';
 import { InlineResponse2001 } from '../model/inlineResponse2001';
 import { InlineResponse2002 } from '../model/inlineResponse2002';
-import { XAny } from '../model/xAny';
 
 import { BASE_PATH }                                         from '../variables';
 import { Configuration }                                     from '../configuration';

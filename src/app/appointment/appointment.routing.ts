@@ -11,6 +11,7 @@ import { WalkInCheckInComponent }         from './walk-in-check-in.component';
 import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
 import { AnonComponent }                  from './anon.component';
+import { AcceptOfferComponent }           from './accept-offer.component';
 
 
 const appointmentRoutes: Routes = [
@@ -19,6 +20,7 @@ const appointmentRoutes: Routes = [
     component: AppointmentComponent,
     children: [
       { path: 'today', component: AppointmentTodayComponent },
+      { path: 'accept/:secret', component: AcceptOfferComponent },
       { path: 'week', component: WeekComponent },
       { path: 'walk-in-check-in', component: WalkInCheckInComponent },
       { path: 'patient/:id', component: PatientComponent },

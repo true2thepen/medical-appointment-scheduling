@@ -30,6 +30,14 @@ export class ViewAppointmentService {
               `${x[i].patient.givenName} ${x[i].patient.surname}`;
             }
           }
+          // Render blocked appointments differently
+          if (x[i].autoAppointmentBlockedSecret) {
+            x[i].title = 'Offered Appointment';
+            x[i].color = '#000000';
+            x[i].backgroundColor = '#ffffff';
+            x[i].borderColor = '#000000';
+            x[i].className  = 'auto-appointment-blocked';
+          }
         }
         return x;
       });

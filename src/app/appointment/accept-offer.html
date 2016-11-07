@@ -1,0 +1,25 @@
+<div id="wrapper" class="card-centered-wrapper">
+  <md-card *ngIf="acceptedAppointment" class="card-centered-600">
+    <md-card-title>Appointment Accepted</md-card-title>
+    <md-card-content>
+      <p>You have successfully accepted your appointment.</p>
+      <h3>Details:</h3>
+      <p>Sunday, February 14th 2010,<br />13:00</p>
+    </md-card-content>
+  </md-card>
+  <md-card *ngIf="failed" class="card-centered-600">
+    <md-card-title>Appointment Expired</md-card-title>
+    <md-card-content>
+      <p>
+        It looks like this offer for an appointment already expired.
+      </p>
+      <p>
+        You can always get a new one by mailing to
+        <a href="mailto:auto-appointment@sebastianhaas.online" target="_top">
+          auto-appointment@sebastianhaas.online
+        </a>
+        or calling us directly at 269-852-0681.
+      </p>
+    </md-card-content>
+  </md-card>
+</div>

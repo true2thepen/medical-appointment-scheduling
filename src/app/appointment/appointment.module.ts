@@ -22,6 +22,7 @@ import { appointmentRouting }             from './appointment.routing';
 import { ViewAppointmentService }         from './appointment.service';
 import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
+import { AcceptOfferComponent }           from './accept-offer.component';
 import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
 import { CantyCTIService }                from '../cantyCti.service';
 
@@ -48,7 +49,8 @@ import { CantyCTIService }                from '../cantyCti.service';
     PatientCancelAppointmentDialog,
     WeekComponent,
     WalkInCheckInComponent,
-    AnonComponent
+    AnonComponent,
+    AcceptOfferComponent
   ],
   providers: [
     ViewAppointmentService,
