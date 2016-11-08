@@ -4,12 +4,21 @@
   color: red;
 }
 
+/deep/ span.md-slide-toggle-content {
+  font-weight: bold !important;
+  font-size: 1.17em !important;
+}
+
 select {
   font: inherit;
   border: 1px solid darkgrey;
   background-color: transparent;
   margin-top: 16px;
   margin-left: 16px;
+}
+
+/deep/ .ui-autocomplete {
+  margin-bottom: 10px;
 }
 
 /deep/ .ui-autocomplete-panel {
@@ -25,18 +34,36 @@ select {
 }
 
 /deep/ li.ui-autocomplete-token {
-  background-color: #eeeeee;
+  background-color: md-color($primary);
   border-radius: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
-  color: gray;
+  color: md-contrast($primary, 500);
   max-width: 585px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/deep/ li.ui-autocomplete-input-token {
+  border-bottom: 1pt solid darkgrey;
+  margin: unset;
+  padding: unset;
+  padding-bottom: 5px;
+}
+
 /deep/ ul.ui-autocomplete-multiple.ui-widget.ui-inputtext {
   padding: 0;
+}
+
+/deep/ span.ui-autocomplete.ui-widget.ui-autocomplete-multiple {
+  overflow: visible;
+}
+
+/deep/ div.ui-autocomplete-panel.ui-widget-content.ui-corner-all.ui-shadow {
+  width: 400px !important;
+  bottom: -200px !important;
+  top: unset !important;
+  height: 200px !important;
 }
 
 .label {

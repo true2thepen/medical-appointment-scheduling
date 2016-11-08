@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
+import { AutoComplete } from 'primeng/primeng';
 
 import { Appointment }           from '../api/model/appointment';
 import { AppointmentService }    from '../api/api/appointment.service';
@@ -27,6 +28,8 @@ export class AppointmentDetailComponent {
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
+  @ViewChild('examMultiChooser') private examinationsInput: AutoComplete;
+  private examinationsPlaceholder = 'Examinations';
   private proposedTimeSlots: any[] = [];
   private model: AppointmentViewModel = {
     id: undefined,
@@ -207,6 +210,7 @@ export class AppointmentDetailComponent {
   }
 
   private onFormChange() {
+    console.log(this.examinationsInput);
      // Every time the form changes, use latest information to find a suitable date
     if (this.model.duration) {
       this.proposedTimeSlots = [];
