@@ -17,6 +17,9 @@ import 'rxjs/add/operator/mergeMap';
 // jQuery
 import 'jquery';
 
+// hammer.js
+import 'hammerjs';
+
 // Fullcalendar
 import 'fullcalendar';
 import 'fullcalendar/dist/locale-all.js';

@@ -15,6 +15,7 @@
       "async",
       "core-js",
       "hammerjs",
+      "handlebars",
       "jasmine",
       "node",
       "protractor",

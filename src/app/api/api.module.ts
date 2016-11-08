@@ -7,6 +7,7 @@ import { AttendanceService } from './api/attendance.service';
 import { AuditLogEntryService } from './api/auditLogEntry.service';
 import { ExaminationService } from './api/examination.service';
 import { MailService } from './api/mail.service';
+import { NotificationService } from './api/notification.service';
 import { PatientService } from './api/patient.service';
 import { RoomService } from './api/room.service';
 
@@ -14,6 +15,6 @@ import { RoomService } from './api/room.service';
   imports:      [ CommonModule, HttpModule ],
   declarations: [],
   exports:      [],
-  providers:    [ AppointmentService, AttendanceService, AuditLogEntryService, ExaminationService, MailService, PatientService, RoomService ]
+  providers:    [ AppointmentService, AttendanceService, AuditLogEntryService, ExaminationService, MailService, NotificationService, PatientService, RoomService ]
 })
 export class ApiModule {}

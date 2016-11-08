@@ -56,6 +56,25 @@
           </select>
         </div>
 
+        <!-- Only on add, not on update for the time. -->
+        <div *ngIf="!this.model.id" class="section-reminders">
+          <md-slide-toggle [(ngModel)]="model.reminders" name="reminders">
+            Reminders
+          </md-slide-toggle>
+          <div *ngIf="model.reminders">
+            <div class="md-checkbox-div">
+              <md-checkbox [(ngModel)]="model.emailReminder" name="emailReminder">
+                Send email reminder <span *ngIf="model?.patient?.email" class="label">({{model.patient.email}})</span>
+              </md-checkbox>
+            </div>
+            <div>
+              <md-checkbox [(ngModel)]="model.smsReminder" name="smsReminder">
+                Send text message reminder <span *ngIf="model?.patient?.phone" class="label">({{model.patient.phone}})</span>
+              </md-checkbox>
+            </div>
+          </div>
+        </div>
+
       </md-card-content>
       <md-card-actions align="end">
         <button [disabled]="!appointmentForm.form.valid" md-button type="submit">SAVE</button>

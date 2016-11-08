@@ -11,6 +11,8 @@ import { Patient }               from '../api/model/patient';
 import { PatientService }        from '../api/api/patient.service';
 import { Room }                  from '../api/model/room';
 import { RoomService }           from '../api/api/room.service';
+import { NotificationService }   from '../api/api/notification.service';
+import { NotificationBuilder }   from './notificationBuilder';
 
 import * as moment from 'moment';
 
@@ -35,7 +37,8 @@ export class AppointmentDetailComponent {
     duration: undefined,
     roomId: undefined,
     patient: undefined,
-    examinations: undefined
+    examinations: undefined,
+    reminders: undefined
   };
 
   constructor(
@@ -45,7 +48,8 @@ export class AppointmentDetailComponent {
     private appointmentService: AppointmentService,
     private examinationService: ExaminationService,
     private roomService: RoomService,
-    private patientService: PatientService) {}
+    private patientService: PatientService,
+    private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
@@ -93,11 +97,29 @@ export class AppointmentDetailComponent {
       .appointmentCreate(newAppointment)
       .subscribe(
         x => {
+
+          // Link examinations
           if (examinations && examinations.length > 0) {
             for (let i = 0; i < examinations.length; ++i) {
               this.linkExaminationWithAppointment(x, examinations[i]);
             }
           }
+
+          // Create reminders
+          if (this.model.reminders) {
+            this.notificationService.notificationCreate(
+              NotificationBuilder.getNotification(
+                x,
+                this.model.emailReminder ? this.model.patient.email : undefined,
+                this.model.smsReminder ? this.model.patient.phone : undefined
+              ))
+            .subscribe(
+              null,
+              err => console.log(err),
+              () => console.log('Created notification.')
+            );
+          }
+
         },
         e => { console.log('onError: %o', e); },
         () => { console.log('Completed insert.'); }
@@ -112,6 +134,7 @@ export class AppointmentDetailComponent {
           for (let i = 0; i < examinations.length; ++i) {
             this.linkExaminationWithAppointment(x, examinations[i]);
           }
+          // TODO Reminders currently being ignored on update
         },
         e => { console.log('onError: %o', e); },
         () => { console.log('Completed update.'); }
@@ -294,4 +317,7 @@ interface AppointmentViewModel {
   roomId: number;
   patient: Patient;
   examinations: Examination[];
+  reminders: boolean;
+  smsReminder?: boolean;
+  emailReminder?: boolean;
 }

@@ -8,5 +8,7 @@ export * from './inlineResponse2001';
 export * from './inlineResponse2002';
 export * from './inlineResponse2003';
 export * from './inlineResponse2004';
+export * from './notification';
+export * from './notificationTransport';
 export * from './patient';
 export * from './room';
