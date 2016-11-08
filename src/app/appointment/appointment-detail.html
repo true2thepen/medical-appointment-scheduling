@@ -24,7 +24,8 @@
 
   <form *ngIf="editing" (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
     <md-card class="card-centered-600">
-    <md-card-title>New Appointment</md-card-title>
+    <md-card-title *ngIf="!model.id">New Appointment</md-card-title>
+    <md-card-title *ngIf="model.id">Update Appointment</md-card-title>
       <md-card-content>
 
         <div>
