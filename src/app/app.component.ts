@@ -34,30 +34,25 @@ import { CantyCTIService,
 <md-sidenav-layout fullscreen>
   <md-sidenav #sidenav>
     <md-nav-list>
-      <a [routerLink]="['./home']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>home</md-icon>
-        <span md-line>Home</span>
-        <!--<span md-line class="secondary">Take a look at your appointments</span>-->
-      </a>
       <a [routerLink]="['./appointment/attendance']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>people</md-icon>
         <span md-line>Attendance List</span>
       </a>
       <a [routerLink]="['./appointment']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>view_agenda</md-icon>
+        <md-icon md-list-icon>view_module</md-icon>
         <span md-line>Month</span>
       </a>
       <a [routerLink]="['./appointment/week']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_week</md-icon>
         <span md-line>Week</span>
       </a>
-      <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>view_week</md-icon>
-        <span md-line>Rooms</span>
-      </a>
       <a [routerLink]="['./appointment/today']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>today</md-icon>
+        <md-icon md-list-icon>view_day</md-icon>
         <span md-line>Today</span>
+      </a>
+      <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_list</md-icon>
+        <span md-line>Rooms</span>
       </a>
       <a [routerLink]="['./appointment/statistics']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>show_chart</md-icon>
@@ -66,6 +61,11 @@ import { CantyCTIService,
       <a [routerLink]="['./about']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>help</md-icon>
         <span md-line>Help</span>
+      </a>
+      <md-divider></md-divider>
+      <a [routerLink]="['./appointment/anon']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>visibility_off</md-icon>
+        <span md-line>Anonymized View</span>
       </a>
     </md-nav-list>
   </md-sidenav>
