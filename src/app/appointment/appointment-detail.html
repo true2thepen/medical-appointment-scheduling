@@ -1,4 +1,4 @@
-<div class="card-centered-wrapper">
+<div #fml class="card-centered-wrapper">
 
   <md-card *ngIf="!editing" class="card-centered-600">
     <md-card-title>
@@ -29,7 +29,7 @@
       <md-card-content>
 
         <h3>Patient</h3>
-        <div>
+       <div>
           <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="surname" placeholder="Patient" required="true" name="patient">
             <template let-patient>
               <span>{{patient?.givenName}} {{patient?.surname}}, {{patient?.dateOfBirth | date:'shortDate'}}</span>
@@ -39,7 +39,7 @@
 
         <h3>Examinations</h3>
         <div class="examinations-container">
-          <p-autoComplete #examMultiChooser [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" [placeholder]="examinationsPlaceholder" field="name" [multiple]="true" name="examinations">
+          <p-autoComplete #examMultiChooser [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
           </p-autoComplete>
         </div>
 
@@ -61,7 +61,7 @@
         </div>
 
         <!-- Only on add, not on update for the time. -->
-        <div *ngIf="!this.model.id" class="section-reminders">
+        <div *ngIf="!this?.model?.id" class="section-reminders">
           <md-slide-toggle [(ngModel)]="model.reminders" name="reminders">
             Reminders
           </md-slide-toggle>

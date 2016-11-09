@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
@@ -28,9 +28,8 @@ export class AppointmentDetailComponent {
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
-  @ViewChild('examMultiChooser') private examinationsInput: AutoComplete;
-  private examinationsPlaceholder = 'Examinations';
   private proposedTimeSlots: any[] = [];
+  @ViewChildren('examMultiChooser') private examsMultiInput: QueryList<AutoComplete>;
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
@@ -73,7 +72,16 @@ export class AppointmentDetailComponent {
       console.log('displaying appointment with id: %d', Number(param));
       this.getAppointmentById(Number(param));
     }
+
     this.getAllRooms();
+  }
+
+  ngAfterViewInit() {
+    // Set placeholder for examinations input
+    for (let autoComplete of this.examsMultiInput.toArray()) {
+      console.log(autoComplete);
+      autoComplete.input.placeholder = 'Examinations';
+    }
   }
 
   onSubmit(): void {
@@ -210,7 +218,12 @@ export class AppointmentDetailComponent {
   }
 
   private onFormChange() {
-    console.log(this.examinationsInput);
+    // Set placeholder for examinations input
+    for (let autoComplete of this.examsMultiInput.toArray()) {
+      console.log(autoComplete);
+      autoComplete.input.placeholder = 'Examinations';
+    }
+
      // Every time the form changes, use latest information to find a suitable date
     if (this.model.duration) {
       this.proposedTimeSlots = [];
