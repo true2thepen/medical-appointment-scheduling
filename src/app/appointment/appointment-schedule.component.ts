@@ -21,7 +21,7 @@ import { Schedule }           from 'primeng/primeng';
 export class AppointmentScheduleComponent implements OnInit {
 
   private appointments: ViewAppointment[];
-  private locale: any;
+  private locale: string;
   private hiddenDays: number[];
   private viewDate: moment.Moment;
   @ViewChild(Schedule) private schedule: Schedule;
@@ -55,7 +55,7 @@ export class AppointmentScheduleComponent implements OnInit {
       routerLink: 'appointment/add'
     });
     this.getAllAppointments();
-    this.locale = 'de';
+    this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'.startsWith('de') ? 'de' : 'en';
     this.hiddenDays = [ 0 ]; // Hide Sundays by default
   }
 

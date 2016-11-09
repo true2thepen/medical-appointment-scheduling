@@ -20,6 +20,9 @@ import 'jquery';
 // hammer.js
 import 'hammerjs';
 
+// moment.js
+import 'moment';
+
 // Fullcalendar
 import 'fullcalendar';
 import 'fullcalendar/dist/locale-all.js';

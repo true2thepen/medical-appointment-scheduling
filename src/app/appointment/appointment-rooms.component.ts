@@ -22,7 +22,7 @@ export class AppointmentRoomsComponent implements OnInit {
 
   private appointmentsByRoom: Appointment[][] = [[]];
   private rooms: Room[];
-  private locale: any;
+  private locale: string;
   private minTime: moment.Duration = moment.duration('07:00:00');
   private maxTime: moment.Duration = moment.duration('20:00:00');
   private viewDate: moment.Moment;
@@ -57,7 +57,7 @@ export class AppointmentRoomsComponent implements OnInit {
       routerLink: 'appointment/add'
     });
     this.getAllRooms();
-    this.locale = 'de';
+    this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
   }
 
   private getAppointmentsByRoom(room: Room): void {

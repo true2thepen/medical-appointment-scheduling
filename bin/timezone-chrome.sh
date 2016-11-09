@@ -23,7 +23,7 @@
 ### Customize these
 
 # Change this to the spoof a different timezone. Helpful for testing timezone specific client facing content.
-export TZ="America/Los_Angeles"
+export TZ="Europe/Vienna"
 
 # Permanent directory to store the user-data directory of your 'fresh'
 # Chrome configuration.

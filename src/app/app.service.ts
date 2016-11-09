@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Rx';
-import { HmrState } from 'angular2-hmr';
+import { Subject }    from 'rxjs/Rx';
+import { HmrState }   from 'angular2-hmr';
+
+import * as moment    from 'moment';
 
 declare var navigator: any; // navigator.languages not available yet
 
@@ -53,15 +55,30 @@ export class AppState {
     return this._state[prop] = value;
   }
 
+  /**
+   * This sets the locale depending on the browser configuration.
+   * The value is extracted from either `navigator.languages[0]`,
+   * `navigator.language` or `navigator.userLanguage` and persisted to
+   * localStorage, where all other parts of the application take it from.
+   */
   public ensureLocale() {
     if (!localStorage.getItem('locale')) {
       let locale = navigator.languages
         ? navigator.languages[0]
         : (navigator.language || navigator.userLanguage);
       localStorage.setItem('locale', locale);
+      this.setMomentLocale(locale);
+    } else {
+      this.setMomentLocale(localStorage.getItem('locale'));
     }
   }
 
+  /**
+   * This sets the locale for all newly create moments globally.
+   */
+  private setMomentLocale(locale: string) {
+    moment.locale(locale);
+  }
 
   _clone(object) {
     // simple object clone

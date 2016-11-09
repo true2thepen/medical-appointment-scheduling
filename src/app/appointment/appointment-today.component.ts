@@ -30,7 +30,7 @@ export class AppointmentTodayComponent implements OnInit {
     this._state.actions.next();
     this._state.primaryAction.next();
     this.getTodaysAppointments();
-    this.locale = 'en';
+    this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
     this.defaultView = 'basicDay';
   }
 
