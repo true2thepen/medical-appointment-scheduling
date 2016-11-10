@@ -51,6 +51,7 @@
     "docs": "npm run typedoc -- --options typedoc.json --exclude '**/*.spec.ts' ./src/",
     "start": "npm run server:dev",
     "start:hmr": "npm run server:dev:hmr",
+    "sass": "node-sass src -o src --include-path node_modules --output-style compressed -q",
     "preversion": "npm test",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
