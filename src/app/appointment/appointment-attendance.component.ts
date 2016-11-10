@@ -15,8 +15,8 @@ import { Room }                  from '../api/model/room';
 import * as moment from 'moment';
 
 @Component({
-  template: require('./appointment-attendance.html'),
-  styles: [ require('./appointment-attendance.style.scss') ]
+  templateUrl: './appointment-attendance.html',
+  styleUrls: ['./appointment-attendance.style.scss' ]
 })
 
 export class AppointmentAttendanceComponent {

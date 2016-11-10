@@ -19,8 +19,8 @@ import * as moment               from 'moment';
 import * as humanizeDuration     from 'humanize-duration';
 
 @Component({
-  template: require('./appointment-detail.html'),
-  styles: [ require('./appointment-detail.style.scss') ]
+  templateUrl: './appointment-detail.html',
+  styleUrls: [ './appointment-detail.style.scss' ]
 })
 
 export class AppointmentDetailComponent {

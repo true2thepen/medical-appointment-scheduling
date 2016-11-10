@@ -9,8 +9,8 @@ import { ViewAppointmentService } from './appointment.service';
 import * as moment            from 'moment';
 
 @Component({
-  template: require('./appointment-today.html'),
-  styles: [ require('./appointment-today.style.scss') ]
+  templateUrl: './appointment-today.html',
+  styleUrls: [ './appointment-today.style.scss' ]
 })
 
 export class AppointmentTodayComponent implements OnInit {

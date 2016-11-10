@@ -12,8 +12,8 @@ import * as async  from 'async';
 declare var Plotly: any;
 
 @Component({
-  template: require('./statistics.html'),
-  styles: [ require('./statistics.style.scss') ]
+  templateUrl: './statistics.html',
+  styleUrls: [ './statistics.style.scss' ]
 })
 export class StatisticsComponent implements OnInit {
 

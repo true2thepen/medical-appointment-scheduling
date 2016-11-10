@@ -14,8 +14,8 @@ import { Schedule }               from 'primeng/primeng';
 
 
 @Component({
-  template: require('./anon.html'),
-  styles: [ require('./anon.style.scss') ]
+  templateUrl: './anon.html',
+  styleUrls: [ './anon.style.scss' ]
 })
 
 export class AnonComponent implements OnInit {

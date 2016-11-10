@@ -9,8 +9,7 @@ import { CANTY_CTI_HOST }               from './cantyCti.service';
 
 import { AppComponent }                 from './app.component';
 import { AppState }                     from './app.service';
-import { routing }                      from './app.routing';
-import { appRoutingProviders }          from './app.routing';
+import { AppRoutingModule }             from './app-routing.module';
 import { CantyCTIService }              from './cantyCti.service';
 
 import { AppointmentModule }            from './appointment/appointment.module';
@@ -24,10 +23,10 @@ import { XLarge }                       from './home/x-large';
     BrowserModule,
     FormsModule,
     HttpModule,
-    routing,
     AppointmentModule,
     HomeModule,
-    MaterialModule.forRoot()
+    MaterialModule.forRoot(),
+    AppRoutingModule
   ],
   declarations: [
     AppComponent,
@@ -38,7 +37,6 @@ import { XLarge }                       from './home/x-large';
   providers: [
     AppState,
     CantyCTIService,
-    appRoutingProviders,
     {
       provide: BASE_PATH, // Used in apis as base path.
       useValue: API_BASE_PATH // Declared in custom-typings.d.ts, set by webpack's DefinePlugin

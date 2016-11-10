@@ -6,8 +6,8 @@ import { Appointment }            from '../api/model/appointment';
 import { AppointmentService }     from '../api/api/appointment.service';
 
 @Component({
-  template: require('./accept-offer.html'),
-  styles: [ require('./accept-offer.style.scss') ]
+  templateUrl: './accept-offer.html',
+  styleUrls: [ './accept-offer.style.scss' ]
 })
 export class AcceptOfferComponent implements OnInit {
 

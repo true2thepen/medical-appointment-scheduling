@@ -14,8 +14,8 @@ import { ViewAppointment }        from './appointment.viewmodel';
 import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
 
 @Component({
-  template: require('./patient.html'),
-  styles: [ require('./patient.style.scss') ]
+  templateUrl: './patient.html',
+  styleUrls: [ './patient.style.scss' ]
 })
 export class PatientComponent implements OnInit {
 

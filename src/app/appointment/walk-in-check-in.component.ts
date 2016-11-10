@@ -17,8 +17,8 @@ import { RoomService }           from '../api/api/room.service';
 import * as moment from 'moment';
 
 @Component({
-  template: require('./walk-in-check-in.html'),
-  styles: [ require('./walk-in-check-in.style.scss') ]
+  template: './walk-in-check-in.html',
+  styles: [ './walk-in-check-in.style.scss' ]
 })
 
 export class WalkInCheckInComponent {

@@ -29,7 +29,7 @@ import { CantyCTIService,
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styles: [ require('./app.style.scss') ],
+  styleUrls: [ './app.style.scss' ],
   template: `
 <md-sidenav-layout fullscreen>
   <md-sidenav #sidenav>

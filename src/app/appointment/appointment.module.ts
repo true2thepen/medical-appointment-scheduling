@@ -18,7 +18,7 @@ import { AppointmentAttendanceComponent } from './appointment-attendance.compone
 import { WeekComponent }                  from './week.component';
 import { WalkInCheckInComponent }         from './walk-in-check-in.component';
 import { AnonComponent }                  from './anon.component';
-import { appointmentRouting }             from './appointment.routing';
+import { AppointmentRoutingModule }       from './appointment-routing.module';
 import { ViewAppointmentService }         from './appointment.service';
 import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
@@ -32,7 +32,7 @@ import { CantyCTIService }                from '../cantyCti.service';
     FormsModule,
     MaterialModule,
     ApiModule,
-    appointmentRouting,
+    AppointmentRoutingModule,
     AutoCompleteModule,
     ScheduleModule,
     MomentModule
