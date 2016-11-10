@@ -55,7 +55,7 @@ export class AppointmentScheduleComponent implements OnInit {
       routerLink: 'appointment/add'
     });
     this.getAllAppointments();
-    this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'.startsWith('de') ? 'de' : 'en';
+    this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
     this.hiddenDays = [ 0 ]; // Hide Sundays by default
   }
 

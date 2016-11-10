@@ -15,7 +15,8 @@ import { RoomService }           from '../api/api/room.service';
 import { NotificationService }   from '../api/api/notification.service';
 import { NotificationBuilder }   from './notificationBuilder';
 
-import * as moment from 'moment';
+import * as moment               from 'moment';
+import * as humanizeDuration     from 'humanize-duration';
 
 @Component({
   template: require('./appointment-detail.html'),
@@ -29,6 +30,7 @@ export class AppointmentDetailComponent {
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
   private proposedTimeSlots: any[] = [];
+  private localeHumanizer: any;
   @ViewChildren('examMultiChooser') private examsMultiInput: QueryList<AutoComplete>;
   private model: AppointmentViewModel = {
     id: undefined,
@@ -61,6 +63,11 @@ export class AppointmentDetailComponent {
     this._state.title.next();
     this._state.actions.next();
     this._state.primaryAction.next();
+
+    // Set up localized humanizer for durations
+    this.localeHumanizer = humanizeDuration.humanizer({
+      language: localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'
+    });
 
     // Create new appointment
     if (param === 'add') {
@@ -319,8 +326,8 @@ export class AppointmentDetailComponent {
     this.editing = true;
   }
 
-  private humanizeDuration(durationString: String): String {
-    return moment.duration('PT' + durationString).humanize();
+  private formatDuration(durationString: string): string {
+    return this.localeHumanizer(moment.duration('PT' + durationString).asMilliseconds());
   }
 }
 

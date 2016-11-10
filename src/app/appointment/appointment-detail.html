@@ -11,7 +11,7 @@
     <md-card-content>
       <p *ngIf="model.roomId && rooms">{{getRoomNameById(model.roomId)}}</p>
       <p>On {{model.date}} at {{model.time}}</p>
-      <p>{{humanizeDuration(model.duration)}}</p>
+      <p>{{formatDuration(model.duration)}}</p>
       <ul>
         <li *ngFor="let e of model.examinations"><span>{{e.name}}</span></li>
       </ul>

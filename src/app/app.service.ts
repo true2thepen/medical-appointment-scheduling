@@ -73,16 +73,16 @@ export class AppState {
     }
   }
 
+  _clone(object) {
+    // simple object clone
+    return JSON.parse(JSON.stringify( object ));
+  }
+
   /**
    * This sets the locale for all newly create moments globally.
    */
   private setMomentLocale(locale: string) {
     moment.locale(locale);
-  }
-
-  _clone(object) {
-    // simple object clone
-    return JSON.parse(JSON.stringify( object ));
   }
 }
 
