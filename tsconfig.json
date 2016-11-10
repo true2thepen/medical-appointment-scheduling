@@ -9,6 +9,7 @@
     "lib": ["es5", "dom"],
     "strictNullChecks": false,
     "baseUrl": "./src",
+    "outDir": "./tmp",
     "paths": [
     ],
     "types": [
@@ -17,8 +18,9 @@
       "hammerjs",
       "handlebars",
       "jasmine",
+      "jquery",
       "node",
-      "protractor",
+      "q",
       "selenium-webdriver",
       "source-map",
       "socket.io-client",
