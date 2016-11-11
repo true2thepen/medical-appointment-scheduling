@@ -59,7 +59,16 @@ export class NotificationBuilder {
   }
 
   private static contentText(appointment: Appointment): string {
-    return 'Dear patient, we would like to remind you of your appointment tomorrow at ' +
+
+    return localStorage.getItem('locale').startsWith('de') ?
+
+      'Sehr geehrter Patient, wir möchten Sie höflichst an Ihren Termin morgen um ' +
+      moment(appointment.start).format('LT') +
+      'erinnern. Mit freundlichen Grüßen, die Rezeption Ihres Arztes.'
+
+      :
+
+      'Dear patient, we would like to remind you of your appointment tomorrow at ' +
       moment(appointment.start).format('LT') +
       '. Kind regards, Sebastian from your doctor\'s office.';
   }

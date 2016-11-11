@@ -36,36 +36,32 @@ import { CantyCTIService,
     <md-nav-list>
       <a [routerLink]="['./appointment/attendance']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>people</md-icon>
-        <span md-line>Attendance List</span>
+        <span md-line i18n>Attendance List</span>
       </a>
       <a [routerLink]="['./appointment']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_module</md-icon>
-        <span md-line>Month</span>
+        <span md-line i18n>Month</span>
       </a>
       <a [routerLink]="['./appointment/week']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_week</md-icon>
-        <span md-line>Week</span>
+        <span md-line i18n>Week</span>
       </a>
       <a [routerLink]="['./appointment/today']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_day</md-icon>
-        <span md-line>Today</span>
+        <span md-line i18n>Today</span>
       </a>
       <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>view_list</md-icon>
-        <span md-line>Rooms</span>
+        <span md-line i18n>Rooms</span>
       </a>
       <a [routerLink]="['./appointment/statistics']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>show_chart</md-icon>
-        <span md-line>Statistics</span>
-      </a>
-      <a [routerLink]="['./about']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>help</md-icon>
-        <span md-line>Help</span>
+        <span md-line i18n>Statistics</span>
       </a>
       <md-divider></md-divider>
       <a [routerLink]="['./appointment/anon']" (click)="sidenav.close()" md-list-item>
         <md-icon md-list-icon>visibility_off</md-icon>
-        <span md-line>Anonymized View</span>
+        <span md-line i18n>Anonymized View</span>
       </a>
     </md-nav-list>
   </md-sidenav>
@@ -88,20 +84,20 @@ import { CantyCTIService,
     </button>
 
     <md-menu x-position="before" #menu="mdMenu">
-        <button md-menu-item (click)="insertTestExaminations()">Insert Test-Examinations</button>
-        <button md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
-        <button md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
+        <button i18n md-menu-item (click)="insertTestExaminations()">Insert Test-Examinations</button>
+        <button i18n md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
+        <button i18n md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
         <md-divider></md-divider>
-        <button md-menu-item (click)="createRandomAppointments()">
+        <button i18n md-menu-item (click)="createRandomAppointments()">
           Create random appointments
         </button>
-        <button md-menu-item (click)="createRandomAttendances()">Create random attendances</button>
+        <button i18n md-menu-item (click)="createRandomAttendances()">Create random attendances</button>
         <md-divider></md-divider>
-        <button md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
-        <button md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
-        <button md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
-        <button md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
-        <button md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
+        <button i18n md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
+        <button i18n md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
+        <button i18n md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
+        <button i18n md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
+        <button i18n md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
     </md-menu>
   </md-toolbar>
   <main>
@@ -123,7 +119,6 @@ export class AppComponent {
   public url = 'https://twitter.com/AngularClass';
 
   private angularclassLogo = 'assets/img/angularclass-avatar.png';
-  private name = 'Angular 2 Webpack Starter';
   private title = 'Medical Appointment Scheduling';
   private isSubPage = false;
   private actions: Action[];
@@ -203,8 +198,10 @@ export class AppComponent {
           .subscribe(
             patient => {
               this.snackBarRef = this.snackBar.open(
+                localStorage.getItem('locale').startsWith('de') ?
+                `Eingehender Anruf von ${patient.givenName} ${patient.surname}` :
                 `Incoming call from ${patient.givenName} ${patient.surname}`,
-                'Open',
+                localStorage.getItem('locale').startsWith('de') ? 'Zum Patienten' : 'Open',
                 this.snackBarConfig
               );
               this.snackBarDismissSubscription = this.snackBarRef.afterDismissed()
@@ -234,9 +231,6 @@ export class AppComponent {
       err => console.log(err),
       () => console.log('CantyCTI has finished broadcasting incoming calls.')
     );
-
-    // TODO debug output app state on console
-    console.log('Initial App State', this._state.state);
   }
 
   public actionsHandler(action: Action) {

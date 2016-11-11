@@ -1,9 +1,11 @@
 import { Component, OnInit }      from '@angular/core';
-import { ActivatedRoute }           from '@angular/router';
+import { ActivatedRoute }         from '@angular/router';
 
 import { AppState }               from '../app.service';
 import { Appointment }            from '../api/model/appointment';
 import { AppointmentService }     from '../api/api/appointment.service';
+
+import * as moment                from 'moment';
 
 @Component({
   templateUrl: './accept-offer.html',
@@ -21,7 +23,8 @@ export class AcceptOfferComponent implements OnInit {
 
   ngOnInit() {
     this._state.isSubPage.next(true); // TODO block this #114
-    this._state.title.next('Accept appointment');
+    this._state.title.next(
+      localStorage.getItem('locale').startsWith('de') ? 'Terminbestätigung' : 'Accept Appointment');
     this._state.actions.next();
     this._state.primaryAction.next();
     this.appointmentService.appointmentAcceptOffer(this.route.snapshot.params['secret'])
@@ -37,5 +40,9 @@ export class AcceptOfferComponent implements OnInit {
       },
       () => console.log('Accepted offer successfully.')
     );
+  }
+
+  formatMoment(date: Date) {
+    return moment(date).format('LLLL');
   }
 }

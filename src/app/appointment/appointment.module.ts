@@ -25,6 +25,8 @@ import { PatientComponent }               from './patient.component';
 import { AcceptOfferComponent }           from './accept-offer.component';
 import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
 import { CantyCTIService }                from '../cantyCti.service';
+import { FixTimeAgoToForPipe,
+  FixTimeAgoToSincePipe }                 from './fix-time-ago.pipe';
 
 @NgModule({
   imports: [
@@ -50,7 +52,9 @@ import { CantyCTIService }                from '../cantyCti.service';
     WeekComponent,
     WalkInCheckInComponent,
     AnonComponent,
-    AcceptOfferComponent
+    AcceptOfferComponent,
+    FixTimeAgoToForPipe,
+    FixTimeAgoToSincePipe
   ],
   providers: [
     ViewAppointmentService,

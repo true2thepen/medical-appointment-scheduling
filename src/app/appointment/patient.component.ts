@@ -13,6 +13,9 @@ import { ViewAppointmentService } from './appointment.service';
 import { ViewAppointment }        from './appointment.viewmodel';
 import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
 
+import * as moment                from 'moment';
+import * as humanizeDuration      from 'humanize-duration';
+
 @Component({
   templateUrl: './patient.html',
   styleUrls: [ './patient.style.scss' ]
@@ -22,6 +25,7 @@ export class PatientComponent implements OnInit {
   private patient: Patient;
   private appointments: ViewAppointment[];
   private dialogRef: MdDialogRef<PatientCancelAppointmentDialog>;
+  private localeHumanizer: any;
 
   constructor(
     private _state: AppState,
@@ -47,6 +51,11 @@ export class PatientComponent implements OnInit {
       err => console.log(err)
     );
     this.findAppointments();
+
+    // Set up localized humanizer for durations
+    this.localeHumanizer = humanizeDuration.humanizer({
+      language: localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'
+    });
   }
 
   public openCancelAppointmentDialog(appointment: Appointment) {
@@ -85,5 +94,12 @@ export class PatientComponent implements OnInit {
       appointments => this.appointments = appointments,
       err => console.log(err)
     );
+  }
+
+  private formatDuration(appointment: Appointment): string {
+    let start = moment(appointment.start);
+    let end = moment(appointment.end);
+    let duration = moment.duration(end.diff(start));
+    return this.localeHumanizer(duration.asMilliseconds());
   }
 }

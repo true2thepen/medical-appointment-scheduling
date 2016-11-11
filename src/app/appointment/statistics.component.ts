@@ -28,7 +28,8 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
     this._state.isSubPage.next(false);
-    this._state.title.next('Statistics');
+    this._state.title.next(
+      localStorage.getItem('locale').startsWith('de') ? 'Statistik' : 'Statistics');
     this._state.actions.next();
     this._state.primaryAction.next();
 

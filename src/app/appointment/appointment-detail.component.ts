@@ -14,6 +14,8 @@ import { Room }                  from '../api/model/room';
 import { RoomService }           from '../api/api/room.service';
 import { NotificationService }   from '../api/api/notification.service';
 import { NotificationBuilder }   from './notificationBuilder';
+import { Translation,
+  getI18nStrings }               from './appointment.translations';
 
 import * as moment               from 'moment';
 import * as humanizeDuration     from 'humanize-duration';
@@ -26,6 +28,7 @@ import * as humanizeDuration     from 'humanize-duration';
 export class AppointmentDetailComponent {
 
   private editing: boolean = false;
+  private trans: Translation;
   private rooms: Room[] = undefined;
   private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
@@ -69,6 +72,8 @@ export class AppointmentDetailComponent {
       language: localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'
     });
 
+    this.trans = getI18nStrings();
+
     // Create new appointment
     if (param === 'add') {
       this.editing = true;
@@ -86,8 +91,7 @@ export class AppointmentDetailComponent {
   ngAfterViewInit() {
     // Set placeholder for examinations input
     for (let autoComplete of this.examsMultiInput.toArray()) {
-      console.log(autoComplete);
-      autoComplete.input.placeholder = 'Examinations';
+      autoComplete.input.placeholder = this.trans.examination;
     }
   }
 
@@ -103,7 +107,11 @@ export class AppointmentDetailComponent {
       roomId: this.model.roomId
     };
     let examinations: Examination[] = this.model.examinations;
-    let start: moment.Moment = moment(this.model.date + ' ' + this.model.time);
+    let startDate = moment(this.model.date, 'l');
+    let startTime = moment(this.model.time, 'LT');
+    let start = startDate.clone();
+    start.hour(startTime.hour());
+    start.minute(startTime.minute());
     let end: moment.Moment = start.clone();
     end.add(moment.duration('PT' + this.model.duration));
     newAppointment.start = start.toDate();
@@ -227,8 +235,8 @@ export class AppointmentDetailComponent {
   private onFormChange() {
     // Set placeholder for examinations input
     for (let autoComplete of this.examsMultiInput.toArray()) {
-      console.log(autoComplete);
-      autoComplete.input.placeholder = 'Examinations';
+      autoComplete.input.placeholder =
+        localStorage.getItem('locale').startsWith('de') ?  'Behandlungen' : 'Examinations';
     }
 
      // Every time the form changes, use latest information to find a suitable date
@@ -281,8 +289,8 @@ export class AppointmentDetailComponent {
           let endDate = moment(x.end);
           let duration = moment.duration(endDate.diff(startDate));
           this.model.id = x.id;
-          this.model.date = startDate.format('Y-MM-DD');
-          this.model.time = startDate.format('HH:mm');
+          this.model.date = startDate.format('l');
+          this.model.time = startDate.format('LT');
           this.model.duration = duration.toJSON().substring(2);
           this.model.title = x.title;
           this.model.description = x.description;
@@ -313,8 +321,8 @@ export class AppointmentDetailComponent {
       let startDate = moment(timeSlot.start);
       this.model.duration =
         `${moment.duration(timeSlot.duration, 'minutes').toJSON().substring(2)}`;
-      this.model.date = startDate.format('Y-MM-DD');
-      this.model.time = startDate.format('HH:mm');
+      this.model.date = startDate.format('l');
+      this.model.time = startDate.format('LT');
       this.model.roomId = timeSlot.resources[0];
 
       // Clear suggestions

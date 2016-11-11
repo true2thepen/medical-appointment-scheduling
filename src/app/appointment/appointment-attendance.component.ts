@@ -39,7 +39,8 @@ export class AppointmentAttendanceComponent {
   ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
     this._state.isSubPage.next(false);
-    this._state.title.next('Attendance List');
+    this._state.title.next(
+      localStorage.getItem('locale').startsWith('de') ? 'Anwesenheit' : 'Attendance List');
     this._state.actions.next();
     this._state.primaryAction.next({
       icon: 'person_add',

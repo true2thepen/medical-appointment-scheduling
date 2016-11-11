@@ -1,19 +1,19 @@
 <div id="wrapper" class="card-centered-wrapper">
   <md-card *ngIf="acceptedAppointment" class="card-centered-600">
-    <md-card-title>Appointment Accepted</md-card-title>
+    <md-card-title i18n="Title for appointment accepted card">Appointment Accepted</md-card-title>
     <md-card-content>
-      <p>You have successfully accepted your appointment.</p>
-      <h3>Details:</h3>
-      <p>Sunday, February 14th 2010,<br />13:00</p>
+      <p i18n>You have successfully accepted your appointment.</p>
+      <h3 i18n>Details:</h3>
+      <p i18n>{{formatMoment(acceptedAppointment.start)}}</p>
     </md-card-content>
   </md-card>
   <md-card *ngIf="failed" class="card-centered-600">
-    <md-card-title>Appointment Expired</md-card-title>
+    <md-card-title i18n="Title for offer error">Appointment Expired</md-card-title>
     <md-card-content>
-      <p>
+      <p i18n="Error message telling an offer has expired">
         It looks like this offer for an appointment already expired.
       </p>
-      <p>
+      <p i18n="Hint that it's always possible to get a new offer">
         You can always get a new one by mailing to
         <a href="mailto:auto-appointment@sebastianhaas.online" target="_top">
           auto-appointment@sebastianhaas.online

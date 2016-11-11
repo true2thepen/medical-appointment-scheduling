@@ -94,7 +94,8 @@ export class AnonComponent implements OnInit {
     } else {
       endString = endOfWeekMoment.format('MMMM Do YYYY');
     }
-    let weekString = this.viewDate.format('[Week] w');
+    let weekString = this.viewDate.format(
+      localStorage.getItem('locale').startsWith('de') ? '[Woche] w' : '[Week] w');
     return startString + ' - ' + endString + ', ' + weekString;
   }
 

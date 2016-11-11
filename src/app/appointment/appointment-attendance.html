@@ -9,7 +9,7 @@
         <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line" i18n="Appointment scheduled info">
-          Scheduled for {{appointment.start | date:'shortTime'}}, {{appointment.start | amTimeAgo}}
+          Scheduled for {{appointment.start | amDateFormat:'LT'}}, {{appointment.start | amTimeAgo}}
         </p>
         <button md-icon-button (click)="requestCall(appointment?.patient?.phone)">
             <md-icon class="md-24">phone</md-icon>
@@ -27,7 +27,7 @@
         <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line" i18n="Appointment waiting duration info">
-          Waiting since {{appointment?.attendance?.checkedIn | amTimeAgo:true}}
+          Waiting {{appointment?.attendance?.checkedIn | amTimeAgo | fixTimeAgoToSince}}
         </p>
         <button md-button (click)="underTreatment(appointment)" i18n="Under treatment button">UNDER TREATMENT</button>
       </md-list-item>
@@ -42,7 +42,7 @@
         <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
         <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
         <p md-line class="md-list-third-line" i18n="Appointment under treatment duration info">
-          Under treatment since {{appointment?.attendance?.underTreatment | amTimeAgo:true}}
+          Under treatment {{appointment?.attendance?.underTreatment | amTimeAgo | fixTimeAgoToSince}}
         </p>
         <button md-button (click)="checkOut(appointment)" i18n="Check out button">CHECK OUT</button>
       </md-list-item>

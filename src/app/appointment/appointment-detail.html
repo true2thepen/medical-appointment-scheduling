@@ -10,7 +10,7 @@
     <md-card-subtitle *ngIf="model.title">{{model.title}}</md-card-subtitle>
     <md-card-content>
       <p *ngIf="model.roomId && rooms">{{getRoomNameById(model.roomId)}}</p>
-      <p>On {{model.date}} at {{model.time}}</p>
+      <p i18n>On {{model.date}} at {{model.time}}</p>
       <p>{{formatDuration(model.duration)}}</p>
       <ul>
         <li *ngFor="let e of model.examinations"><span>{{e.name}}</span></li>
@@ -18,43 +18,43 @@
       <p>{{model.description}}</p>
     </md-card-content>
     <md-card-actions align="end">
-      <button md-button (click)="handleEditClick()">EDIT</button>
+      <button md-button (click)="handleEditClick()" i18n>EDIT</button>
     </md-card-actions>
   </md-card>
 
   <form *ngIf="editing" (ngSubmit)="onSubmit()" #appointmentForm="ngForm" (change)="onFormChange()" class="ui form">
     <md-card class="card-centered-600">
-    <md-card-title *ngIf="!model.id">New Appointment</md-card-title>
-    <md-card-title *ngIf="model.id">Update Appointment</md-card-title>
+    <md-card-title *ngIf="!model.id" i18n>New Appointment</md-card-title>
+    <md-card-title *ngIf="model.id" i18n>Update Appointment</md-card-title>
       <md-card-content>
 
-        <h3>Patient</h3>
+      <h3 i18n="Section header for appointment form">Patient</h3>
        <div>
-          <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="surname" placeholder="Patient" required="true" name="patient">
+          <p-autoComplete [(ngModel)]="model.patient" [suggestions]="filteredPatients" (completeMethod)="findPatients($event)" field="surname" [placeholder]="trans.patient" required="true" name="patient">
             <template let-patient>
               <span>{{patient?.givenName}} {{patient?.surname}}, {{patient?.dateOfBirth | date:'shortDate'}}</span>
             </template>
           </p-autoComplete>
         </div>
 
-        <h3>Examinations</h3>
+        <h3 i18n="Section header for appointment form">Examinations</h3>
         <div class="examinations-container">
-          <p-autoComplete #examMultiChooser [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" placeholder="Examinations" field="name" [multiple]="true" name="examinations">
+          <p-autoComplete #examMultiChooser [(ngModel)]="model.examinations" [suggestions]="filteredExaminations" (completeMethod)="findExaminations($event)" [minLength]="1" [placeholder]="trans.examinations" field="name" [multiple]="true" name="examinations">
           </p-autoComplete>
         </div>
 
-        <h3>Details</h3>
-        <div><md-input [(ngModel)]="model.duration" placeholder="Duration" required="true" name="duration"></md-input><span class="description">E.g.: 30M, 1H, 1H40M etc.</span></div>
+        <h3 i18n="Section header for appointment form">Details</h3>
+        <div><md-input [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration"></md-input><span class="description" i18n>E.g.: 30M, 1H, 1H40M etc.</span></div>
 
-        <div><md-input [(ngModel)]="model.date" placeholder="Date" required="true" name="date"></md-input>
-        <md-input [(ngModel)]="model.time" placeholder="Time" required="true" name="time"></md-input></div>
+        <div><md-input [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></md-input>
+        <md-input [(ngModel)]="model.time" [placeholder]="trans.time" required="true" name="time"></md-input></div>
 
-        <md-input [(ngModel)]="model.title" placeholder="Title" name="title"></md-input>
-        <md-input [(ngModel)]="model.description" placeholder="Description" name="description"></md-input>
+        <md-input [(ngModel)]="model.title" [placeholder]="trans.title" name="title"></md-input>
+        <md-input [(ngModel)]="model.description" [placeholder]="trans.description" name="description"></md-input>
 
-        <h3>Room</h3>
+        <h3 i18n="Section header for appointment form">Room</h3>
         <div>
-          <span class="label">Room: *</span>
+          <span i18n class="label">Room: *</span>
           <select [(ngModel)]="model.roomId" required name="room">
             <option *ngFor="let r of rooms" [value]="r?.id">{{r?.name}}</option>
           </select>
@@ -62,17 +62,17 @@
 
         <!-- Only on add, not on update for the time. -->
         <div *ngIf="!this?.model?.id" class="section-reminders">
-          <md-slide-toggle [(ngModel)]="model.reminders" name="reminders">
+          <md-slide-toggle [(ngModel)]="model.reminders" name="reminders" i18n="Section hedaer for appointment form">
             Reminders
           </md-slide-toggle>
           <div *ngIf="model.reminders">
             <div class="md-checkbox-div">
-              <md-checkbox [(ngModel)]="model.emailReminder" name="emailReminder">
+              <md-checkbox [(ngModel)]="model.emailReminder" name="emailReminder" i18n>
                 Send email reminder <span *ngIf="model?.patient?.email" class="label">({{model.patient.email}})</span>
               </md-checkbox>
             </div>
             <div>
-              <md-checkbox [(ngModel)]="model.smsReminder" name="smsReminder">
+              <md-checkbox [(ngModel)]="model.smsReminder" name="smsReminder" i18n>
                 Send text message reminder <span *ngIf="model?.patient?.phone" class="label">({{model.patient.phone}})</span>
               </md-checkbox>
             </div>
@@ -81,21 +81,21 @@
 
       </md-card-content>
       <md-card-actions align="end">
-        <button [disabled]="!appointmentForm.form.valid" md-button type="submit">SAVE</button>
+        <button [disabled]="!appointmentForm.form.valid" md-button type="submit" i18n>SAVE</button>
       </md-card-actions>
     </md-card>
   </form>
 
   <div *ngFor="let timeSlot of proposedTimeSlots">
     <md-card class="card-centered-600">
-      <md-card-subtitle>In {{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | amTimeAgo:true}}</md-card-subtitle>
+      <md-card-subtitle i18n="Date overview in suggested appoitment">In {{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | amTimeAgo:true}}</md-card-subtitle>
       <md-card-title>{{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'fullDate'}}</md-card-title>
       <md-card-content>
-        <div>{{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'shortTime'}}, {{timeSlot.scheduledTasks.NewAppointment.schedule[0].duration}} Minutes</div>
+        <div i18n>{{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | date:'shortTime'}}, {{timeSlot.scheduledTasks.NewAppointment.schedule[0].duration}} Minutes</div>
         <div>{{getRoomNameById(timeSlot.scheduledTasks.NewAppointment.schedule[0].resources[0])}}</div>
       </md-card-content>
       <md-card-actions align="end">
-        <button md-button type="submit" (click)="applySuggestion(timeSlot.scheduledTasks.NewAppointment.schedule[0])">APPLY SUGGESTION</button>
+        <button md-button type="submit" (click)="applySuggestion(timeSlot.scheduledTasks.NewAppointment.schedule[0])" i18n>APPLY</button>
       </md-card-actions>
     </md-card>
   </div>

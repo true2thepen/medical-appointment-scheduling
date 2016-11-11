@@ -17,8 +17,8 @@ import { RoomService }           from '../api/api/room.service';
 import * as moment from 'moment';
 
 @Component({
-  template: './walk-in-check-in.html',
-  styles: [ './walk-in-check-in.style.scss' ]
+  templateUrl: './walk-in-check-in.html',
+  styleUrls: [ './walk-in-check-in.style.scss' ]
 })
 
 export class WalkInCheckInComponent {
@@ -28,9 +28,10 @@ export class WalkInCheckInComponent {
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
-    description: 'Walk-in patient',
-    date: moment().format('Y-MM-DD'),
-    time: moment().format('HH:mm'),
+    description:
+      localStorage.getItem('locale').startsWith('de') ? 'Akutpatient' : 'Walk-in patient',
+    date: moment().format('l'),
+    time: moment().format('LT'),
     duration: '30M',
     roomId: undefined,
     patient: undefined,
@@ -49,7 +50,11 @@ export class WalkInCheckInComponent {
   ngOnInit(): void {
     // This is a sub-page
     this._state.isSubPage.next(true);
-    this._state.title.next('Walk-In Patient Check-In');
+    this._state.title.next(
+      localStorage.getItem('locale').startsWith('de') ?
+        'Akutpatienten anmelden' :
+        'Walk-In Patient Check-In'
+      );
     this._state.actions.next();
     this._state.primaryAction.next();
     this.getAllRooms();
@@ -67,7 +72,11 @@ export class WalkInCheckInComponent {
       roomId: this.model.roomId
     };
     let examinations: Examination[] = this.model.examinations;
-    let start: moment.Moment = moment(this.model.date + ' ' + this.model.time);
+    let startDate = moment(this.model.date, 'l');
+    let startTime = moment(this.model.time, 'LT');
+    let start = startDate.clone();
+    start.hour(startTime.hour());
+    start.minute(startTime.minute());
     let end: moment.Moment = start.clone();
     end.add(moment.duration('PT' + this.model.duration));
     newAppointment.start = start.toDate();
@@ -161,8 +170,8 @@ export class WalkInCheckInComponent {
           let endDate = moment(x.end);
           let duration = moment.duration(endDate.diff(startDate));
           this.model.id = x.id;
-          this.model.date = startDate.format('Y-MM-DD');
-          this.model.time = startDate.format('HH:mm');
+          this.model.date = startDate.format('l');
+          this.model.time = startDate.format('LT');
           this.model.duration = duration.toJSON().substring(2);
           this.model.title = x.title;
           this.model.description = x.description;

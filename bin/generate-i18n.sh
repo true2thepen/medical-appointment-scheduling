@@ -9,7 +9,10 @@ done
 # 2) Run ng-x18n
 npm run i18n
 
-# 3) Remove comments from all styleUrl declarations (undo 1) )
+# 3) Clean tsc js output
+rm -rf ./tmp
+
+# 4) Remove comments from all styleUrl declarations (undo 1) )
 for i in src/app/*.component.ts; do
     sed -i '' 's/\(\/\/ \)\(styleUrls:.*\)/\2/g' "$i";
 done

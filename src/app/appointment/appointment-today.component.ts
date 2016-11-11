@@ -26,7 +26,8 @@ export class AppointmentTodayComponent implements OnInit {
 
   ngOnInit() {
     this._state.isSubPage.next(false);
-    this._state.title.next('Today');
+    this._state.title.next(
+      localStorage.getItem('locale').startsWith('de') ? 'Heute' : 'Today');
     this._state.actions.next();
     this._state.primaryAction.next();
     this.getTodaysAppointments();

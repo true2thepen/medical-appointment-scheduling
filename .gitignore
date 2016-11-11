@@ -30,6 +30,9 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
+# TSC stuff
+tmp
+
 # Node Files #
 /node_modules
 /bower_components
