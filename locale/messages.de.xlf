@@ -42,9 +42,12 @@
         <source>Anonymized View</source>
         <target>Anonyme Wochenansicht</target>
       </trans-unit>
-      <trans-unit id="b34f9b03c99828359d009a019eef55f7cd498b1f" datatype="html">
-        <source>Insert Test-Examinations</source>
-        <target>Testuntersuchungen anlegen</target>
+      <trans-unit id="8f6dbe6f9be27ce81f3c93224b137fd6961144c0" datatype="html">
+        <source>
+        Insert Test-Examinations
+      </source>
+        <target>
+        Testuntersuchungen anlegen</target>
       </trans-unit>
       <trans-unit id="965e90bee6f44c2bee46d748b24bd7165f052f42" datatype="html">
         <source>Insert Test-Rooms</source>
@@ -54,7 +57,7 @@
         <source>Insert Test-Patients</source>
         <target>Testpatienten anlegen</target>
       </trans-unit>
-      <trans-unit id="eaf993af7b4d0268bc32424a022033bcf4fe2ee1" datatype="html">
+      <trans-unit id="1d13badbb66e3f6b78d2507d5d5d94d63529669e" datatype="html">
         <source>
           Create random appointments
         </source>
@@ -62,9 +65,13 @@
           Zufällige Termine erzeugen
         </target>
       </trans-unit>
-      <trans-unit id="8ffd2ee3de77b78a40a5cceb3c8eb8d0e79025d4" datatype="html">
-        <source>Create random attendances</source>
-        <target>Zufällige Anwesenheiten erzeugen</target>
+      <trans-unit id="383b528f8c906e90b6495f7152a6aabcae1a07ad" datatype="html">
+        <source>
+        Create random attendances
+      </source>
+        <target>
+        Zufällige Anwesenheiten erzeugen
+      </target>
       </trans-unit>
       <trans-unit id="24775b72f6757ca4477f42e355c68939404b02fb" datatype="html">
         <source>Delete All Appointments</source>

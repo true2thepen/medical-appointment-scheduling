@@ -22,14 +22,14 @@ export function main() {
       platformBrowserDynamic()
         .bootstrapModule(AppModule, options)
         .then(decorateModuleRef)
-        .catch(err => console.error(err));
+        .catch(ngErr => console.error(ngErr));
     })
-    .catch(err => {
+    .catch(transErr => {
       console.log('Could not load translations. Launching without I18n.');
       platformBrowserDynamic()
         .bootstrapModule(AppModule)
         .then(decorateModuleRef)
-        .catch(err => console.error(err));
+        .catch(ngErr => console.error(ngErr));
     });
 }
 

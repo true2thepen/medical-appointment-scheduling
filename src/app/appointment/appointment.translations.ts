@@ -1,7 +1,3 @@
-export function getI18nStrings() : any {
-  return localStorage.getItem('locale').startsWith('de') ? de : en;
-}
-
 const en: Translation = {
   date: 'Date',
   description: 'Description',
@@ -34,3 +30,7 @@ export interface Translation {
   time: string;
   title: string;
 };
+
+export function getI18nStrings(): any {
+  return localStorage.getItem('locale').startsWith('de') ? de : en;
+}

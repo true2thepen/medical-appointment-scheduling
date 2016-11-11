@@ -84,20 +84,24 @@ import { CantyCTIService,
     </button>
 
     <md-menu x-position="before" #menu="mdMenu">
-        <button i18n md-menu-item (click)="insertTestExaminations()">Insert Test-Examinations</button>
-        <button i18n md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
-        <button i18n md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
-        <md-divider></md-divider>
-        <button i18n md-menu-item (click)="createRandomAppointments()">
-          Create random appointments
-        </button>
-        <button i18n md-menu-item (click)="createRandomAttendances()">Create random attendances</button>
-        <md-divider></md-divider>
-        <button i18n md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
-        <button i18n md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
-        <button i18n md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
-        <button i18n md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
-        <button i18n md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
+      <button i18n md-menu-item (click)="insertTestExaminations()">
+        Insert Test-Examinations
+      </button>
+      <button i18n md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
+      <button i18n md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
+      <md-divider></md-divider>
+      <button i18n md-menu-item (click)="createRandomAppointments()">
+        Create random appointments
+      </button>
+      <button i18n md-menu-item (click)="createRandomAttendances()">
+        Create random attendances
+      </button>
+      <md-divider></md-divider>
+      <button i18n md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
+      <button i18n md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
+      <button i18n md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
+      <button i18n md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
+      <button i18n md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
     </md-menu>
   </md-toolbar>
   <main>
