@@ -2,7 +2,7 @@
 Concept showcase for "Design of a Web-Based Appointment Scheduling System for Small and Medium-Sized Medical Facilities".
 
 ## Showcase
-tbd
+A snapshot of this repository is available on [Heroku](https://scheduling-client.herokuapp.com).
 
 ## How to deploy
 This application can be easily deployed to Heroku. tbd
