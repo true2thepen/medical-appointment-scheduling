@@ -61,6 +61,9 @@ export class AppointmentDetailComponent {
   ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
 
+    // Mouseflow integration
+    _mfq.push(['newPageView', '/appointment/' + param]);
+
     // This is a sub-page
     this._state.isSubPage.next(true);
     this._state.title.next();

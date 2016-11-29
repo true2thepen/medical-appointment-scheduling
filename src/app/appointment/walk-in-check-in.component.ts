@@ -48,6 +48,8 @@ export class WalkInCheckInComponent {
     private patientService: PatientService) {}
 
   ngOnInit(): void {
+    // Mouseflow integration
+    _mfq.push(['newPageView', '/appointment/walk-in-check-in']);
     // This is a sub-page
     this._state.isSubPage.next(true);
     this._state.title.next(

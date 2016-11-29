@@ -37,6 +37,8 @@ export class WeekComponent implements OnInit {
     private patientService: PatientService) {}
 
   ngOnInit() {
+    // Mouseflow integration
+    _mfq.push(['newPageView', '/appointment/week']);
     this.viewDate = moment();
     this._state.isSubPage.next(false);
     this._state.title.next(this.getTitleFromViewDate());

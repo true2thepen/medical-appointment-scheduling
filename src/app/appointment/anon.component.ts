@@ -37,6 +37,8 @@ export class AnonComponent implements OnInit {
     private patientService: PatientService) {}
 
   ngOnInit() {
+    // Mouseflow integration
+    _mfq.push(['newPageView', '/appointment/anon']);
     this.viewDate = moment();
     this._state.isSubPage.next(false); // TODO block menu, this should be a dead-end
     this._state.title.next(this.getTitleFromViewDate());

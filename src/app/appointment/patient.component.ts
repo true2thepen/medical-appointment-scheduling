@@ -37,6 +37,8 @@ export class PatientComponent implements OnInit {
     private dialog: MdDialog) {}
 
   ngOnInit() {
+    // Mouseflow integration
+    _mfq.push(['newPageView', '/appointment/patient']);
     this._state.isSubPage.next(true);
     this._state.title.next();
     this._state.actions.next();

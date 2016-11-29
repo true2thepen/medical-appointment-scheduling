@@ -37,6 +37,8 @@ export class AppointmentAttendanceComponent {
     private cantyCTIService: CantyCTIService) {}
 
   ngOnInit(): void {
+    // Mouseflow integration
+    _mfq.push(['newPageView', '/appointment/attendance']);
     let param: string = this.route.snapshot.params['id'];
     this._state.isSubPage.next(false);
     this._state.title.next(
