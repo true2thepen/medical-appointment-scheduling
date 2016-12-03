@@ -8,6 +8,10 @@
     "sourceMap": true,
     "lib": ["es5", "dom"],
     "strictNullChecks": false,
+    "noUnusedLocals" : false,
+    "noUnusedParameters": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "baseUrl": "./src",
     "outDir": "./tmp",
     "paths": [
