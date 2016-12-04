@@ -62,7 +62,9 @@ export class AppointmentDetailComponent {
     let param: string = this.route.snapshot.params['id'];
 
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/' + param]);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/' + param]);
+    }
 
     // This is a sub-page
     this._state.isSubPage.next(true);

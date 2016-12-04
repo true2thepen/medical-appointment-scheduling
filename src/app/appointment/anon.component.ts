@@ -38,7 +38,9 @@ export class AnonComponent implements OnInit {
 
   ngOnInit() {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/anon']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/anon']);
+    }
     this.viewDate = moment();
     this._state.isSubPage.next(false); // TODO block menu, this should be a dead-end
     this._state.title.next(this.getTitleFromViewDate());

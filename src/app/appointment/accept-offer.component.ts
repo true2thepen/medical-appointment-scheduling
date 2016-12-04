@@ -23,7 +23,9 @@ export class AcceptOfferComponent implements OnInit {
 
   ngOnInit() {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/accept']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/accept']);
+    }
     this._state.isSubPage.next(true); // TODO block this #114
     this._state.title.next(
       localStorage.getItem('locale').startsWith('de') ? 'Terminbestätigung' : 'Accept Appointment');

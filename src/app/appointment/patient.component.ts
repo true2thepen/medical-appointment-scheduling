@@ -38,7 +38,9 @@ export class PatientComponent implements OnInit {
 
   ngOnInit() {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/patient']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/patient']);
+    }
     this._state.isSubPage.next(true);
     this._state.title.next();
     this._state.actions.next();

@@ -54,8 +54,6 @@ declare var System: SystemJS;
 declare var API_BASE_PATH: string;
 declare var CANTY_HOST_URL: string;
 
-declare var _mfq: any;
-
 interface SystemJS {
   import: (path?: string) => Promise<any>;
 }

@@ -26,7 +26,9 @@ export class AppointmentTodayComponent implements OnInit {
 
   ngOnInit() {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/today']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/today']);
+    }
     this._state.isSubPage.next(false);
     this._state.title.next(
       localStorage.getItem('locale').startsWith('de') ? 'Heute' : 'Today');

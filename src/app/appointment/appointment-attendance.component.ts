@@ -38,7 +38,9 @@ export class AppointmentAttendanceComponent {
 
   ngOnInit(): void {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/attendance']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/attendance']);
+    }
     let param: string = this.route.snapshot.params['id'];
     this._state.isSubPage.next(false);
     this._state.title.next(

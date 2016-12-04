@@ -49,7 +49,9 @@ export class WalkInCheckInComponent {
 
   ngOnInit(): void {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/walk-in-check-in']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/walk-in-check-in']);
+    }
     // This is a sub-page
     this._state.isSubPage.next(true);
     this._state.title.next(

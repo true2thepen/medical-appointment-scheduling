@@ -28,7 +28,9 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/statistics']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/statistics']);
+    }
     this._state.isSubPage.next(false);
     this._state.title.next(
       localStorage.getItem('locale').startsWith('de') ? 'Statistik' : 'Statistics');

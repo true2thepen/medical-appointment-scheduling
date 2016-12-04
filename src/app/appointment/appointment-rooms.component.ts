@@ -36,7 +36,9 @@ export class AppointmentRoomsComponent implements OnInit {
 
   ngOnInit() {
     // Mouseflow integration
-    _mfq.push(['newPageView', '/appointment/rooms']);
+    if ((<any>window)._mfq) {
+      (<any>window)._mfq.push(['newPageView', '/appointment/rooms']);
+    }
     this.viewDate = moment();
     this._state.isSubPage.next(false);
     this._state.title.next(this.viewDate.format('LL'));
