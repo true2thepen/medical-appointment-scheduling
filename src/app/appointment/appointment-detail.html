@@ -46,8 +46,11 @@
         <h3 i18n="Section header for appointment form">Details</h3>
         <div><md-input [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration"></md-input><span class="description" i18n>E.g.: 30M, 1H, 1H40M etc.</span></div>
 
-        <div><md-input [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></md-input>
-        <md-input [(ngModel)]="model.time" [placeholder]="trans.time" required="true" name="time"></md-input></div>
+        <div>
+          <md-input [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></md-input>
+          <md-input [(ngModel)]="model.time" [placeholder]="trans.time" required="true" name="time"></md-input>
+          <md-input id="timepicker" class="timepicker" type="time" name="time2"></md-input>
+        </div>
 
         <md-input [(ngModel)]="model.title" [placeholder]="trans.title" name="title"></md-input>
         <md-input [(ngModel)]="model.description" [placeholder]="trans.description" name="description"></md-input>

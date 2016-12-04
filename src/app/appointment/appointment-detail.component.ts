@@ -1,4 +1,4 @@
-import { Component, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, ViewChild, QueryList, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
@@ -35,6 +35,7 @@ export class AppointmentDetailComponent {
   private proposedTimeSlots: any[] = [];
   private localeHumanizer: any;
   @ViewChildren('examMultiChooser') private examsMultiInput: QueryList<AutoComplete>;
+  @ViewChild('timepicker') private timepicker:ElementRef;
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
@@ -98,6 +99,9 @@ export class AppointmentDetailComponent {
     for (let autoComplete of this.examsMultiInput.toArray()) {
       autoComplete.input.placeholder = this.trans.examination;
     }
+
+    // Set up time picker #129
+    console.log('Time picker:', this.timepicker);
   }
 
   onSubmit(): void {
