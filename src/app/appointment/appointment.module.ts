@@ -24,6 +24,7 @@ import { StatisticsComponent }            from './statistics.component';
 import { PatientComponent }               from './patient.component';
 import { AcceptOfferComponent }           from './accept-offer.component';
 import { PatientCancelAppointmentDialog } from './patient-cancel-appointment.dialog';
+import { ClockPickerComponent }           from './clockpicker/clockpicker.component';
 import { CantyCTIService }                from '../cantyCti.service';
 import { FixTimeAgoToForPipe,
   FixTimeAgoToSincePipe }                 from './fix-time-ago.pipe';
@@ -54,7 +55,8 @@ import { FixTimeAgoToForPipe,
     AnonComponent,
     AcceptOfferComponent,
     FixTimeAgoToForPipe,
-    FixTimeAgoToSincePipe
+    FixTimeAgoToSincePipe,
+    ClockPickerComponent
   ],
   providers: [
     ViewAppointmentService,

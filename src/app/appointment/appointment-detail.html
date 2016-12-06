@@ -48,8 +48,7 @@
 
         <div>
           <md-input [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></md-input>
-          <md-input [(ngModel)]="model.time" [placeholder]="trans.time" required="true" name="time"></md-input>
-          <md-input id="timepicker" class="timepicker" type="time" name="time2"></md-input>
+          <clockpicker [(ngModel)]="model.time" [placeholder]="trans.time" autoClose="true" [twelveHours]="isTwelveHours" required="true" name="time"></clockpicker>
         </div>
 
         <md-input [(ngModel)]="model.title" [placeholder]="trans.title" name="title"></md-input>
@@ -88,6 +87,8 @@
       </md-card-actions>
     </md-card>
   </form>
+
+  <div>{{model.duration}} {{model.date}} {{model.time}}</div>
 
   <div *ngFor="let timeSlot of proposedTimeSlots">
     <md-card class="card-centered-600">
