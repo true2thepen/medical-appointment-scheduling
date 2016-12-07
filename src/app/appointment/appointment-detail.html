@@ -47,12 +47,12 @@
         <div><md-input [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration"></md-input><span class="description" i18n>E.g.: 30M, 1H, 1H40M etc.</span></div>
 
         <div>
-          <md-input [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></md-input>
-          <clockpicker [(ngModel)]="model.time" [placeholder]="trans.time" autoClose="true" [twelveHours]="isTwelveHours" required="true" name="time"></clockpicker>
+          <datepicker [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></datepicker>
+          <clockpicker [(ngModel)]="model.time" [placeholder]="trans.time" autoClose="false" [twelveHours]="isTwelveHours" required="true" name="time"></clockpicker>
         </div>
 
-        <md-input [(ngModel)]="model.title" [placeholder]="trans.title" name="title"></md-input>
-        <md-input [(ngModel)]="model.description" [placeholder]="trans.description" name="description"></md-input>
+        <md-input [(ngModel)]="model.title" [placeholder]="trans.title" name="title" class="padding-top-24"></md-input>
+        <md-input [(ngModel)]="model.description" [placeholder]="trans.description" name="description" class="padding-top-24"></md-input>
 
         <h3 i18n="Section header for appointment form">Room</h3>
         <div>

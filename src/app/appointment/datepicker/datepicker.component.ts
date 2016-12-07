@@ -5,42 +5,43 @@ import { MdInput }                                  from '@angular/material';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor,
   FormControl, NG_VALIDATORS }                      from '@angular/forms';
 
-import * as ClockPicker                             from './clockpicker.js';
+import * as DatePicker                              from './picker.date';
+import * as Picker                                  from './picker';
 import * as moment                                  from 'moment';
 
-export const CLOCKPICKER_VALUE_ACCESSOR: any = {
+export const DATEPICKER_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => ClockPickerComponent),
+  useExisting: forwardRef(() => DatePickerComponent),
   multi: true
 };
 
-export function validateTime(c: FormControl) {
-  let time = moment(c.value, 'LT');
-  if (time.isValid()) {
+export function validateDate(c: FormControl) {
+  let date = moment(c.value, 'l');
+  if (date.isValid()) {
     return null;
   } else {
     let err = {
-      timeError: {
+      dateError: {
         given: c.value,
-        valid: time.isValid(),
-        invalidAt: time.invalidAt()
+        valid: date.isValid(),
+        invalidAt: date.invalidAt()
       }
     };
     return err;
   }
 };
 
-export const CLOCKPICKER_VALIDATORS: any = {
+export const DATEPICKER_VALIDATORS: any = {
   provide: NG_VALIDATORS,
-  useValue: validateTime,
+  useValue: validateDate,
   multi: true
 };
 
 @Component({
-  selector: 'clockpicker',
-  providers: [CLOCKPICKER_VALUE_ACCESSOR, CLOCKPICKER_VALIDATORS],
-  styleUrls: [ 'materialize.css', './clockpicker.scss' ],
-  template: `<md-input #clockPicker
+  selector: 'datepicker',
+  providers: [DATEPICKER_VALUE_ACCESSOR, DATEPICKER_VALIDATORS],
+  styleUrls: [ 'materialize.css', './datepicker.scss' ],
+  template: `<md-input #datePicker
                [ngStyle]="style"
                [class]="styleClass"
                [placeholder]="placeholder"
@@ -50,23 +51,21 @@ export const CLOCKPICKER_VALIDATORS: any = {
                (keyup)="onKey($event)"
                (blur)="onBlur($event)">
                  <button md-suffix md-icon-button color="primary"
-                               (click)="show()" type=button tabindex="-1">
-                   <md-icon class="md-24">schedule</md-icon>
+                             (click)="show()" type=button tabindex="-1">
+                   <md-icon class="md-24">today</md-icon>
                  </button>
              </md-input>`
 })
-export class ClockPickerComponent implements AfterViewChecked, OnDestroy, ControlValueAccessor {
+export class DatePickerComponent implements AfterViewChecked, OnDestroy, ControlValueAccessor {
 
   @Input() placeholder: string;
   @Input() required: boolean;
   @Input() style: any;
-  @Input() styleClass: string;
   @Input() disabled: boolean;
-  @Input() twelveHours: boolean;
-  @Input() autoClose: boolean;
-  @Input() doneText: string;
-  @ViewChild('clockPicker') private el: MdInput;
-  private clockPicker: any;
+  @Input() styleClass: string;
+  @Input() dateFormat: string;
+  @ViewChild('datePicker') private el: MdInput;
+  private datePicker: any;
   private _value: any = '';
   private input: HTMLInputElement;
   private initialized: boolean;
@@ -120,28 +119,22 @@ export class ClockPickerComponent implements AfterViewChecked, OnDestroy, Contro
 
   private initialize() {
     this.input = this.el._inputElement.nativeElement;
-    this.clockPicker = new ClockPicker(this.input, {
-      'default': '',
-      fromnow: 0,
-      donetext: this.doneText ? this.doneText : 'Done',
-      autoclose: this.autoClose,
-      ampmclickable: false,
-      darktheme: false,
-      twelvehour: this.twelveHours,
-      vibrate: true,
-      afterDone: () => { this.afterClockPickerDone(); }
+
+    this.datePicker = new Picker($(this.input), 'pickadate', DatePicker, {
+      format: this.dateFormat ? this.dateFormat : 'm/d/yyyy',
+      formatSubmit: this.dateFormat ? this.dateFormat : 'm/d/yyyy'
     });
+
+    // Anytime before open, update value from input
+    this.datePicker.on('open', () => {
+      this.datePicker.set('select', moment(this.input.value, 'l').valueOf(), { muted: true });
+    });
+
     this.initialized = true;
   }
 
   private show() {
-    this.clockPicker.show();
-  }
-
-  private afterClockPickerDone() {
-    // Hotfix to notify md-input that its value has changed
-    this.sanitizeApplyTime(this.input.value);
-    this.input.value = this.value;
+    this.datePicker.open();
   }
 
   private onKey(event: Event) {
@@ -149,13 +142,13 @@ export class ClockPickerComponent implements AfterViewChecked, OnDestroy, Contro
   }
 
   private onBlur(event: Event) {
-    this.sanitizeApplyTime(this.input.value);
+    this.sanitizeApplyDate(this.input.value);
   }
 
-  private sanitizeApplyTime(value: any) {
-    let time = moment(value, 'LT');
+  private sanitizeApplyDate(value: any) {
+    let time = moment(value, 'l');
     if (time.isValid()) {
-      this.value = time.format('LT');
+      this.value = time.format('l');
     } else {
       this.value = value;
     }

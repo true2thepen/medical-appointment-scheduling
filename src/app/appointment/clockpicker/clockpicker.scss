@@ -27,3 +27,8 @@
   top: unset;
   bottom: 0px;
 }
+
+/deep/ clockpicker > md-input {
+  width: 148px;
+}
+

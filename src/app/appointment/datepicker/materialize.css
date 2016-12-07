@@ -4846,6 +4846,7 @@ small {
 
 /deep/ .btn, .btn-large,
 /deep/ .btn-flat {
+  font-weight: 500;
   border: none;
   border-radius: 2px;
   display: inline-block;
@@ -7965,6 +7966,7 @@ input[type=range]:focus::-ms-fill-upper {
   text-align: center;
   position: relative;
   margin-top: .75em;
+  margin-bottom: .75em;
 }
 
 /**

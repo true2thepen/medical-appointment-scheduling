@@ -92,6 +92,14 @@ select {
   margin-bottom: 5px;
 }
 
+.padding-top-24 {
+  padding-top: 24px;
+}
+
+/deep/ md-input {
+  margin-right: 24px;
+}
+
 /* do not group these rules */
 *::-webkit-input-placeholder {
     color: red;
