@@ -124,9 +124,9 @@
         <target>Details</target>
         <note priority="1" from="description">Section header for appointment form</note>
       </trans-unit>
-      <trans-unit id="770fe3b20cd6251dc36e215fd8c8613ba597316c" datatype="html">
-        <source>E.g.: 30M, 1H, 1H40M etc.</source>
-        <target>Z.B.: 30M, 1H, 1H40M etc.</target>
+      <trans-unit id="70242d5078edbdc8705bf2ee0fc4824e6913c1ad" datatype="html">
+        <source>e.g.: 30M, 1H, 1H40M etc.</source>
+        <target>z.B.: 30M, 1H, 1H40M etc.</target>
       </trans-unit>
       <trans-unit id="02969438a91ab2201026e0f585ac971cb6f59338" datatype="html">
         <source>Room</source>
