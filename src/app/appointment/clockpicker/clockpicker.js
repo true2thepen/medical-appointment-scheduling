@@ -469,14 +469,16 @@
     this.spanMinutes.html(leadingZero(this.minutes));
 
     // Set AM/PM
-    if (this.amOrPm === "AM") {
-      this.amPmBlock.children('.am-button').addClass('active');
-      this.amPmBlock.children('.pm-button').removeClass('active');
-      this.spanAmPm.empty().append('AM');
-    } else {
-      this.amPmBlock.children('.am-button').removeClass('active');
-      this.amPmBlock.children('.pm-button').addClass('active');
-      this.spanAmPm.empty().append('PM');
+    if(this.options.twelvehour) {
+      if (this.amOrPm === "AM") {
+        this.amPmBlock.children('.am-button').addClass('active');
+        this.amPmBlock.children('.pm-button').removeClass('active');
+        this.spanAmPm.empty().append('AM');
+      } else {
+        this.amPmBlock.children('.am-button').removeClass('active');
+        this.amPmBlock.children('.pm-button').addClass('active');
+        this.spanAmPm.empty().append('PM');
+      }
     }
 
     // Toggle to hours view
