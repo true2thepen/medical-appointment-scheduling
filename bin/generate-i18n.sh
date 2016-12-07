@@ -5,6 +5,9 @@ done
 for i in src/app/appointment/*.component.ts; do
     sed -i '' 's/\(styleUrls:.*\)/\/\/ \1/g' "$i";
 done
+for i in src/app/appointment/clockpicker/*.component.ts; do
+    sed -i '' 's/\(styleUrls:.*\)/\/\/ \1/g' "$i";
+done
 
 # 2) Run ng-x18n
 npm run i18n
@@ -17,5 +20,8 @@ for i in src/app/*.component.ts; do
     sed -i '' 's/\(\/\/ \)\(styleUrls:.*\)/\2/g' "$i";
 done
 for i in src/app/appointment/*.component.ts; do
+    sed -i '' 's/\(\/\/ \)\(styleUrls:.*\)/\2/g' "$i";
+done
+for i in src/app/appointment/clockpicker/*.component.ts; do
     sed -i '' 's/\(\/\/ \)\(styleUrls:.*\)/\2/g' "$i";
 done
