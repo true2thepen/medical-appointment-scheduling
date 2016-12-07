@@ -5,12 +5,15 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 /**
  * Webpack Plugins
  */
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const DefinePlugin = require('webpack/lib/DefinePlugin');
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const V8LazyParseWebpackPlugin = require('v8-lazy-parse-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /**
@@ -29,13 +32,6 @@ const METADATA = webpackMerge(commonConfig.metadata, {
 
 module.exports = function(env) {
   return webpackMerge(commonConfig({env: ENV}), {
-
-  /**
-   * Switch loaders to debug mode.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#debug
-   */
-  debug: false,
 
   /**
    * Developer tool to enhance debugging
@@ -126,7 +122,6 @@ module.exports = function(env) {
     // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
     new DefinePlugin({
       'ENV': JSON.stringify(METADATA.ENV),
-      'HMR': METADATA.HMR,
       'process.env': {
         'ENV': JSON.stringify(METADATA.ENV),
         'NODE_ENV': JSON.stringify(METADATA.ENV)
@@ -143,34 +138,53 @@ module.exports = function(env) {
      * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
      */
     // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-    new UglifyJsPlugin({
-      // beautify: true, //debug
-      // mangle: false, //debug
-      // dead_code: false, //debug
-      // unused: false, //debug
-      // deadCode: false, //debug
-      // compress: {
-      //   screw_ie8: true,
-      //   keep_fnames: true,
-      //   drop_debugger: false,
-      //   dead_code: false,
-      //   unused: false
-      // }, // debug
-      // comments: true, //debug
+      new UglifyJsPlugin({
+        // beautify: true, //debug
+        // mangle: false, //debug
+        // dead_code: false, //debug
+        // unused: false, //debug
+        // deadCode: false, //debug
+        // compress: {
+        //   screw_ie8: true,
+        //   keep_fnames: true,
+        //   drop_debugger: false,
+        //   dead_code: false,
+        //   unused: false
+        // }, // debug
+        // comments: true, //debug
 
-      beautify: false, //prod
 
-      mangle: {
-        screw_ie8 : true,
-        keep_fnames: true
-      }, //prod
-
-      compress: {
-        screw_ie8: true
-      }, //prod
-
-      comments: false //prod
+        beautify: false, //prod
+        output: {
+          comments: false
+        }, //prod
+        mangle: {
+          screw_ie8: true
+        }, //prod
+        compress: {
+          screw_ie8: true,
+          warnings: false,
+          conditionals: true,
+          unused: true,
+          comparisons: true,
+          sequences: true,
+          dead_code: true,
+          evaluate: true,
+          if_return: true,
+          join_vars: true,
+          negate_iife: false // we need this for lazy v8
+        },
     }),
+
+    new NormalModuleReplacementPlugin(
+      /angular2-hmr/,
+      helpers.root('config/empty.js')
+    ),
+
+    new NormalModuleReplacementPlugin(
+      /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
+      helpers.root('config/empty.js')
+    ),
 
     /**
      * Plugin: CompressionPlugin
@@ -179,42 +193,36 @@ module.exports = function(env) {
      *
      * See: https://github.com/webpack/compression-webpack-plugin
      */
-    new CompressionPlugin({
-      regExp: /\.css$|\.html$|\.js$|\.map$/,
-      threshold: 2 * 1024
-    })
+    // new CompressionPlugin({
+    //   regExp: /\.css$|\.html$|\.js$|\.map$/,
+    //   threshold: 2 * 1024
+    // })
+
+    new LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+      options: {
+        /**
+         * Html loader advanced options
+         *
+         * See: https://github.com/webpack/html-loader#advanced-options
+         */
+        // TODO: Need to workaround Angular 2's html syntax => #id [bind] (event) *ngFor
+        htmlLoader: {
+          minimize: true,
+          removeAttributeQuotes: false,
+          caseSensitive: true,
+          customAttrSurround: [
+            [/#/, /(?:)/],
+            [/\*/, /(?:)/],
+            [/\[?\(?/, /(?:)/]
+          ],
+          customAttrAssign: [/\)?\]?=/]
+        },
+      }
+    }),
 
   ],
-
-  /**
-   * Static analysis linter for TypeScript advanced options configuration
-   * Description: An extensible linter for the TypeScript language.
-   *
-   * See: https://github.com/wbuchwalter/tslint-loader
-   */
-  tslint: {
-    emitErrors: true,
-    failOnHint: false, // PETRO changed this from true to false
-    resourcePath: 'src'
-  },
-
-  /**
-   * Html loader advanced options
-   *
-   * See: https://github.com/webpack/html-loader#advanced-options
-   */
-  // TODO: Need to workaround Angular 2's html syntax => #id [bind] (event) *ngFor
-  htmlLoader: {
-    minimize: true,
-    removeAttributeQuotes: false,
-    caseSensitive: true,
-    customAttrSurround: [
-      [/#/, /(?:)/],
-      [/\*/, /(?:)/],
-      [/\[?\(?/, /(?:)/]
-    ],
-    customAttrAssign: [/\)?\]?=/]
-  },
 
   /*
    * Include polyfills or mocks for various node stuff
@@ -223,7 +231,7 @@ module.exports = function(env) {
    * See: https://webpack.github.io/docs/configuration.html#node
    */
   node: {
-    global: 'window',
+    global: true,
     crypto: 'empty',
     process: false,
     module: false,

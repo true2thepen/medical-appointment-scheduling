@@ -14,7 +14,7 @@ export function getTranslationProviders(): Promise<Object[]> {
   }
 
   if (locale.startsWith('de')) {
-    let translationFileContents = require('raw!../../locale/messages.de.xlf');
+    let translationFileContents = require('raw-loader!../../locale/messages.de.xlf');
     return Promise.resolve([
         { provide: TRANSLATIONS, useValue: translationFileContents },
         { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },

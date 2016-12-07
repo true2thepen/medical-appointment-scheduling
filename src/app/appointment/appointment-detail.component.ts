@@ -34,6 +34,7 @@ export class AppointmentDetailComponent {
   private filteredExaminations: Examination[] = undefined;
   private proposedTimeSlots: any[] = [];
   private localeHumanizer: any;
+  private isTwelveHours: boolean;
   @ViewChildren('examMultiChooser') private examsMultiInput: QueryList<AutoComplete>;
   private model: AppointmentViewModel = {
     id: undefined,
@@ -76,6 +77,8 @@ export class AppointmentDetailComponent {
     this.localeHumanizer = humanizeDuration.humanizer({
       language: localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'
     });
+
+    this.isTwelveHours = this.isCurrentLocaleUsingTwelveHours();
 
     this.trans = getI18nStrings();
 
@@ -341,6 +344,10 @@ export class AppointmentDetailComponent {
 
   private formatDuration(durationString: string): string {
     return this.localeHumanizer(moment.duration('PT' + durationString).asMilliseconds());
+  }
+
+  private isCurrentLocaleUsingTwelveHours(): boolean {
+    return moment().format('LT').endsWith('M');
   }
 }
 
