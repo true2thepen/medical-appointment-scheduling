@@ -5,9 +5,9 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Medical Appointment Scheduling</title>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 
-  <meta name="description" content="<%= webpackConfig.metadata.title %>">
+  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeui/4.1.15/primeui-all.min.css">
 
@@ -16,7 +16,7 @@
   <%= webpackConfig.htmlElements.headTags %>
   <% } %>
 
-  <% if (!webpackConfig.metadata.isDevServer) { %>
+  <% if (!htmlWebpackPlugin.options.metadata.isDevServer) { %>
   <script type="text/javascript">
   var _mfq = _mfq || [];
     (function() {
@@ -29,7 +29,7 @@
   <% } %>
 
   <!-- base url -->
-  <base href="<%= webpackConfig.metadata.baseUrl %>">
+  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
 
 </head>
 
@@ -39,7 +39,7 @@
     Loading...
   </app>
 
-  <% if (webpackConfig.metadata.isDevServer && webpackConfig.metadata.HMR !== true) { %>
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer) { %>
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
   <% } %>
