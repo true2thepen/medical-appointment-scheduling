@@ -48,7 +48,7 @@
 
         <div>
           <datepicker [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></datepicker>
-          <clockpicker [(ngModel)]="model.time" [placeholder]="trans.time" autoClose="false" [twelveHours]="isTwelveHours" required="true" name="time"></clockpicker>
+          <clockpicker [(ngModel)]="model.time" [placeholder]="trans.time" [twelveHours]="isTwelveHours" required="true" name="time"></clockpicker>
         </div>
 
         <md-input [(ngModel)]="model.title" [placeholder]="trans.title" maxlength="20" name="title" class="padding-top-24"></md-input>
