@@ -44,15 +44,23 @@
         </div>
 
         <h3 i18n="Section header for appointment form">Details</h3>
-        <div><md-input [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration"></md-input><span class="description" i18n>E.g.: 30M, 1H, 1H40M etc.</span></div>
+        <div>
+          <md-input [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration">
+            <md-hint align="end" i18n>e.g.: 30M, 1H, 1H40M etc.</md-hint>
+          </md-input>
+        </div>
 
         <div>
           <datepicker [(ngModel)]="model.date" [placeholder]="trans.date" required="true" name="date"></datepicker>
           <clockpicker [(ngModel)]="model.time" [placeholder]="trans.time" [twelveHours]="isTwelveHours" required="true" name="time"></clockpicker>
         </div>
 
-        <md-input [(ngModel)]="model.title" [placeholder]="trans.title" maxlength="20" name="title" class="padding-top-24"></md-input>
-        <md-input [(ngModel)]="model.description" [placeholder]="trans.description" maxlength="100" name="description" class="padding-top-24"></md-input>
+        <md-input #title [(ngModel)]="model.title" [placeholder]="trans.title" maxlength="20" name="title" class="padding-top-24">
+          <md-hint align="end">{{title.characterCount}} / 20</md-hint>
+        </md-input>
+        <md-input #description [(ngModel)]="model.description" [placeholder]="trans.description" maxlength="100" name="description" class="padding-top-24">
+          <md-hint align="end">{{description.characterCount}} / 100</md-hint>
+        </md-input>
 
         <h3 i18n="Section header for appointment form">Room</h3>
         <div>

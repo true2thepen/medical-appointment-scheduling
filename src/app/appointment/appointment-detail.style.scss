@@ -1,6 +1,14 @@
 @import 'appointment.style';
 
-.ng-invalid {
+/deep/ .ng-invalid {
+  color: red;
+}
+
+/deep/ .ng-invalid.ng-untouched {
+  color: unset;
+}
+
+/deep/ .ng-invalid.ng-touched {
   color: red;
 }
 
@@ -50,6 +58,11 @@ select {
   padding: unset;
   padding-bottom: 5px;
   padding-top: 10px;
+}
+
+/deep/ li.ui-autocomplete-list-item.ui-corner-all:hover {
+  background-color: md-color($primary);
+  color: white;
 }
 
 /deep/ ul.ui-autocomplete-multiple.ui-widget.ui-inputtext {
