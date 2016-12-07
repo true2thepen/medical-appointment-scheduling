@@ -1,8 +1,9 @@
-import { Component, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, ViewChild, QueryList } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
 import { AutoComplete } from 'primeng/primeng';
+import { MdInput } from '@angular/material';
 
 import { Appointment }           from '../api/model/appointment';
 import { AppointmentService }    from '../api/api/appointment.service';
@@ -36,6 +37,7 @@ export class AppointmentDetailComponent {
   private localeHumanizer: any;
   private isTwelveHours: boolean;
   @ViewChildren('examMultiChooser') private examsMultiInput: QueryList<AutoComplete>;
+  @ViewChild('duration') private durationInput: MdInput;
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
@@ -249,35 +251,40 @@ export class AppointmentDetailComponent {
 
      // Every time the form changes, use latest information to find a suitable date
     if (this.model.duration) {
-      this.proposedTimeSlots = [];
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment()
-      );
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment().add(1, 'day')
-      );
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment().add(1, 'week')
-      );
-      this.findTime(
-        this.model.duration,
-        this.model.examinations && this.model.examinations.length > 0 ?
-          this.model.examinations[0].id : undefined,
-        this.model.roomId,
-        moment().add(1, 'month')
-      );
+
+      // Check if duration is valid
+      let duration = moment.duration('PT' + this.model.duration);
+      if (moment.isDuration(duration) && duration.asMinutes() > 1) {
+        this.proposedTimeSlots = [];
+        this.findTime(
+          this.model.duration,
+          this.model.examinations && this.model.examinations.length > 0 ?
+            this.model.examinations[0].id : undefined,
+          this.model.roomId,
+          moment()
+        );
+        this.findTime(
+          this.model.duration,
+          this.model.examinations && this.model.examinations.length > 0 ?
+            this.model.examinations[0].id : undefined,
+          this.model.roomId,
+          moment().add(1, 'day')
+        );
+        this.findTime(
+          this.model.duration,
+          this.model.examinations && this.model.examinations.length > 0 ?
+            this.model.examinations[0].id : undefined,
+          this.model.roomId,
+          moment().add(1, 'week')
+        );
+        this.findTime(
+          this.model.duration,
+          this.model.examinations && this.model.examinations.length > 0 ?
+            this.model.examinations[0].id : undefined,
+          this.model.roomId,
+          moment().add(1, 'month')
+        );
+      }
     }
   }
 
@@ -321,6 +328,19 @@ export class AppointmentDetailComponent {
         e => console.log(e),
         () => console.log('Completed querying for appointment data')
       );
+  }
+
+  private onDurationBlur(event: Event) {
+    if (this.durationInput) {
+      if (/^[0-9]$/.test(this.durationInput.value)) {
+        this.durationInput.value = this.durationInput.value + 'H';
+      } else if (/^[0-9]{2}$/.test(this.durationInput.value)) {
+        this.durationInput.value = this.durationInput.value + 'M';
+      } else {
+        this.durationInput.value = this.durationInput.value.toUpperCase();
+      }
+      this.onFormChange();
+    }
   }
 
   private applySuggestion(timeSlot: any) {

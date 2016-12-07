@@ -17,6 +17,7 @@ declare var Plotly: any;
 })
 export class StatisticsComponent implements OnInit {
 
+  private noData: boolean;
   private colors: string[] = [
     '#00bcd4', '#4caf50', '#cddc39', '#ff9800', '#e91e63', '#673ab7', '#9c27b0'
   ];
@@ -41,6 +42,11 @@ export class StatisticsComponent implements OnInit {
     this.attendanceService.attendanceFind()
     .subscribe(
       attendances => {
+        if (attendances.length <= 0) {
+          this.noData = true;
+          return;
+        }
+
         let data: number[][] = [];
 
         async.each(attendances, (attendance: Attendance, callback: Function) => {
@@ -95,7 +101,7 @@ export class StatisticsComponent implements OnInit {
     }
     let layout = {
       yaxis: {
-        title: 'Minutes',
+        title: localStorage.getItem('locale').startsWith('de') ? 'Minuten' : 'Minutes',
         zeroline: false,
         gridcolor: 'rgba(0, 0, 0, 0.1)'
       },

@@ -45,7 +45,9 @@
 
         <h3 i18n="Section header for appointment form">Details</h3>
         <div>
-          <md-input [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration">
+          <md-input #duration [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration"
+            pattern="^[0-9]+H[0-9]+M|[0-9]+[M|H]$"
+            (blur)="onDurationBlur($event)">
             <md-hint align="end" i18n>e.g.: 30M, 1H, 1H40M etc.</md-hint>
           </md-input>
         </div>

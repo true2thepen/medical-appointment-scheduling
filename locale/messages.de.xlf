@@ -208,6 +208,14 @@
         <target>Warteraum</target>
         <note priority="1" from="description">Header for section of waiting patients</note>
       </trans-unit>
+      <trans-unit id="a4fa463dd713afa46c5e049ba31300c2647a123e" datatype="html">
+        <source>Delays by Day</source>
+        <target>Verspätungen nach Tagen</target>
+      </trans-unit>
+      <trans-unit id="2591b387626ae983224ca6c91d9c206edfe12c69" datatype="html">
+        <source>Sorry, no attendances yet.</source>
+        <target>Es sind noch keine Patienten behandelt worden.</target>
+      </trans-unit>
       <trans-unit id="bdcfc4515ad8bbf7c7afcb475a4d21322b7cba7b" datatype="html">
         <source>No patients waiting at the moment.</source>
         <target>Es sind keine Patienten im Warteraum.</target>
