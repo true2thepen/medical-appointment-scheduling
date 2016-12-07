@@ -453,7 +453,8 @@
     // Get the time
     var value = ((this.input.prop('value') || this.options['default'] || '') + '').split(':');
     if(this.options.twelvehour && !(typeof value[1] === 'undefined')) {
-      value[1] = value[1].replace("AM", "").replace("PM", "");
+      this.amOrPm = value[1].endsWith("AM") ? "AM" : "PM";
+      value[1] = value[1].replace(" AM", "").replace(" PM", "");
     }
     if (value[0] === 'now') {
       var now = new Date(+ new Date() + this.options.fromnow);
@@ -466,6 +467,18 @@
     this.minutes = + value[1] || 0;
     this.spanHours.html(leadingZero(this.hours));
     this.spanMinutes.html(leadingZero(this.minutes));
+
+    // Set AM/PM
+    if (this.amOrPm === "AM") {
+      this.amPmBlock.children('.am-button').addClass('active');
+      this.amPmBlock.children('.pm-button').removeClass('active');
+      this.spanAmPm.empty().append('AM');
+    } else {
+      this.amPmBlock.children('.am-button').removeClass('active');
+      this.amPmBlock.children('.pm-button').addClass('active');
+      this.spanAmPm.empty().append('PM');
+    }
+
     // Toggle to hours view
     this.toggleView('hours');
     // Set position

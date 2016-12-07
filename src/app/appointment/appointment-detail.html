@@ -96,8 +96,6 @@
     </md-card>
   </form>
 
-  <div>{{model.duration}} {{model.date}} {{model.time}}</div>
-
   <div *ngFor="let timeSlot of proposedTimeSlots">
     <md-card class="card-centered-600">
       <md-card-subtitle i18n="Date overview in suggested appoitment">In {{timeSlot.scheduledTasks.NewAppointment.schedule[0].start | amTimeAgo:true}}</md-card-subtitle>
