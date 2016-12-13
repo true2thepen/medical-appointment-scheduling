@@ -141,7 +141,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "1.8.0",
     "materialize-css": "^0.97.8",
-    "node-sass": "^3.8.0",
+    "node-sass": "^4.0.0",
     "parse5": "^3.0.0",
     "protractor": "4.0.13",
     "raw-loader": "0.5.1",
