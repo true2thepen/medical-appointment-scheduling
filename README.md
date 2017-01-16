@@ -13,7 +13,7 @@ After checkout, run:
 $ npm install
 $ npm start
 ```
-This requires node >=4 together with npm to be installed.
+This requires node >=4 together with npm to be installed. This repository doesn't contain any backend, you need to have an instance of [medical-appointment-scheduling-server](https://github.com/sebastianhaas/medical-appointment-scheduling-server) running.
 
 ## Tests
 Both unit and end-to-end tests do exist for most parts of the application.
