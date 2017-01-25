@@ -1,4 +1,6 @@
 # Medical Appointment Scheduling
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/sebastianhaas/medical-appointment-scheduling.svg)](https://greenkeeper.io/)
 Concept showcase for "Design of a Web-Based Appointment Scheduling System for Small and Medium-Sized Medical Facilities".
 
 ## Showcase
