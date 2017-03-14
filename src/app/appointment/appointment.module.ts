@@ -1,11 +1,16 @@
 import { NgModule }                       from '@angular/core';
 import { FormsModule }                    from '@angular/forms';
+import { ReactiveFormsModule }            from '@angular/forms';
 import { CommonModule }                   from '@angular/common';
 import { MaterialModule }                 from '@angular/material';
+
+import 'fullcalendar';
+import 'fullcalendar/dist/locale-all.js';
 
 import { AutoCompleteModule }             from 'primeng/primeng';
 import { ScheduleModule }                 from 'primeng/primeng';
 import { MomentModule }                   from 'angular2-moment';
+import { Md2Module }                      from 'md2';
 
 import { ApiModule }                      from '../api/api.module';
 
@@ -34,7 +39,9 @@ import { FixTimeAgoToForPipe,
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MaterialModule,
+    Md2Module,
     ApiModule,
     AppointmentRoutingModule,
     AutoCompleteModule,

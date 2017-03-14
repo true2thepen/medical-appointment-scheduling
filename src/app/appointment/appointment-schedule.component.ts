@@ -14,8 +14,8 @@ import { Schedule }           from 'primeng/primeng';
 
 
 @Component({
-  templateUrl: './appointment-schedule.html',
-  styleUrls: [ './appointment-schedule.style.scss' ]
+  templateUrl: './appointment-schedule.component.html',
+  styleUrls: [ './appointment-schedule.component.scss' ]
 })
 
 export class AppointmentScheduleComponent implements OnInit {

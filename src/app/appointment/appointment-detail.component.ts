@@ -1,9 +1,11 @@
 import { Component, ViewChildren, ViewChild, QueryList } from '@angular/core';
+import { MdInputDirective } from '@angular/material';
 import { NgForm } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../app.service';
 import { AutoComplete } from 'primeng/primeng';
-import { MdInput } from '@angular/material';
+import { Observable } from 'rxjs';
 
 import { Appointment }           from '../api/model/appointment';
 import { AppointmentService }    from '../api/api/appointment.service';
@@ -22,8 +24,8 @@ import * as moment               from 'moment';
 import * as humanizeDuration     from 'humanize-duration';
 
 @Component({
-  templateUrl: './appointment-detail.html',
-  styleUrls: [ './appointment-detail.style.scss' ]
+  templateUrl: './appointment-detail.component.html',
+  styleUrls: [ './appointment-detail.component.scss' ]
 })
 
 export class AppointmentDetailComponent {
@@ -31,13 +33,24 @@ export class AppointmentDetailComponent {
   private editing: boolean = false;
   private trans: Translation;
   private rooms: Room[] = undefined;
-  private filteredPatients: Patient[] = undefined;
+
+  // Patient autocomplete field
+  private patientControl = new FormControl();
+  private patients: Patient[] = [];
+  private filteredPatients: Observable<Patient[]>;
+
+  // Examinations autocomplete/tag field
+  private examinations: Examination[] = [];
+
+  // Duration input
+  private durationControl = new FormControl();
+
   private filteredExaminations: Examination[] = undefined;
   private proposedTimeSlots: any[] = [];
   private localeHumanizer: any;
   private isTwelveHours: boolean;
   @ViewChildren('examMultiChooser') private examsMultiInput: QueryList<AutoComplete>;
-  @ViewChild('duration') private durationInput: MdInput;
+  @ViewChild('duration') private durationInput: MdInputDirective;
   private model: AppointmentViewModel = {
     id: undefined,
     title: undefined,
@@ -45,7 +58,7 @@ export class AppointmentDetailComponent {
     date: undefined,
     time: undefined,
     duration: undefined,
-    roomId: undefined,
+    room: undefined,
     patient: undefined,
     examinations: undefined,
     reminders: undefined
@@ -84,6 +97,9 @@ export class AppointmentDetailComponent {
 
     this.trans = getI18nStrings();
 
+    // Set up rooms control (retrieve all rooms)
+    this.getAllRooms();
+
     // Create new appointment
     if (param === 'add') {
       this.editing = true;
@@ -95,14 +111,32 @@ export class AppointmentDetailComponent {
       this.getAppointmentById(Number(param));
     }
 
-    this.getAllRooms();
-  }
+    // Set up patient autocomplete control
+    this.patientService.patientFind().subscribe(
+      (patients) => {
+        this.patients = patients;
+        this.filteredPatients = this.patientControl.valueChanges
+         .startWith(null)
+         .map(val => this.filterPatients(val));
+      },
+      (err) => console.log(err)
+    );
 
-  ngAfterViewInit() {
-    // Set placeholder for examinations input
-    for (let autoComplete of this.examsMultiInput.toArray()) {
-      autoComplete.input.placeholder = this.trans.examination;
-    }
+    // Set up examinations control
+    this.examinationService.examinationFind().subscribe(
+      (examinations) => this.examinations = examinations,
+      (err) => console.log(err)
+    );
+
+    // Set up duration control
+    this.durationControl.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .map((val) => this.sanitizeDuration(val))
+      .subscribe(
+        (x) => this.model.duration = x,
+        (err) => console.log(err)
+      );
   }
 
   onSubmit(): void {
@@ -114,7 +148,7 @@ export class AppointmentDetailComponent {
       modifiedBy: 0,
       createdBy: 0,
       patientId: this.model.patient.id,
-      roomId: this.model.roomId
+      roomId: this.model.room.id
     };
     let examinations: Examination[] = this.model.examinations;
     let startDate = moment(this.model.date, 'l');
@@ -181,6 +215,28 @@ export class AppointmentDetailComponent {
     this.router.navigateByUrl('appointment');
   }
 
+  /**
+   * Used to display patients in the suggestions drop down.
+   */
+  public patientDisplayFn(patient: Patient): string {
+    return patient ? `${patient.givenName} ${patient.surname} (${moment(patient.dateOfBirth).format('l')})` : null;
+  }
+
+  /**
+   * Used to display room names in the frontend.
+   */
+  public getRoomNameById(roomId: number): string {
+    return this.getRoomById(roomId).name;
+  }
+
+  private getRoomById(roomId: number): Room {
+    return this.rooms.find(
+      (room) => {
+        return room.id === roomId;
+      }
+    );
+  }
+
   private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
     this.appointmentService.appointmentPrototypeLinkExaminations(
       examination.id.toString(),
@@ -202,14 +258,8 @@ export class AppointmentDetailComponent {
     );
   }
 
-  private findPatients(event) {
-    this.patientService
-    .patientFind(`{"where": {"surname": {"regexp": "${event.query}/i"}}}`)
-    .subscribe(
-      x => this.filteredPatients = x,
-      e => console.log(e),
-      () => console.log('Completed querying for patients.')
-    );
+  private filterPatients(val: string): Patient[] {
+    return val ? this.patients.filter((patient) => new RegExp(val, 'gi').test(`${patient.surname} ${patient.givenName}`)) : this.patients;
   }
 
   private findExaminations(event) {
@@ -242,13 +292,11 @@ export class AppointmentDetailComponent {
     );
   }
 
+  /**
+   * Will be called everytime the form changes, and query the backend for new
+   * time slot suggestions.
+   */
   private onFormChange() {
-    // Set placeholder for examinations input
-    for (let autoComplete of this.examsMultiInput.toArray()) {
-      autoComplete.input.placeholder =
-        localStorage.getItem('locale').startsWith('de') ?  'Behandlungen' : 'Examinations';
-    }
-
      // Every time the form changes, use latest information to find a suitable date
     if (this.model.duration) {
 
@@ -260,38 +308,30 @@ export class AppointmentDetailComponent {
           this.model.duration,
           this.model.examinations && this.model.examinations.length > 0 ?
             this.model.examinations[0].id : undefined,
-          this.model.roomId,
+          this.model.room.id,
           moment()
         );
         this.findTime(
           this.model.duration,
           this.model.examinations && this.model.examinations.length > 0 ?
             this.model.examinations[0].id : undefined,
-          this.model.roomId,
+          this.model.room.id,
           moment().add(1, 'day')
         );
         this.findTime(
           this.model.duration,
           this.model.examinations && this.model.examinations.length > 0 ?
             this.model.examinations[0].id : undefined,
-          this.model.roomId,
+          this.model.room.id,
           moment().add(1, 'week')
         );
         this.findTime(
           this.model.duration,
           this.model.examinations && this.model.examinations.length > 0 ?
             this.model.examinations[0].id : undefined,
-          this.model.roomId,
+          this.model.room.id,
           moment().add(1, 'month')
         );
-      }
-    }
-  }
-
-  private getRoomNameById(roomId: number) {
-    for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i].id === roomId) {
-        return this.rooms[i].name;
       }
     }
   }
@@ -299,7 +339,7 @@ export class AppointmentDetailComponent {
   private getAppointmentById(id: number) {
     this.appointmentService.appointmentFindById(id.toString())
       .subscribe(
-        x => {
+        (x) => {
           let startDate = moment(x.start);
           let endDate = moment(x.end);
           let duration = moment.duration(endDate.diff(startDate));
@@ -312,35 +352,42 @@ export class AppointmentDetailComponent {
           if (x.patientId) {
             this.patientService.patientFindById(x.patientId.toString())
               .subscribe(
-                y => this.model.patient = y,
-                e => console.log(e),
+                (y) => this.model.patient = y,
+                (e) => console.log(e),
                 () => console.log('Completed querying for patient by id')
               );
           }
-          this.model.roomId = x.roomId;
+          this.model.room = this.getRoomById(x.roomId);
           this.appointmentService.appointmentPrototypeGetExaminations(x.id.toString())
             .subscribe(
-              z => this.model.examinations = z,
-              e => console.log(e),
+              (z) => this.model.examinations = z,
+              (e) => console.log(e),
               () => console.log('Completed querying for examinations by appointment id')
             );
         },
-        e => console.log(e),
+        (e) => console.log(e),
         () => console.log('Completed querying for appointment data')
       );
   }
 
-  private onDurationBlur(event: Event) {
-    if (this.durationInput) {
-      if (/^[0-9]$/.test(this.durationInput.value)) {
-        this.durationInput.value = this.durationInput.value + 'H';
-      } else if (/^[0-9]{2}$/.test(this.durationInput.value)) {
-        this.durationInput.value = this.durationInput.value + 'M';
+  /**
+   * Triggered on duration input changes. Seeks to sanitize the entered value.
+   */
+  private sanitizeDuration(val: string) {
+    if (val) {
+      // Strip any whitespaces from anywhere
+      val = val.replace(/\s/g, "");
+      // Check different types of input
+      if (/^[0-9]$/.test(val)) {
+        val = val + 'H';
+      } else if (/^[0-9]{2}$/.test(val)) {
+        val = val + 'M';
       } else {
-        this.durationInput.value = this.durationInput.value.toUpperCase();
+        val = val.toUpperCase();
       }
-      this.onFormChange();
+      // this.onFormChange(); // TODO
     }
+    return val;
   }
 
   private applySuggestion(timeSlot: any) {
@@ -351,7 +398,7 @@ export class AppointmentDetailComponent {
         `${moment.duration(timeSlot.duration, 'minutes').toJSON().substring(2)}`;
       this.model.date = startDate.format('l');
       this.model.time = startDate.format('LT');
-      this.model.roomId = timeSlot.resources[0];
+      this.model.room = this.getRoomById(timeSlot.resources[0]);
 
       // Clear suggestions
       this.proposedTimeSlots = [];
@@ -378,7 +425,7 @@ interface AppointmentViewModel {
   date: string;
   time: string;
   duration: string;
-  roomId: number;
+  room: Room;
   patient: Patient;
   examinations: Examination[];
   reminders: boolean;

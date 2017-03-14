@@ -9,8 +9,8 @@ import { ViewAppointmentService } from './appointment.service';
 import * as moment            from 'moment';
 
 @Component({
-  templateUrl: './appointment-today.html',
-  styleUrls: [ './appointment-today.style.scss' ]
+  templateUrl: './appointment-today.component.html',
+  styleUrls: [ './appointment-today.component.scss' ]
 })
 
 export class AppointmentTodayComponent implements OnInit {
@@ -33,7 +33,10 @@ export class AppointmentTodayComponent implements OnInit {
     this._state.title.next(
       localStorage.getItem('locale').startsWith('de') ? 'Heute' : 'Today');
     this._state.actions.next();
-    this._state.primaryAction.next();
+    this._state.primaryAction.next({
+      icon: 'add',
+      routerLink: 'appointment/add'
+    });
     this.getTodaysAppointments();
     this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
     this.defaultView = 'basicDay';

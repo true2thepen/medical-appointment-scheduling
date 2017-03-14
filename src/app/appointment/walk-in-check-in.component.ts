@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component }             from '@angular/core';
+import { NgForm }                from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable }            from 'rxjs/Observable';
 import { AppState }              from '../app.service';
+import { FormControl }           from '@angular/forms';
 
 import { Attendance }            from '../api/model/attendance';
 import { Appointment }           from '../api/model/appointment';
@@ -13,17 +14,33 @@ import { Patient }               from '../api/model/patient';
 import { PatientService }        from '../api/api/patient.service';
 import { Room }                  from '../api/model/room';
 import { RoomService }           from '../api/api/room.service';
+import { Translation,
+  getI18nStrings }               from './appointment.translations';
 
 import * as moment from 'moment';
 
 @Component({
-  templateUrl: './walk-in-check-in.html',
-  styleUrls: [ './walk-in-check-in.style.scss' ]
+  templateUrl: './walk-in-check-in.component.html',
+  styleUrls: [ './walk-in-check-in.component.scss' ]
 })
 
 export class WalkInCheckInComponent {
+
+  // Patient autocomplete field
+  private patientControl = new FormControl();
+  private patients: Patient[] = [];
+  private filteredPatients: Observable<Patient[]>;
+
+  // Examinations autocomplete/tag field
+  private examinations: Examination[] = [];
+
+  // Duration input
+  private durationControl = new FormControl();
+
+  // Translation
+  private trans: Translation;
+
   private rooms: Room[] = undefined;
-  private filteredPatients: Patient[] = undefined;
   private filteredExaminations: Examination[] = undefined;
   private model: AppointmentViewModel = {
     id: undefined,
@@ -33,7 +50,7 @@ export class WalkInCheckInComponent {
     date: moment().format('l'),
     time: moment().format('LT'),
     duration: '30M',
-    roomId: undefined,
+    room: undefined,
     patient: undefined,
     examinations: undefined
   };
@@ -61,7 +78,37 @@ export class WalkInCheckInComponent {
       );
     this._state.actions.next();
     this._state.primaryAction.next();
+
+    this.trans = getI18nStrings();
+
     this.getAllRooms();
+
+    // Set up patient autocomplete control
+    this.patientService.patientFind().subscribe(
+      (patients) => {
+        this.patients = patients;
+        this.filteredPatients = this.patientControl.valueChanges
+         .startWith(null)
+         .map(val => this.filterPatients(val));
+      },
+      (err) => console.log(err)
+    );
+
+    // Set up examinations control
+    this.examinationService.examinationFind().subscribe(
+      (examinations) => this.examinations = examinations,
+      (err) => console.log(err)
+    );
+
+    // Set up duration control
+    this.durationControl.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .map((val) => this.sanitizeDuration(val))
+      .subscribe(
+        (x) => this.model.duration = x,
+        (err) => console.log(err)
+      );
   }
 
   onSubmit(): void {
@@ -73,7 +120,7 @@ export class WalkInCheckInComponent {
       modifiedBy: 0,
       createdBy: 0,
       patientId: this.model.patient.id,
-      roomId: this.model.roomId
+      roomId: this.model.room.id
     };
     let examinations: Examination[] = this.model.examinations;
     let startDate = moment(this.model.date, 'l');
@@ -138,14 +185,8 @@ export class WalkInCheckInComponent {
     );
   }
 
-  private findPatients(event) {
-    this.patientService
-    .patientFind(`{"where": {"surname": {"regexp": "${event.query}/i"}}}`)
-    .subscribe(
-      x => this.filteredPatients = x,
-      e => console.log(e),
-      () => console.log('Completed querying for patients.')
-    );
+  private filterPatients(val: string): Patient[] {
+    return val ? this.patients.filter((patient) => new RegExp(val, 'gi').test(`${patient.surname} ${patient.givenName}`)) : this.patients;
   }
 
   private findExaminations(event) {
@@ -158,12 +199,26 @@ export class WalkInCheckInComponent {
     );
   }
 
-  private getRoomNameById(roomId: number) {
-    for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i].id === roomId) {
-        return this.rooms[i].name;
+  /**
+   * Used to display patients in the suggestions drop down.
+   */
+  public patientDisplayFn(patient: Patient): string {
+    return patient ? `${patient.givenName} ${patient.surname} (${moment(patient.dateOfBirth).format('l')})` : null;
+  }
+
+  /**
+   * Used to display room names in the frontend.
+   */
+  public getRoomNameById(roomId: number): string {
+    return this.getRoomById(roomId).name;
+  }
+
+  private getRoomById(roomId: number): Room {
+    return this.rooms.find(
+      (room) => {
+        return room.id === roomId;
       }
-    }
+    );
   }
 
   private getAppointmentById(id: number) {
@@ -214,6 +269,26 @@ export class WalkInCheckInComponent {
       .appointmentPrototypeCreateAttendance(appointment.id.toString(), data);
   }
 
+  /**
+   * Triggered on duration input changes. Seeks to sanitize the entered value.
+   */
+  private sanitizeDuration(val: string) {
+    if (val) {
+      // Strip any whitespaces from anywhere
+      val = val.replace(/\s/g, "");
+      // Check different types of input
+      if (/^[0-9]$/.test(val)) {
+        val = val + 'H';
+      } else if (/^[0-9]{2}$/.test(val)) {
+        val = val + 'M';
+      } else {
+        val = val.toUpperCase();
+      }
+      // this.onFormChange(); // TODO
+    }
+    return val;
+  }
+
   private humanizeDuration(durationString: String): String {
     return moment.duration('PT' + durationString).humanize();
   }
@@ -226,7 +301,7 @@ interface AppointmentViewModel {
   date: string;
   time: string;
   duration: string;
-  roomId: number;
+  room: Room;
   patient: Patient;
   examinations: Examination[];
 }

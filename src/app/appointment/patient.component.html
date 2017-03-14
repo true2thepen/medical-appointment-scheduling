@@ -1,4 +1,6 @@
 <div id="wrapper" class="card-centered-wrapper">
+
+  <!-- Patient information -->
   <md-card class="card-centered-600">
     <md-card-title i18n>Patient Data</md-card-title>
     <p *ngIf="!patient" i18n>Loading patient data...</p>
@@ -11,6 +13,11 @@
       <p>{{patient.streetAddress}}<br />{{patient.zipCode}} {{patient.city}}<br />{{patient.country}}</p>
     </div>
   </md-card>
+
+  <!-- Section title -->
+  <div class="section-title" i18n>SCHEDULED APPOINTMENTS</div>
+
+  <!-- Show scheduled appointments for patient -->
   <md-card *ngFor="let appointment of appointments" class="card-centered-600">
     <md-card-title>{{appointment.start | amDateFormat:'LL'}}</md-card-title>
     <md-card-subtitle i18n>
@@ -26,4 +33,5 @@
       <button md-button (click)="openCancelAppointmentDialog(appointment)" i18n>CANCEL APPOINTMENT</button>
     </md-card-actions>
   </md-card>
+
 </div>

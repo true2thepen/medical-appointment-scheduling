@@ -4,8 +4,9 @@
 import { Component, ViewEncapsulation }   from '@angular/core';
 import { ViewContainerRef }               from '@angular/core';
 import { Location }                       from '@angular/common';
-import { MdSnackBar, MdSnackBarConfig }   from '@angular/material';
+import { MdSnackBar }                     from '@angular/material';
 import { MdSnackBarRef }                  from '@angular/material';
+import { SimpleSnackBar }                 from '@angular/material';
 import { MdDialogRef, MdDialog,
  MdDialogConfig }                         from '@angular/material';
 import { Router }                         from '@angular/router';
@@ -29,93 +30,8 @@ import { CantyCTIService,
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [ './app.style.scss' ],
-  template: `
-<md-sidenav-layout fullscreen>
-  <md-sidenav #sidenav>
-    <md-nav-list>
-      <a [routerLink]="['./appointment/attendance']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>people</md-icon>
-        <span md-line i18n>Attendance List</span>
-      </a>
-      <a [routerLink]="['./appointment']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>view_module</md-icon>
-        <span md-line i18n>Month</span>
-      </a>
-      <a [routerLink]="['./appointment/week']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>view_week</md-icon>
-        <span md-line i18n>Week</span>
-      </a>
-      <a [routerLink]="['./appointment/today']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>view_day</md-icon>
-        <span md-line i18n>Today</span>
-      </a>
-      <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>view_list</md-icon>
-        <span md-line i18n>Rooms</span>
-      </a>
-      <a [routerLink]="['./appointment/statistics']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>show_chart</md-icon>
-        <span md-line i18n>Statistics</span>
-      </a>
-      <md-divider></md-divider>
-      <a [routerLink]="['./appointment/anon']" (click)="sidenav.close()" md-list-item>
-        <md-icon md-list-icon>visibility_off</md-icon>
-        <span md-line i18n>Anonymized View</span>
-      </a>
-    </md-nav-list>
-  </md-sidenav>
-  <md-toolbar color="primary">
-    <button *ngIf="!isSubPage" md-icon-button (click)="sidenav.open()">
-      <md-icon>menu</md-icon>
-    </button>
-    <button *ngIf="isSubPage" md-icon-button (click)="_location.back()">
-      <md-icon>arrow_back</md-icon>
-    </button>
-    {{title}}
-    <span class="md-toolbar-fill-remaining-space"></span>
-
-    <button *ngFor="let action of actions" md-icon-button (click)="actionsHandler(action)">
-        <md-icon class="md-24">{{action.icon}}</md-icon>
-    </button>
-
-    <button md-icon-button [md-menu-trigger-for]="menu">
-       <md-icon>more_vert</md-icon>
-    </button>
-
-    <md-menu x-position="before" #menu="mdMenu">
-      <button i18n md-menu-item (click)="insertTestExaminations()">
-        Insert Test-Examinations
-      </button>
-      <button i18n md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
-      <button i18n md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
-      <md-divider></md-divider>
-      <button i18n md-menu-item (click)="createRandomAppointments()">
-        Create random appointments
-      </button>
-      <button i18n md-menu-item (click)="createRandomAttendances()">
-        Create random attendances
-      </button>
-      <md-divider></md-divider>
-      <button i18n md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
-      <button i18n md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
-      <button i18n md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
-      <button i18n md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
-      <button i18n md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
-    </md-menu>
-  </md-toolbar>
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-</md-sidenav-layout>
-
-<button *ngIf="primaryAction"
-        md-fab class="right-lower-corner-fab"
-        (click)="actionsHandler(primaryAction)"
-        [routerLink]="primaryAction.routerLink">
-    <md-icon class="md-24">{{primaryAction.icon}}</md-icon>
-</button>
-  `
+  styleUrls: [ './app.component.scss' ],
+  templateUrl: './app.component.html'
 })
 
 export class AppComponent {
@@ -127,9 +43,7 @@ export class AppComponent {
   private isSubPage = false;
   private actions: Action[];
   private primaryAction: Action;
-  private snackBarConfig: MdSnackBarConfig;
-  private snackBarRef: any;
-  private snackBarDismissSubscription: Subscription;
+  private snackBarRef: MdSnackBarRef<SimpleSnackBar>;
 
   constructor(
     private _state: AppState,
@@ -147,7 +61,6 @@ export class AppComponent {
   ngOnInit() {
     this._state.ensureLocale(); // Make sure locale is set
     console.log('Locale is %s', localStorage.getItem('locale'));
-    this.snackBarConfig = new MdSnackBarConfig(this.viewContainerRef);
 
     // Listen for title changes
     this._state.title.subscribe(
@@ -201,15 +114,15 @@ export class AppComponent {
           this.patientService.patientFindOne(JSON.stringify(filter))
           .subscribe(
             patient => {
-              this.snackBarRef = this.snackBar.open(
-                localStorage.getItem('locale').startsWith('de') ?
+              let message = localStorage.getItem('locale').startsWith('de') ?
                 `Eingehender Anruf von ${patient.givenName} ${patient.surname}` :
-                `Incoming call from ${patient.givenName} ${patient.surname}`,
-                localStorage.getItem('locale').startsWith('de') ? 'Zum Patienten' : 'Open',
-                this.snackBarConfig
-              );
-              this.snackBarDismissSubscription = this.snackBarRef.afterDismissed()
-              .subscribe(
+                `Incoming call from ${patient.givenName} ${patient.surname}`;
+              let action = localStorage.getItem('locale')
+                .startsWith('de') ? 'Zum Patienten' : 'Open';
+
+              this.snackBarRef = this.snackBar.open(message, action);
+
+              this.snackBarRef.onAction().subscribe(
                 null,
                 null,
                 () => this.router.navigate(['appointment', 'patient', patient.id])
@@ -218,17 +131,14 @@ export class AppComponent {
             err => {
               this.snackBar.open(
                 `Incoming call from ${incomingCall.phoneNumber}`,
-                'OK',
-                this.snackBarConfig);
-              console.log(err);
+                'OK'
+              );
             }
           );
         } else if (incomingCall.callState === IncomingCallState.OFFHOOK) {
           // Nothing to do here, just keep displaying the snack bar
         } else { // Hang up, IDLE
-          this.snackBarDismissSubscription.unsubscribe();
           this.snackBarRef.dismiss(); // No probleme here if already dismissed
-          this.snackBarDismissSubscription = null;
           this.snackBarRef = null;
         }
       },

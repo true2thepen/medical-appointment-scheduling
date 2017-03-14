@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, DoCheck,
   Input, Output, EventEmitter, IterableDiffers,
   AfterViewChecked, ViewChild, forwardRef }         from '@angular/core';
-import { MdInput }                                  from '@angular/material';
+import { MdInputContainer }                         from '@angular/material';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor,
   FormControl, NG_VALIDATORS }                      from '@angular/forms';
 
@@ -40,20 +40,23 @@ export const CLOCKPICKER_VALIDATORS: any = {
   selector: 'clockpicker',
   providers: [CLOCKPICKER_VALUE_ACCESSOR, CLOCKPICKER_VALIDATORS],
   styleUrls: [ 'materialize.css', './clockpicker.scss' ],
-  template: `<md-input #clockPicker
-               [ngStyle]="style"
-               [class]="styleClass"
-               [placeholder]="placeholder"
-               [required]="required"
-               [disabled]="disabled"
-               [(value)]="value"
-               (keyup)="onKey($event)"
-               (blur)="onBlur($event)">
-                 <button md-suffix md-icon-button color="primary"
-                               (click)="show()" type=button tabindex="-1">
-                   <md-icon class="md-24">schedule</md-icon>
-                 </button>
-             </md-input>`
+  template: `
+<md-input-container #clockPicker>
+  <input
+    mdInput
+    [placeholder]="placeholder"
+    [(value)]="value"
+    [ngStyle]="style"
+    [class]="styleClass"
+    [required]="required"
+    [disabled]="disabled"
+    (keyup)="onKey($event)"
+    (blur)="onBlur($event)">
+  <button md-suffix md-icon-button color="primary"
+               (click)="show()" type=button tabindex="-1">
+   <md-icon class="md-24">schedule</md-icon>
+  </button>
+</md-input-container>`
 })
 export class ClockPickerComponent implements AfterViewChecked, OnDestroy, ControlValueAccessor {
 
@@ -65,7 +68,7 @@ export class ClockPickerComponent implements AfterViewChecked, OnDestroy, Contro
   @Input() twelveHours: boolean;
   @Input() autoClose: boolean;
   @Input() doneText: string;
-  @ViewChild('clockPicker') private el: MdInput;
+  @ViewChild('clockPicker') private el: MdInputContainer;
   private clockPicker: any;
   private _value: any = '';
   private input: HTMLInputElement;
@@ -76,7 +79,7 @@ export class ClockPickerComponent implements AfterViewChecked, OnDestroy, Contro
   }
 
   public ngAfterViewChecked() {
-    if (!this.initialized && this.el._inputElement.nativeElement.offsetParent) {
+    if (!this.initialized && this.el._mdInputChild/*.nativeElement.offsetParent*/) {
       this.initialize();
     }
   }
@@ -139,7 +142,7 @@ export class ClockPickerComponent implements AfterViewChecked, OnDestroy, Contro
   }
 
   private afterClockPickerDone() {
-    // Hotfix to notify md-input that its value has changed
+    // Hotfix to notify mdInput that its value has changed
     this.sanitizeApplyTime(this.input.value);
     this.input.value = this.value;
   }

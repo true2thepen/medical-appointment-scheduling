@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, DoCheck,
   Input, Output, EventEmitter, IterableDiffers,
   AfterViewChecked, ViewChild, forwardRef }         from '@angular/core';
-import { MdInput }                                  from '@angular/material';
+import { MdInputContainer }                         from '@angular/material';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor,
   FormControl, NG_VALIDATORS }                      from '@angular/forms';
 
@@ -41,7 +41,9 @@ export const DATEPICKER_VALIDATORS: any = {
   selector: 'datepicker',
   providers: [DATEPICKER_VALUE_ACCESSOR, DATEPICKER_VALIDATORS],
   styleUrls: [ 'materialize.css', './datepicker.scss' ],
-  template: `<md-input #datePicker
+  template: `
+            <md-input-container #datePicker>
+              <input mdInput
                [ngStyle]="style"
                [class]="styleClass"
                [placeholder]="placeholder"
@@ -50,11 +52,11 @@ export const DATEPICKER_VALIDATORS: any = {
                [(value)]="value"
                (keyup)="onKey($event)"
                (blur)="onBlur($event)">
-                 <button md-suffix md-icon-button color="primary"
+                <button md-suffix md-icon-button color="primary"
                              (click)="show()" type=button tabindex="-1">
-                   <md-icon class="md-24">today</md-icon>
-                 </button>
-             </md-input>`
+                  <md-icon class="md-24">today</md-icon>
+                </button>
+            </md-input-container>`
 })
 export class DatePickerComponent implements AfterViewChecked, OnDestroy, ControlValueAccessor {
 
@@ -64,7 +66,7 @@ export class DatePickerComponent implements AfterViewChecked, OnDestroy, Control
   @Input() disabled: boolean;
   @Input() styleClass: string;
   @Input() dateFormat: string;
-  @ViewChild('datePicker') private el: MdInput;
+  @ViewChild('datePicker') private el: MdInputContainer;
   private datePicker: any;
   private _value: any = '';
   private input: HTMLInputElement;
@@ -75,7 +77,7 @@ export class DatePickerComponent implements AfterViewChecked, OnDestroy, Control
   }
 
   public ngAfterViewChecked() {
-    if (!this.initialized && this.el._inputElement.nativeElement.offsetParent) {
+    if (!this.initialized && this.el._mdInputChild/*.nativeElement.offsetParent*/) {
       this.initialize();
     }
   }

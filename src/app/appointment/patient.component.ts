@@ -17,8 +17,8 @@ import * as moment                from 'moment';
 import * as humanizeDuration      from 'humanize-duration';
 
 @Component({
-  templateUrl: './patient.html',
-  styleUrls: [ './patient.style.scss' ]
+  templateUrl: './patient.component.html',
+  styleUrls: [ './patient.component.scss' ]
 })
 export class PatientComponent implements OnInit {
 

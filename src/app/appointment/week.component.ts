@@ -14,8 +14,8 @@ import { Schedule }               from 'primeng/primeng';
 
 
 @Component({
-  templateUrl: './week.html',
-  styleUrls: [ './week.style.scss' ]
+  templateUrl: './week.component.html',
+  styleUrls: [ './week.component.scss' ]
 })
 
 export class WeekComponent implements OnInit {

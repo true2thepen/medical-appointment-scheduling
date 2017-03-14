@@ -14,8 +14,8 @@ import * as moment            from 'moment';
 import { Schedule }           from 'primeng/primeng';
 
 @Component({
-  templateUrl: './appointment-rooms.html',
-  styleUrls: [ './appointment-rooms.style.scss' ]
+  templateUrl: './appointment-rooms.component.html',
+  styleUrls: [ './appointment-rooms.component.scss' ]
 })
 
 export class AppointmentRoomsComponent implements OnInit {

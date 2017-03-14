@@ -4,6 +4,8 @@ import { FormsModule }                  from '@angular/forms';
 import { HttpModule }                   from '@angular/http';
 import { MaterialModule }               from '@angular/material';
 
+import { Md2Module }                    from 'md2';
+
 import { BASE_PATH }                    from './api/variables';
 import { CANTY_CTI_HOST }               from './cantyCti.service';
 
@@ -26,6 +28,7 @@ import { XLarge }                       from './home/x-large';
     AppointmentModule,
     HomeModule,
     MaterialModule.forRoot(),
+    Md2Module.forRoot(),
     AppRoutingModule
   ],
   declarations: [
