@@ -1,13 +1,12 @@
 import { Component, OnInit }  from '@angular/core';
 
+import * as moment            from 'moment';
+import * as async             from 'async';
+
+import { AppState }           from '../app.service';
 import { Attendance }         from '../api/model/attendance';
 import { AppointmentService } from '../api/api/appointment.service';
 import { AttendanceService }  from '../api/api/attendance.service';
-
-import { AppState }           from '../app.service';
-
-import * as moment from 'moment';
-import * as async  from 'async';
 
 declare var Plotly: any;
 
@@ -17,7 +16,7 @@ declare var Plotly: any;
 })
 export class StatisticsComponent implements OnInit {
 
-  private noData: boolean;
+  public noData: boolean;
   private colors: string[] = [
     '#00bcd4', '#4caf50', '#cddc39', '#ff9800', '#e91e63', '#673ab7', '#9c27b0'
   ];
@@ -25,12 +24,13 @@ export class StatisticsComponent implements OnInit {
   constructor(
     private _state: AppState,
     private attendanceService: AttendanceService,
-    private appointmentService: AppointmentService) {}
+    private appointmentService: AppointmentService
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     // Mouseflow integration
-    if ((<any>window)._mfq) {
-      (<any>window)._mfq.push(['newPageView', '/appointment/statistics']);
+    if ((<any> window)._mfq) {
+      (<any> window)._mfq.push(['newPageView', '/appointment/statistics']);
     }
     this._state.isSubPage.next(false);
     this._state.title.next(
@@ -41,7 +41,7 @@ export class StatisticsComponent implements OnInit {
     // Retrieve data for statistics
     this.attendanceService.attendanceFind()
     .subscribe(
-      attendances => {
+      (attendances) => {
         if (attendances.length <= 0) {
           this.noData = true;
           return;
@@ -52,7 +52,7 @@ export class StatisticsComponent implements OnInit {
         async.each(attendances, (attendance: Attendance, callback: Function) => {
           this.appointmentService.appointmentFindById(attendance.appointmentId.toString())
           .subscribe(
-            appointment => {
+            (appointment) => {
               // Calculate actual offset from planned time in minutes for box plot
               let offset = moment.duration(moment(attendance.underTreatment)
                 .diff(moment(appointment.start)))
@@ -65,7 +65,7 @@ export class StatisticsComponent implements OnInit {
               }
               data[dayOfWeek].push(offset);
             },
-            err => callback(err),
+            (err) => callback(err),
             () => callback()
           );
         }, (err) => {
@@ -76,8 +76,7 @@ export class StatisticsComponent implements OnInit {
           }
         });
       },
-      error => console.log(error),
-      () => {}
+      (error) => console.log(error)
     );
   }
 

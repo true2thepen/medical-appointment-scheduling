@@ -9,6 +9,6 @@ import { MdDialogRef } from '@angular/material';
   <button i18n type="button" (click)="dialogRef.close('no')">NO</button>
   `
 })
-export class PatientCancelAppointmentDialog {
-  constructor(public dialogRef: MdDialogRef<PatientCancelAppointmentDialog>) {}
+export class PatientCancelAppointmentDialogComponent {
+  constructor(public dialogRef: MdDialogRef<PatientCancelAppointmentDialogComponent>) {}
 }

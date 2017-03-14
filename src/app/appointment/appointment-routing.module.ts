@@ -1,18 +1,18 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AppointmentComponent }           from './appointment.component';
-import { AppointmentScheduleComponent }   from './appointment-schedule.component';
-import { AppointmentDetailComponent }     from './appointment-detail.component';
-import { AppointmentRoomsComponent }      from './appointment-rooms.component';
-import { AppointmentTodayComponent }      from './appointment-today.component';
-import { AppointmentAttendanceComponent } from './appointment-attendance.component';
-import { WeekComponent }                  from './week.component';
-import { WalkInCheckInComponent }         from './walk-in-check-in.component';
-import { StatisticsComponent }            from './statistics.component';
-import { PatientComponent }               from './patient.component';
-import { AnonComponent }                  from './anon.component';
 import { AcceptOfferComponent }           from './accept-offer.component';
+import { AnonComponent }                  from './anon.component';
+import { AppointmentAttendanceComponent } from './attendance.component';
+import { AppointmentComponent }           from './appointment.component';
+import { AppointmentDetailComponent }     from './detail.component';
+import { AppointmentRoomsComponent }      from './rooms.component';
+import { AppointmentScheduleComponent }   from './schedule.component';
+import { AppointmentTodayComponent }      from './today.component';
+import { PatientComponent }               from './patient.component';
+import { StatisticsComponent }            from './statistics.component';
+import { WalkInCheckInComponent }         from './walk-in-check-in.component';
+import { WeekComponent }                  from './week.component';
 
 @NgModule({
   imports: [

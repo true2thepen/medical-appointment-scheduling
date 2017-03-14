@@ -31,6 +31,9 @@ Make sure you have a running instance in another terminal before running end-to-
 $ npm run e2e
 ```
 
+## Code style
+Code quality is ensured by `tslint` with `codelyzer` for Angular 2 specific linting.
+
 ## Technology stack
 ### Core technologies
 * [Angular 2](https://angular.io/)
@@ -46,6 +49,10 @@ $ npm run e2e
 * [Jasmine](http://jasmine.github.io/)
 * [Protractor](http://www.protractortest.org/)
 * [Selenium](http://docs.seleniumhq.org/)
+
+### Code style
+* [codelyzer](https://github.com/mgechev/codelyzer)
+* [tslint](https://palantir.github.io/tslint/)
 
 ## License
 [MIT](/LICENSE)

@@ -3,6 +3,7 @@
  */
 import { Component, ViewEncapsulation }   from '@angular/core';
 import { ViewContainerRef }               from '@angular/core';
+import { OnInit }                         from '@angular/core';
 import { Location }                       from '@angular/common';
 import { MdSnackBar }                     from '@angular/material';
 import { MdSnackBarRef }                  from '@angular/material';
@@ -22,7 +23,6 @@ import { RoomService }                    from './api/api/room.service';
 import { CantyCTIService,
   IncomingCallState }                     from './cantyCti.service';
 
-
 /*
  * App Component
  * Top Level Component
@@ -34,15 +34,15 @@ import { CantyCTIService,
   templateUrl: './app.component.html'
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   public url = 'https://twitter.com/AngularClass';
+  public primaryAction: Action;
+  public isSubPage = false;
+  public title = 'Medical Appointment Scheduling';
 
-  private angularclassLogo = 'assets/img/angularclass-avatar.png';
-  private title = 'Medical Appointment Scheduling';
-  private isSubPage = false;
   private actions: Action[];
-  private primaryAction: Action;
+
   private snackBarRef: MdSnackBarRef<SimpleSnackBar>;
 
   constructor(
@@ -58,14 +58,14 @@ export class AppComponent {
     private snackBar: MdSnackBar,
     private viewContainerRef: ViewContainerRef) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this._state.ensureLocale(); // Make sure locale is set
     console.log('Locale is %s', localStorage.getItem('locale'));
 
     // Listen for title changes
     this._state.title.subscribe(
-      title => this.title = title,
-      error => {
+      (title) => this.title = title,
+      (error) => {
         this.title = 'Medical Appointment Scheduling';
         console.log('Error getting title for activated route.');
       },
@@ -74,8 +74,8 @@ export class AppComponent {
 
     // Listen for toolbar icon changes
     this._state.isSubPage.subscribe(
-      isSubPage => this.isSubPage = isSubPage,
-      error => {
+      (isSubPage) => this.isSubPage = isSubPage,
+      (error) => {
         this.isSubPage = false;
         console.log('Error getting isSubPage for activated route.');
       },
@@ -84,8 +84,8 @@ export class AppComponent {
 
     // Listen for toolbar action changes
     this._state.actions.subscribe(
-      actions => this.actions = actions,
-      error => {
+      (actions) => this.actions = actions,
+      (error) => {
         this.actions = undefined;
         console.log('Error getting actions for activated route.');
       },
@@ -94,8 +94,8 @@ export class AppComponent {
 
     // Listen for toolbar action changes
     this._state.primaryAction.subscribe(
-      primaryAction => this.primaryAction = primaryAction,
-      error => {
+      (primaryAction) => this.primaryAction = primaryAction,
+      (error) => {
         this.primaryAction = undefined;
         console.log('Error getting primary action for activated route.');
       },
@@ -104,7 +104,7 @@ export class AppComponent {
 
     // Listen for CantyCTI events
     this.cantyCTIService.incomingCall.subscribe(
-      incomingCall => {
+      (incomingCall) => {
         if (incomingCall.callState === IncomingCallState.RINGING) {
           const filter = {
             where: {
@@ -113,7 +113,7 @@ export class AppComponent {
           };
           this.patientService.patientFindOne(JSON.stringify(filter))
           .subscribe(
-            patient => {
+            (patient) => {
               let message = localStorage.getItem('locale').startsWith('de') ?
                 `Eingehender Anruf von ${patient.givenName} ${patient.surname}` :
                 `Incoming call from ${patient.givenName} ${patient.surname}`;
@@ -128,7 +128,7 @@ export class AppComponent {
                 () => this.router.navigate(['appointment', 'patient', patient.id])
               );
             },
-            err => {
+            (err) => {
               this.snackBar.open(
                 `Incoming call from ${incomingCall.phoneNumber}`,
                 'OK'
@@ -142,7 +142,7 @@ export class AppComponent {
           this.snackBarRef = null;
         }
       },
-      err => console.log(err),
+      (err) => console.log(err),
       () => console.log('CantyCTI has finished broadcasting incoming calls.')
     );
   }
@@ -155,93 +155,87 @@ export class AppComponent {
     }
   }
 
+  public navigateBack() {
+    this._location.back();
+  }
+
   public deleteAllRooms() {
     this.roomService.roomDeleteAllRooms()
     .subscribe(
-      x => console.log(`Deleted all ${x.deletedCount} rooms.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Deleted all ${x.deletedCount} rooms.`),
+      (err) => console.log(err)
     );
   }
 
   public deleteAllAppointments() {
     this.appointmentService.appointmentDeleteAllAppointments()
     .subscribe(
-      x => console.log(`Deleted all ${x.deletedCount} appointments.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Deleted all ${x.deletedCount} appointments.`),
+      (err) => console.log(err)
     );
   }
 
   public deleteAllExaminations() {
     this.examinationService.examinationDeleteAllExaminations()
     .subscribe(
-      x => console.log(`Deleted all ${x.deletedCount} examinations.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Deleted all ${x.deletedCount} examinations.`),
+      (err) => console.log(err)
     );
   }
 
   public deleteAllAttendances() {
     this.attendanceService.attendanceDeleteAllAttendances()
     .subscribe(
-      x => console.log(`Deleted all ${x.deletedCount} attendances.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Deleted all ${x.deletedCount} attendances.`),
+      (err) => console.log(err)
     );
   }
 
   public deleteAllPatients() {
     this.patientService.patientDeleteAllPatients()
     .subscribe(
-      x => console.log(`Deleted all ${x.deletedCount} patients.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Deleted all ${x.deletedCount} patients.`),
+      (err) => console.log(err)
     );
   }
 
   public insertTestPatients() {
     this.patientService.patientInsertTestData(localStorage.getItem('locale'))
     .subscribe(
-      x => console.log(`Inserted ${x.insertCount} test entries for patients.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Inserted ${x.insertCount} test entries for patients.`),
+      (err) => console.log(err)
     );
   }
 
   public insertTestExaminations() {
     this.examinationService.examinationInsertTestData(localStorage.getItem('locale'))
     .subscribe(
-      x => console.log(`Inserted ${x.insertCount} test entries for examinations.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Inserted ${x.insertCount} test entries for examinations.`),
+      (err) => console.log(err)
     );
   }
 
   public insertTestRooms() {
     this.roomService.roomInsertTestData(localStorage.getItem('locale'))
     .subscribe(
-      x => console.log(`Inserted ${x.insertCount} test entries for rooms.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Inserted ${x.insertCount} test entries for rooms.`),
+      (err) => console.log(err)
     );
   }
 
   public createRandomAppointments() {
     this.appointmentService.appointmentGenerateRandomAppointments()
     .subscribe(
-      x => console.log(`Created random appointments.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Created random appointments.`),
+      (err) => console.log(err)
     );
   }
 
   public createRandomAttendances() {
     this.attendanceService.attendanceGenerateRandomAttendances()
     .subscribe(
-      x => console.log(`Created random attendances.`),
-      err => console.log(err),
-      () => {}
+      (x) => console.log(`Created random attendances.`),
+      (err) => console.log(err)
     );
   }
 }

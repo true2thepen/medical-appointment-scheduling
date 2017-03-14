@@ -1,50 +1,55 @@
-import { Component, ViewChildren, ViewChild, QueryList } from '@angular/core';
-import { MdInputDirective } from '@angular/material';
-import { NgForm } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AppState } from '../app.service';
-import { AutoComplete } from 'primeng/primeng';
-import { Observable } from 'rxjs';
+/* tslint:disable no-access-missing-member */ // TODO
 
-import { Appointment }           from '../api/model/appointment';
-import { AppointmentService }    from '../api/api/appointment.service';
-import { Examination }           from '../api/model/examination';
-import { ExaminationService }    from '../api/api/examination.service';
-import { Patient }               from '../api/model/patient';
-import { PatientService }        from '../api/api/patient.service';
-import { Room }                  from '../api/model/room';
-import { RoomService }           from '../api/api/room.service';
-import { NotificationService }   from '../api/api/notification.service';
-import { NotificationBuilder }   from './notificationBuilder';
+import { Component, QueryList }    from '@angular/core';
+import { ViewChildren, ViewChild } from '@angular/core';
+import { OnInit }                  from '@angular/core';
+import { MdInputDirective }        from '@angular/material';
+import { NgForm }                  from '@angular/forms';
+import { FormControl }             from '@angular/forms';
+import { ActivatedRoute, Router }  from '@angular/router';
+
+import { AutoComplete }            from 'primeng/primeng';
+import { Observable }              from 'rxjs';
+
+import * as moment                 from 'moment';
+import * as humanizeDuration       from 'humanize-duration';
+
+import { AppState }                from '../app.service';
+import { Appointment }             from '../api/model/appointment';
+import { AppointmentService }      from '../api/api/appointment.service';
+import { Examination }             from '../api/model/examination';
+import { ExaminationService }      from '../api/api/examination.service';
+import { Patient }                 from '../api/model/patient';
+import { PatientService }          from '../api/api/patient.service';
+import { Room }                    from '../api/model/room';
+import { RoomService }             from '../api/api/room.service';
+import { NotificationService }     from '../api/api/notification.service';
+import { NotificationBuilder }     from './notificationBuilder';
 import { Translation,
-  getI18nStrings }               from './appointment.translations';
-
-import * as moment               from 'moment';
-import * as humanizeDuration     from 'humanize-duration';
+  getI18nStrings }                 from './appointment.translations';
 
 @Component({
-  templateUrl: './appointment-detail.component.html',
-  styleUrls: [ './appointment-detail.component.scss' ]
+  templateUrl: './detail.component.html',
+  styleUrls: [ './detail.component.scss' ]
 })
 
-export class AppointmentDetailComponent {
+export class AppointmentDetailComponent implements OnInit {
 
-  private editing: boolean = false;
-  private trans: Translation;
-  private rooms: Room[] = undefined;
+  public editing: boolean = false;
+  public trans: Translation;
+  public rooms: Room[] = undefined;
 
   // Patient autocomplete field
-  private patientControl = new FormControl();
-  private patients: Patient[] = [];
-  private filteredPatients: Observable<Patient[]>;
+  public patientControl = new FormControl();
+
+  // Duration input
+  public durationControl = new FormControl();
 
   // Examinations autocomplete/tag field
   private examinations: Examination[] = [];
 
-  // Duration input
-  private durationControl = new FormControl();
-
+  private patients: Patient[] = [];
+  private filteredPatients: Observable<Patient[]>;
   private filteredExaminations: Examination[] = undefined;
   private proposedTimeSlots: any[] = [];
   private localeHumanizer: any;
@@ -74,12 +79,12 @@ export class AppointmentDetailComponent {
     private patientService: PatientService,
     private notificationService: NotificationService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     let param: string = this.route.snapshot.params['id'];
 
     // Mouseflow integration
-    if ((<any>window)._mfq) {
-      (<any>window)._mfq.push(['newPageView', '/appointment/' + param]);
+    if ((<any> window)._mfq) {
+      (<any> window)._mfq.push(['newPageView', '/appointment/' + param]);
     }
 
     // This is a sub-page
@@ -93,8 +98,8 @@ export class AppointmentDetailComponent {
       language: localStorage.getItem('locale').startsWith('de') ? 'de' : 'en'
     });
 
+    // Set up localization
     this.isTwelveHours = this.isCurrentLocaleUsingTwelveHours();
-
     this.trans = getI18nStrings();
 
     // Set up rooms control (retrieve all rooms)
@@ -105,7 +110,7 @@ export class AppointmentDetailComponent {
       this.editing = true;
 
     // View or edit existing appointment
-    } else if (Number(param) !== NaN) {
+    } else if (!isNaN(Number(param))) {
       this.editing = false;
       console.log('displaying appointment with id: %d', Number(param));
       this.getAppointmentById(Number(param));
@@ -117,7 +122,7 @@ export class AppointmentDetailComponent {
         this.patients = patients;
         this.filteredPatients = this.patientControl.valueChanges
          .startWith(null)
-         .map(val => this.filterPatients(val));
+         .map((val) => this.filterPatients(val));
       },
       (err) => console.log(err)
     );
@@ -139,7 +144,7 @@ export class AppointmentDetailComponent {
       );
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     let newAppointment: Appointment  = {
       title: this.model.title,
       description: this.model.description,
@@ -166,12 +171,12 @@ export class AppointmentDetailComponent {
       this.appointmentService
       .appointmentCreate(newAppointment)
       .subscribe(
-        x => {
+        (x) => {
 
           // Link examinations
           if (examinations && examinations.length > 0) {
-            for (let i = 0; i < examinations.length; ++i) {
-              this.linkExaminationWithAppointment(x, examinations[i]);
+            for (let examination of examinations) {
+              this.linkExaminationWithAppointment(x, examination);
             }
           }
 
@@ -185,13 +190,13 @@ export class AppointmentDetailComponent {
               ))
             .subscribe(
               null,
-              err => console.log(err),
+              (err) => console.log(err),
               () => console.log('Created notification.')
             );
           }
 
         },
-        e => { console.log('onError: %o', e); },
+        (e) => { console.log('onError: %o', e); },
         () => { console.log('Completed insert.'); }
       );
 
@@ -200,13 +205,13 @@ export class AppointmentDetailComponent {
       this.appointmentService
       .appointmentPrototypeUpdateAttributes(this.model.id.toString(), newAppointment)
       .subscribe(
-        x => {
-          for (let i = 0; i < examinations.length; ++i) {
-            this.linkExaminationWithAppointment(x, examinations[i]);
+        (x) => {
+          for (let examination of examinations) {
+            this.linkExaminationWithAppointment(x, examination);
           }
           // TODO Reminders currently being ignored on update
         },
-        e => { console.log('onError: %o', e); },
+        (e) => { console.log('onError: %o', e); },
         () => { console.log('Completed update.'); }
       );
     }
@@ -219,7 +224,10 @@ export class AppointmentDetailComponent {
    * Used to display patients in the suggestions drop down.
    */
   public patientDisplayFn(patient: Patient): string {
-    return patient ? `${patient.givenName} ${patient.surname} (${moment(patient.dateOfBirth).format('l')})` : null;
+    return patient ?
+      `${patient.givenName} ${patient.surname} ` +
+      `(${moment(patient.dateOfBirth).format('l')})`
+      : null;
   }
 
   /**
@@ -242,8 +250,10 @@ export class AppointmentDetailComponent {
       examination.id.toString(),
       appointment.id.toString())
     .subscribe(
-      x => console.log(`Linked examination ${x.examinationId} with appointment ${x.appointmentId}`),
-      e => console.log(e),
+      (x) => console.log(
+        `Linked examination ${x.examinationId} with appointment ${x.appointmentId}`
+      ),
+      (e) => console.log(e),
       () => console.log('Completed linking examination with appointment.')
     );
   }
@@ -252,22 +262,24 @@ export class AppointmentDetailComponent {
     this.roomService
     .roomFind()
     .subscribe(
-      x => this.rooms = x,
-      e => console.log(e),
+      (x) => this.rooms = x,
+      (e) => console.log(e),
       () => console.log('Get all rooms complete.')
     );
   }
 
   private filterPatients(val: string): Patient[] {
-    return val ? this.patients.filter((patient) => new RegExp(val, 'gi').test(`${patient.surname} ${patient.givenName}`)) : this.patients;
+    return val ? this.patients.filter(
+      (patient) => new RegExp(val, 'gi').test(`${patient.surname} ${patient.givenName}`)
+    ) : this.patients;
   }
 
   private findExaminations(event) {
     this.examinationService
     .examinationFind(`{"where": {"name": {"regexp": "${event.query}/i"}}}`)
     .subscribe(
-      x => this.filteredExaminations = x,
-      e => console.log(e),
+      (x) => this.filteredExaminations = x,
+      (e) => console.log(e),
       () => console.log('Completed querying for examinations.')
     );
   }
@@ -286,8 +298,8 @@ export class AppointmentDetailComponent {
       roomId,
       startDate ? startDate.toDate() : undefined)
     .subscribe(
-      x => this.proposedTimeSlots.push(x),
-      e => console.log(e),
+      (x) => this.proposedTimeSlots.push(x),
+      (e) => console.log(e),
       () => console.log('Completed querying for the next free time slot.')
     );
   }
@@ -376,7 +388,7 @@ export class AppointmentDetailComponent {
   private sanitizeDuration(val: string) {
     if (val) {
       // Strip any whitespaces from anywhere
-      val = val.replace(/\s/g, "");
+      val = val.replace(/\s/g, '');
       // Check different types of input
       if (/^[0-9]$/.test(val)) {
         val = val + 'H';

@@ -58,7 +58,7 @@ export class CantyCTIService {
   }
 
   public requestCall(phoneNumber: String) {
-    this.socket.emit(EVENT_KEY_CALL_REQUEST, { phoneNumber: phoneNumber });
+    this.socket.emit(EVENT_KEY_CALL_REQUEST, { phoneNumber });
     console.log(`Requested to call ${phoneNumber}.`);
   }
 

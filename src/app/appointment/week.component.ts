@@ -9,9 +9,7 @@ import { ViewAppointmentService } from './appointment.service';
 import { PatientService }         from '../api/api/patient.service';
 
 import * as moment                from 'moment';
-
 import { Schedule }               from 'primeng/primeng';
-
 
 @Component({
   templateUrl: './week.component.html',
@@ -20,28 +18,31 @@ import { Schedule }               from 'primeng/primeng';
 
 export class WeekComponent implements OnInit {
 
-  private appointments: ViewAppointment[];
-  private locale: string;
-  private hiddenDays: number[];
-  private viewDate: moment.Moment;
-  private minTime: moment.Duration = moment.duration('07:00:00');
-  private maxTime: moment.Duration = moment.duration('20:00:00');
-  private viewMode: String = 'basicWeek';
-  private refreshCalendar: boolean = false; // Tiny hack to get fullcalendar to refresh
+  public appointments: ViewAppointment[];
+  public locale: string;
+  public hiddenDays: number[] = [ 0 ]; // Hide Sundays by default
+  public viewDate: moment.Moment = moment(); // Now
+  public minTime: moment.Duration = moment.duration('07:00:00');
+  public maxTime: moment.Duration = moment.duration('20:00:00');
+  public viewMode: String = 'basicWeek';
+  public refreshCalendar: boolean = false; // Tiny hack to get fullcalendar to refresh
+
   @ViewChild(Schedule) private schedule: Schedule;
 
   constructor(
     private _state: AppState,
     private router: Router,
     private viewAppointmentService: ViewAppointmentService,
-    private patientService: PatientService) {}
+    private patientService: PatientService
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     // Mouseflow integration
-    if ((<any>window)._mfq) {
-      (<any>window)._mfq.push(['newPageView', '/appointment/week']);
+    if ((<any> window)._mfq) {
+      (<any> window)._mfq.push(['newPageView', '/appointment/week']);
     }
-    this.viewDate = moment();
+
+    // Set up page
     this._state.isSubPage.next(false);
     this._state.title.next(this.getTitleFromViewDate());
     this._state.actions.next(this.getActions('agendaWeek'));
@@ -49,27 +50,29 @@ export class WeekComponent implements OnInit {
       icon: 'add',
       routerLink: 'appointment/add'
     });
-    this.getAllAppointments();
+
+    // Set up calendar view
     this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
-    this.hiddenDays = [ 0 ]; // Hide Sundays by default
+
+    // Retrieve data to be displayed
+    this.getAllAppointments();
+  }
+
+  /**
+   * Triggered when a calendar event is clicked.
+   */
+  public handleEventClick(event) {
+    this.router.navigate(['appointment', event.calEvent.id]);
   }
 
   private getAllAppointments(): void {
     this.viewAppointmentService
     .appointmentFind()
     .subscribe(
-      x => this.appointments = x,
-      e => console.log(e),
+      (x) => this.appointments = x,
+      (e) => console.log(e),
       () => console.log('Get all appointments complete')
     );
-  }
-
-  private eventDataTransform(eventData) {
-    eventData.title = eventData.patientId;
-  }
-
-  private handleEventClick(event) {
-    this.router.navigate(['appointment', event.calEvent.id]);
   }
 
   private handleNextClick() {

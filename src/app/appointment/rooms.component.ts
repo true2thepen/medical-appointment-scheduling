@@ -1,45 +1,47 @@
-import { Component, OnInit }  from '@angular/core';
-import { ViewChildren }       from '@angular/core';
-import { QueryList }          from '@angular/core';
-import { Router }             from '@angular/router';
-import { AppState }           from '../app.service';
+import { Component, OnInit }      from '@angular/core';
+import { ViewChildren }           from '@angular/core';
+import { QueryList }              from '@angular/core';
+import { Router }                 from '@angular/router';
 
-import { Appointment }        from '../api/model/appointment';
+import * as moment                from 'moment';
+import { Schedule }               from 'primeng/primeng';
+
+import { AppState }               from '../app.service';
+import { Appointment }            from '../api/model/appointment';
 import { ViewAppointmentService } from './appointment.service';
-import { Room }               from '../api/model/room';
-import { RoomService }        from '../api/api/room.service';
-
-import * as moment            from 'moment';
-
-import { Schedule }           from 'primeng/primeng';
+import { Room }                   from '../api/model/room';
+import { RoomService }            from '../api/api/room.service';
 
 @Component({
-  templateUrl: './appointment-rooms.component.html',
-  styleUrls: [ './appointment-rooms.component.scss' ]
+  templateUrl: './rooms.component.html',
+  styleUrls: [ './rooms.component.scss' ]
 })
 
 export class AppointmentRoomsComponent implements OnInit {
 
-  private appointmentsByRoom: Appointment[][] = [[]];
-  private rooms: Room[];
-  private locale: string;
-  private minTime: moment.Duration = moment.duration('07:00:00');
-  private maxTime: moment.Duration = moment.duration('20:00:00');
-  private viewDate: moment.Moment;
+  public appointmentsByRoom: Appointment[][] = [[]];
+  public rooms: Room[];
+  public locale: string;
+  public minTime: moment.Duration = moment.duration('07:00:00');
+  public maxTime: moment.Duration = moment.duration('20:00:00');
+  public viewDate: moment.Moment = moment();
+
   @ViewChildren(Schedule) private schedules: QueryList<Schedule>;
 
   constructor(
     private _state: AppState,
     private router: Router,
     private viewAppointmentService: ViewAppointmentService,
-    private roomService: RoomService) {}
+    private roomService: RoomService
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     // Mouseflow integration
-    if ((<any>window)._mfq) {
-      (<any>window)._mfq.push(['newPageView', '/appointment/rooms']);
+    if ((<any> window)._mfq) {
+      (<any> window)._mfq.push(['newPageView', '/appointment/rooms']);
     }
-    this.viewDate = moment();
+
+    // Set up page
     this._state.isSubPage.next(false);
     this._state.title.next(this.viewDate.format('LL'));
     this._state.actions.next([
@@ -60,16 +62,27 @@ export class AppointmentRoomsComponent implements OnInit {
       icon: 'add',
       routerLink: 'appointment/add'
     });
+
+    // Retrieve data
     this.getAllRooms();
+
+    // Set up calendar view
     this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
+  }
+
+  /**
+   * Triggered when a calendar event is clicked.
+   */
+  public handleEventClick(event) {
+    this.router.navigate(['appointment', event.calEvent.id]);
   }
 
   private getAppointmentsByRoom(room: Room): void {
     this.viewAppointmentService
     .appointmentFind(`{"where": {"roomId": "${room.id}"}}`)
     .subscribe(
-      x => this.appointmentsByRoom[room.id] = x,
-      e => console.log(e),
+      (x) => this.appointmentsByRoom[room.id] = x,
+      (e) => console.log(e),
       () => console.log(`Get all appointments for room ${room.name} complete`)
     );
   }
@@ -78,19 +91,15 @@ export class AppointmentRoomsComponent implements OnInit {
     this.roomService
     .roomFind()
     .subscribe(
-      x =>  {
+      (x) =>  {
         this.rooms = x;
         for (let room of x) {
           this.getAppointmentsByRoom(room);
         }
       },
-      e => console.log(e),
+      (e) => console.log(e),
       () => console.log('Get all rooms complete')
     );
-  }
-
-  private handleEventClick(event) {
-    this.router.navigate(['appointment', event.calEvent.id]);
   }
 
   private handleNextClick() {

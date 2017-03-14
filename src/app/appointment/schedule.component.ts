@@ -1,29 +1,28 @@
-import { Component, OnInit }  from '@angular/core';
-import { ViewChild }          from '@angular/core';
-import { Router }             from '@angular/router';
-import { AppState }           from '../app.service';
+import { Component, OnInit }      from '@angular/core';
+import { ViewChild }              from '@angular/core';
+import { Router }                 from '@angular/router';
 
-import { ViewAppointment }    from './appointment.viewmodel';
-import { Appointment }        from '../api/model/appointment';
+import * as moment                from 'moment';
+import { Schedule }               from 'primeng/primeng';
+
+import { AppState }               from '../app.service';
+import { ViewAppointment }        from './appointment.viewmodel';
+import { Appointment }            from '../api/model/appointment';
 import { ViewAppointmentService } from './appointment.service';
-import { PatientService }     from '../api/api/patient.service';
-
-import * as moment            from 'moment';
-
-import { Schedule }           from 'primeng/primeng';
-
+import { PatientService }         from '../api/api/patient.service';
 
 @Component({
-  templateUrl: './appointment-schedule.component.html',
-  styleUrls: [ './appointment-schedule.component.scss' ]
+  templateUrl: './schedule.component.html',
+  styleUrls: [ './schedule.component.scss' ]
 })
 
 export class AppointmentScheduleComponent implements OnInit {
 
-  private appointments: ViewAppointment[];
-  private locale: string;
-  private hiddenDays: number[];
-  private viewDate: moment.Moment;
+  public appointments: ViewAppointment[];
+  public locale: string;
+  public hiddenDays: number[] = [ 0 ]; // Hide Sundays by default
+  public viewDate: moment.Moment = moment();
+
   @ViewChild(Schedule) private schedule: Schedule;
 
   constructor(
@@ -32,12 +31,13 @@ export class AppointmentScheduleComponent implements OnInit {
     private viewAppointmentService: ViewAppointmentService,
     private patientService: PatientService) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     // Mouseflow integration
-    if ((<any>window)._mfq) {
-      (<any>window)._mfq.push(['newPageView', '/appointment/']);
+    if ((<any> window)._mfq) {
+      (<any> window)._mfq.push(['newPageView', '/appointment/']);
     }
-    this.viewDate = moment();
+
+    // Set up page
     this._state.isSubPage.next(false);
     this._state.title.next(this.viewDate.format('MMMM YYYY'));
     this._state.actions.next([
@@ -58,27 +58,29 @@ export class AppointmentScheduleComponent implements OnInit {
       icon: 'add',
       routerLink: 'appointment/add'
     });
+
+    // Retrieve data
     this.getAllAppointments();
+
+    // Set up calendar view
     this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
-    this.hiddenDays = [ 0 ]; // Hide Sundays by default
+  }
+
+  /**
+   * Triggered when a calendar event is clicked.
+   */
+  public handleEventClick(event) {
+    this.router.navigate(['appointment', event.calEvent.id]);
   }
 
   private getAllAppointments(): void {
     this.viewAppointmentService
     .appointmentFind()
     .subscribe(
-      x => this.appointments = x,
-      e => console.log(e),
+      (x) => this.appointments = x,
+      (e) => console.log(e),
       () => console.log('Get all appointments complete')
     );
-  }
-
-  private eventDataTransform(eventData) {
-    eventData.title = eventData.patientId;
-  }
-
-  private handleEventClick(event) {
-    this.router.navigate(['appointment', event.calEvent.id]);
   }
 
   private handleNextClick() {

@@ -17,8 +17,8 @@ import { CantyCTIService }              from './cantyCti.service';
 import { AppointmentModule }            from './appointment/appointment.module';
 import { HomeModule }                   from './home/home.module';
 import { AboutComponent }               from './about/about.component';
-import { NoContent }                    from './no-content';
-import { XLarge }                       from './home/x-large';
+import { NoContentComponent }           from './no-content/no-content.component';
+import { XLargeDirective }              from './home/x-large/x-large.directive';
 
 @NgModule({
   imports: [
@@ -34,8 +34,8 @@ import { XLarge }                       from './home/x-large';
   declarations: [
     AppComponent,
     AboutComponent,
-    NoContent,
-    XLarge
+    NoContentComponent,
+    XLargeDirective
   ],
   providers: [
     AppState,

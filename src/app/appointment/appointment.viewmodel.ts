@@ -7,26 +7,26 @@ import { Room }               from '../api/model/room';
 export class ViewAppointment implements Appointment {
 
   // Implemented properties
-  created: Date;
-  createdBy: number;
-  description: string;
-  end: Date;
-  id: number;
-  modified: Date;
-  modifiedBy: number;
-  patientId: number;
-  roomId: number;
-  start: Date;
-  title: string;
+  public created: Date;
+  public createdBy: number;
+  public description: string;
+  public end: Date;
+  public id: number;
+  public modified: Date;
+  public modifiedBy: number;
+  public patientId: number;
+  public roomId: number;
+  public start: Date;
+  public title: string;
 
   // Additional properties
-  attendance: Attendance;
-  examinations: Examination[];
-  patient: Patient;
-  room: Room;
-  backgroundColor: string;
-  borderColor: string;
-  color: string;
+  public attendance: Attendance;
+  public examinations: Examination[];
+  public patient: Patient;
+  public room: Room;
+  public backgroundColor: string;
+  public borderColor: string;
+  public color: string;
 
   constructor(data?: Appointment) {
     if (data) {

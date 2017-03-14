@@ -79,7 +79,6 @@ type AsyncRoutes = {
                          FactoryPromise
 };
 
-
 type IdleCallbacks = Es6PromiseLoader |
                              Function |
               FactoryEs6PromiseLoader |
@@ -100,7 +99,6 @@ interface WebpackModule {
     removeStatusHandler(callback?: (status?: string) => void): void;
   };
 }
-
 
 interface WebpackRequire {
     (id: string): any;

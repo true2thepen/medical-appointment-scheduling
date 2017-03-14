@@ -12,7 +12,7 @@ export class ViewAppointmentService {
 
   public appointmentFind(
     filter?: string,
-    extraHttpRequestParams?: any): Observable<Array<ViewAppointment>> {
+    extraHttpRequestParams?: any): Observable<ViewAppointment[]> {
 
     return this.appointmentService.appointmentFindDeep(filter, extraHttpRequestParams)
       .map((x, idx) => {
@@ -45,7 +45,7 @@ export class ViewAppointmentService {
 
   public appointmentFindAnonymous(
     filter?: string,
-    extraHttpRequestParams?: any): Observable<Array<ViewAppointment>> {
+    extraHttpRequestParams?: any): Observable<ViewAppointment[]> {
 
     return this.appointmentService.appointmentFindDeep(filter, extraHttpRequestParams)
       .map((x, idx) => {
@@ -70,5 +70,3 @@ export class ViewAppointmentService {
       });
   }
 }
-
-

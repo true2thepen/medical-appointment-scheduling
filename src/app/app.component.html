@@ -45,7 +45,7 @@
     <button *ngIf="!isSubPage" md-icon-button (click)="sidenav.toggle()">
       <md-icon>menu</md-icon>
     </button>
-    <button *ngIf="isSubPage" md-icon-button (click)="_location.back()">
+    <button *ngIf="isSubPage" md-icon-button (click)="navigateBack()">
       <md-icon>arrow_back</md-icon>
     </button>
     {{title}}

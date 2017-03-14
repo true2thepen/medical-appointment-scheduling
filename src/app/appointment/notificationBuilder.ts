@@ -1,10 +1,10 @@
-import { Appointment }           from '../api/model/appointment';
-import { Notification }          from '../api/model/notification';
-import { NotificationTransport } from '../api/model/notificationTransport';
-
 import * as Handlebars           from 'handlebars/dist/handlebars';
 import * as later                from 'later';
 import * as moment               from 'moment';
+
+import { Appointment }           from '../api/model/appointment';
+import { Notification }          from '../api/model/notification';
+import { NotificationTransport } from '../api/model/notificationTransport';
 
 export class NotificationBuilder {
   public static getNotification(
@@ -42,8 +42,8 @@ export class NotificationBuilder {
     }
 
     return {
-      schedule: schedule,
-      transports: transports,
+      schedule,
+      transports,
       subject: emailAddress ? 'Your appointment tomorrow' : undefined,
       contentHtml: NotificationBuilder.contentHtml(appointment),
       contentText: NotificationBuilder.contentText(appointment),

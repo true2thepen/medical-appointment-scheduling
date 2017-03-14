@@ -53,13 +53,6 @@ export class AppState {
     }
   }
 
-  /**
-   * This sets the locale for all newly create moments globally.
-   */
-  private setMomentLocale(locale: string) {
-    moment.locale(locale);
-  }
-
   // already return a clone of the current state
   public get state() {
     return this._state = this._clone(this._state);
@@ -78,6 +71,13 @@ export class AppState {
   public set(prop: string, value: any) {
     // internally mutate our state
     return this._state[prop] = value;
+  }
+
+  /**
+   * This sets the locale for all newly create moments globally.
+   */
+  private setMomentLocale(locale: string) {
+    moment.locale(locale);
   }
 
   private _clone(object: InternalStateType) {
