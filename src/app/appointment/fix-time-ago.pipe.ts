@@ -1,23 +1,25 @@
+/* tslint:disable max-classes-per-file */
+
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
  * Raise the value exponentially
  * Takes an exponent argument that defaults to 1.
  * Usage:
- *   value | fixTimeAgoToSince
+ *   value | medFixTimeAgoToSince
  * Example:
- *   {{ vor 10 Minuten |  fixTimeAgoToSince}}
+ *   {{ vor 10 Minuten |  medFixTimeAgoToSince}}
  *   formats to: seit 10 Minuten
  *
- *   {{ 10 minutes ago |  fixTimeAgoToSince}}
+ *   {{ 10 minutes ago |  medFixTimeAgoToSince}}
  *   formats to: since 10 minutes
  */
-@Pipe({name: 'fixTimeAgoToSince'})
+@Pipe({name: 'medFixTimeAgoToSince'})
 export class FixTimeAgoToSincePipe implements PipeTransform {
 
   private locale: string = localStorage.getItem('locale');
 
-  transform(value: string): string {
+  public transform(value: string): string {
     if (this.locale.startsWith('de')) {
       return value.replace('vor', 'seit');
     } else if (this.locale.startsWith('en')) {
@@ -31,20 +33,20 @@ export class FixTimeAgoToSincePipe implements PipeTransform {
  * Raise the value exponentially
  * Takes an exponent argument that defaults to 1.
  * Usage:
- *   value | fixTimeAgoToFor
+ *   value | medFixTimeAgoToFor
  * Example:
- *   {{ vor 10 Minuten |  fixTimeAgoToFor}}
+ *   {{ vor 10 Minuten |  medFixTimeAgoToFor}}
  *   formats to: 10 Minuten
  *
- *  {{ 10 minutes ago |  fixTimeAgoToFor}}
+ *  {{ 10 minutes ago |  medFixTimeAgoToFor}}
  *   formats to: for 10 minutes
  */
-@Pipe({name: 'fixTimeAgoToFor'})
+@Pipe({name: 'medFixTimeAgoToFor'})
 export class FixTimeAgoToForPipe implements PipeTransform {
 
   private locale: string = localStorage.getItem('locale');
 
-  transform(value: string): string {
+  public transform(value: string): string {
     if (this.locale.startsWith('de')) {
       return value.replace('vor', '');
     } else if (this.locale.startsWith('en')) {
@@ -53,4 +55,3 @@ export class FixTimeAgoToForPipe implements PipeTransform {
   }
 
 }
-

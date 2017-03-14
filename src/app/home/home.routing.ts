@@ -7,4 +7,3 @@ const homeRoutes: Routes = [
 ];
 
 export const homeRouting = RouterModule.forChild(homeRoutes);
-

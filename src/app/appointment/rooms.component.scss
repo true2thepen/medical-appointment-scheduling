@@ -1,0 +1,10 @@
+
+@import 'appointment.style';
+
+:host /deep/ figure {
+  align-items: flex-start!important;
+}
+
+md-grid-list {
+  margin: 12px;
+}

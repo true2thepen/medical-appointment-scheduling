@@ -4,6 +4,8 @@ import { FormsModule }                  from '@angular/forms';
 import { HttpModule }                   from '@angular/http';
 import { MaterialModule }               from '@angular/material';
 
+import { Md2Module }                    from 'md2';
+
 import { BASE_PATH }                    from './api/variables';
 import { CANTY_CTI_HOST }               from './cantyCti.service';
 
@@ -15,8 +17,8 @@ import { CantyCTIService }              from './cantyCti.service';
 import { AppointmentModule }            from './appointment/appointment.module';
 import { HomeModule }                   from './home/home.module';
 import { AboutComponent }               from './about/about.component';
-import { NoContent }                    from './no-content';
-import { XLarge }                       from './home/x-large';
+import { NoContentComponent }           from './no-content/no-content.component';
+import { XLargeDirective }              from './home/x-large/x-large.directive';
 
 @NgModule({
   imports: [
@@ -26,13 +28,14 @@ import { XLarge }                       from './home/x-large';
     AppointmentModule,
     HomeModule,
     MaterialModule.forRoot(),
+    Md2Module.forRoot(),
     AppRoutingModule
   ],
   declarations: [
     AppComponent,
     AboutComponent,
-    NoContent,
-    XLarge
+    NoContentComponent,
+    XLargeDirective
   ],
   providers: [
     AppState,

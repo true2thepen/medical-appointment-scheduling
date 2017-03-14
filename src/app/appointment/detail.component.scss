@@ -1,0 +1,96 @@
+@import 'appointment.style';
+@import 'md2-theming';
+
+/deep/ .ng-invalid {
+  color: red;
+}
+
+/deep/ .ng-invalid.ng-untouched {
+  color: unset;
+}
+
+/deep/ .ng-invalid.ng-touched {
+  color: red;
+}
+
+/deep/ span.md-slide-toggle-content {
+  font-weight: bold !important;
+  font-size: 1.17em !important;
+}
+
+select {
+  font: inherit;
+  border: 1px solid darkgrey;
+  background-color: transparent;
+  margin-top: 16px;
+  margin-left: 16px;
+}
+
+.example-input-hint {
+  color: transparentize(black, .54) !important;
+}
+
+.patient-input {
+  width: 50%;
+}
+
+.title-input {
+  width: 50%;
+}
+
+.description-input-container {
+  width: 100%;
+}
+
+.description-textarea {
+  height: 50px;
+}
+
+.room-select {
+  width: 30%;
+}
+
+/deep/ .md2-tag-add {
+  width: 100%; // Required to make the examination's input and suggestions field 100%
+}
+
+.label {
+    color: rgba(black, 0.4);
+}
+
+.description {
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(black, 0.4);
+  margin-left: 10px;
+}
+
+.section-reminders {
+  margin-top: 48px;
+}
+
+.md-checkbox-div {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.padding-top-24 {
+  padding-top: 24px;
+}
+
+/* do not group these rules */
+*::-webkit-input-placeholder {
+    color: red;
+}
+*:-moz-placeholder {
+    /* FF 4-18 */
+    color: red;
+}
+*::-moz-placeholder {
+    /* FF 19+ */
+    color: red;
+}
+*:-ms-input-placeholder {
+    /* IE 10+ */
+    color: red;
+}

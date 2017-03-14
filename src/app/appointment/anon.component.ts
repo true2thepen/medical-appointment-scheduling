@@ -1,62 +1,64 @@
 import { Component, OnInit }      from '@angular/core';
 import { ViewChild }              from '@angular/core';
-import { Router }                 from '@angular/router';
-import { AppState, Action }       from '../app.service';
 
+import * as moment                from 'moment';
+import { Schedule }               from 'primeng/primeng';
+
+import { AppState, Action }       from '../app.service';
 import { ViewAppointment }        from './appointment.viewmodel';
 import { Appointment }            from '../api/model/appointment';
 import { ViewAppointmentService } from './appointment.service';
 import { PatientService }         from '../api/api/patient.service';
 
-import * as moment                from 'moment';
-
-import { Schedule }               from 'primeng/primeng';
-
-
 @Component({
-  templateUrl: './anon.html',
-  styleUrls: [ './anon.style.scss' ]
+  templateUrl: './anon.component.html',
+  styleUrls: [ './anon.component.scss' ]
 })
 
 export class AnonComponent implements OnInit {
 
-  private appointments: ViewAppointment[];
-  private locale: string;
-  private hiddenDays: number[];
-  private viewDate: moment.Moment;
-  private minTime: moment.Duration = moment.duration('07:00:00');
-  private maxTime: moment.Duration = moment.duration('20:00:00');
-  private viewMode: String = 'basicWeek';
-  private refreshCalendar: boolean = false; // Tiny hack to get fullcalendar to refresh
+  public appointments: ViewAppointment[];
+  public locale: string;
+  public hiddenDays: number[] = [ 0 ]; // Hide Sundays by default
+  public viewDate: moment.Moment = moment();
+  public minTime: moment.Duration = moment.duration('07:00:00');
+  public maxTime: moment.Duration = moment.duration('20:00:00');
+  public viewMode: String = 'basicWeek';
+  public refreshCalendar: boolean = false; // Tiny hack to get fullcalendar to refresh
+
   @ViewChild(Schedule) private schedule: Schedule;
 
   constructor(
     private _state: AppState,
-    private router: Router,
     private viewAppointmentService: ViewAppointmentService,
-    private patientService: PatientService) {}
+    private patientService: PatientService
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     // Mouseflow integration
-    if ((<any>window)._mfq) {
-      (<any>window)._mfq.push(['newPageView', '/appointment/anon']);
+    if ((<any> window)._mfq) {
+      (<any> window)._mfq.push(['newPageView', '/appointment/anon']);
     }
-    this.viewDate = moment();
+
+    // Set up page
     this._state.isSubPage.next(false); // TODO block menu, this should be a dead-end
     this._state.title.next(this.getTitleFromViewDate());
     this._state.actions.next(this.getActions('agendaWeek'));
     this._state.primaryAction.next();
+
+    // Retrieve data
     this.getAllAppointments();
+
+    // Set up calendar view
     this.locale = localStorage.getItem('locale').startsWith('de') ? 'de' : 'en';
-    this.hiddenDays = [ 0 ]; // Hide Sundays by default
   }
 
   private getAllAppointments(): void {
     this.viewAppointmentService
     .appointmentFindAnonymous()
     .subscribe(
-      x => this.appointments = x,
-      e => console.log(e),
+      (x) => this.appointments = x,
+      (e) => console.log(e),
       () => console.log('Get all appointments complete')
     );
   }

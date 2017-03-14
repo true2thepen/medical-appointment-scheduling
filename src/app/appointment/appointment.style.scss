@@ -1,5 +1,4 @@
 @import 'material-fullcalendar';
-@import '../app.style';
 
 .card-centered-600 {
   display: inline-block;
@@ -9,7 +8,30 @@
   margin-top: 16px;
   @media screen and (max-width: 800px) {
     margin-top: 0;
-    max-width: none;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/**
+ * Can be used for section title between centered-600
+ * blocks, e.g. on patient page.
+ */
+.section-title {
+  color: transparentize(black, 0.54);
+  padding: 16px;
+  font-size: small;
+  display: inline-block;
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+  margin-top: 16px;
+
+  @media screen and (max-width: 800px) {
+    margin-top: 24px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
   }
 }
 

@@ -4,6 +4,7 @@ const en: Translation = {
   duration: 'Duration',
   examination: 'Examination',
   patient: 'Patient',
+  patientTooltip: 'Go to patient',
   room: 'Room',
   time: 'Time',
   title: 'Title'
@@ -15,6 +16,7 @@ const de: Translation = {
   duration: 'Dauer',
   examination: 'Behandlung',
   patient: 'Patient',
+  patientTooltip: 'Zum Patienten',
   room: 'Raum',
   time: 'Uhrzeit',
   title: 'Titel'
@@ -26,6 +28,7 @@ export interface Translation {
   duration: string;
   examination: string;
   patient: string;
+  patientTooltip: string;
   room: string;
   time: string;
   title: string;

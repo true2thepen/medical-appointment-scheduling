@@ -1,0 +1,6 @@
+<p-schedule [events]="appointments"
+            header="false"
+            [defaultView]="defaultView"
+            timezone="local"
+            [locale]="locale"
+            (onEventClick)="handleEventClick($event)"></p-schedule>

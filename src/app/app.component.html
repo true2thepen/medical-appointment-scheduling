@@ -1,0 +1,92 @@
+<md-sidenav-container>
+  <md-sidenav mode="over" #sidenav>
+    <md-nav-list>
+      <a [routerLink]="['./appointment/attendance']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>people</md-icon>
+        <span md-line i18n>Attendance List</span>
+      </a>
+      <a [routerLink]="['./appointment']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_module</md-icon>
+        <span md-line i18n>Month</span>
+      </a>
+      <a [routerLink]="['./appointment/week']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_week</md-icon>
+        <span md-line i18n>Week</span>
+      </a>
+      <a [routerLink]="['./appointment/today']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_day</md-icon>
+        <span md-line i18n>Today</span>
+      </a>
+      <a [routerLink]="['./appointment/rooms']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>view_list</md-icon>
+        <span md-line i18n>Rooms</span>
+      </a>
+      <a [routerLink]="['./appointment/statistics']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>show_chart</md-icon>
+        <span md-line i18n>Statistics</span>
+      </a>
+      <md-divider></md-divider>
+      <a [routerLink]="['./appointment/anon']" (click)="sidenav.close()" md-list-item>
+        <md-icon md-list-icon>visibility_off</md-icon>
+        <span md-line i18n>Anonymized View</span>
+      </a>
+    </md-nav-list>
+  </md-sidenav>
+
+  <!-- FAB in lower right corner -->
+  <button *ngIf="primaryAction" md-fab class="example-fab"
+          (click)="actionsHandler(primaryAction)"
+          [routerLink]="primaryAction.routerLink">
+      <md-icon class="md-24">{{primaryAction.icon}}</md-icon>
+  </button>
+
+  <!-- App toolbar (on the top of the page) -->
+  <md-toolbar color="primary" class="mat-elevation-z6">
+    <button *ngIf="!isSubPage" md-icon-button (click)="sidenav.toggle()">
+      <md-icon>menu</md-icon>
+    </button>
+    <button *ngIf="isSubPage" md-icon-button (click)="navigateBack()">
+      <md-icon>arrow_back</md-icon>
+    </button>
+    {{title}}
+    <span class="md-toolbar-fill-remaining-space"></span>
+
+    <button *ngFor="let action of actions" md-icon-button (click)="actionsHandler(action)">
+        <md-icon class="md-24">{{action.icon}}</md-icon>
+    </button>
+
+    <button md-icon-button [md-menu-trigger-for]="menu">
+       <md-icon>more_vert</md-icon>
+    </button>
+
+    <md-menu x-position="before" #menu="mdMenu">
+      <button i18n md-menu-item (click)="insertTestExaminations()">
+        Insert Test-Examinations
+      </button>
+      <button i18n md-menu-item (click)="insertTestRooms()">Insert Test-Rooms</button>
+      <button i18n md-menu-item (click)="insertTestPatients()">Insert Test-Patients</button>
+      <md-divider></md-divider>
+      <button i18n md-menu-item (click)="createRandomAppointments()">
+        Create random appointments
+      </button>
+      <button i18n md-menu-item (click)="createRandomAttendances()">
+        Create random attendances
+      </button>
+      <md-divider></md-divider>
+      <button i18n md-menu-item (click)="deleteAllAppointments()">Delete All Appointments</button>
+      <button i18n md-menu-item (click)="deleteAllAttendances()">Delete All Attendances</button>
+      <button i18n md-menu-item (click)="deleteAllRooms()">Delete All Rooms</button>
+      <button i18n md-menu-item (click)="deleteAllPatients()">Delete All Patients</button>
+      <button i18n md-menu-item (click)="deleteAllExaminations()">Delete All Examinations</button>
+    </md-menu>
+  </md-toolbar>
+
+  <!-- Main content -->
+  <div class="my-content">
+    <div class="toolbar-placeholder-fix"></div>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+</md-sidenav-container>

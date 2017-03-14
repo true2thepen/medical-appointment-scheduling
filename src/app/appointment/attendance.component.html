@@ -1,0 +1,65 @@
+<div id="wrapper" class="card-centered-wrapper">
+  <md-card class="card-centered-600">
+    <h2 i18n="Header for section of scheduled patients">Scheduled</h2>
+    <div *ngIf="!appointmentsScheduled || appointmentsScheduled.length <= 0"
+      i18n="Blank message">No more patients scheduled for today.</div>
+    <md-list>
+      <md-list-item *ngFor="let appointment of appointmentsScheduled">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
+        <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
+        <p md-line class="md-list-third-line" i18n="Appointment scheduled info">
+          Scheduled for {{appointment.start | amDateFormat:'LT'}}, {{appointment.start | amTimeAgo}}
+        </p>
+        <button md-icon-button (click)="requestCall(appointment?.patient?.phone)">
+            <md-icon class="md-24">phone</md-icon>
+        </button>
+        <button md-button (click)="checkIn(appointment)" i18n="Check in button">CHECK IN</button>
+      </md-list-item>
+    </md-list>
+
+    <h2 i18n="Header for section of waiting patients">Waiting</h2>
+    <div *ngIf="!appointmentsCheckedIn || appointmentsCheckedIn.length <= 0"
+      i18n="Blank message">No patients waiting at the moment.</div>
+    <md-list>
+      <md-list-item *ngFor="let appointment of appointmentsCheckedIn">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
+        <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
+        <p md-line class="md-list-third-line" i18n="Appointment waiting duration info">
+          Waiting {{appointment?.attendance?.checkedIn | amTimeAgo | medFixTimeAgoToSince}}
+        </p>
+        <button md-button (click)="underTreatment(appointment)" i18n="Under treatment button">UNDER TREATMENT</button>
+      </md-list-item>
+    </md-list>
+
+    <h2 i18n="Header for section of patients under treatment">Under Treatment</h2>
+    <div *ngIf="!appointmentsUnderTreatment || appointmentsUnderTreatment.length <= 0"
+      i18n="Blank message">No patients under treatment.</div>
+    <md-list>
+      <md-list-item *ngFor="let appointment of appointmentsUnderTreatment">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
+        <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
+        <p md-line class="md-list-third-line" i18n="Appointment under treatment duration info">
+          Under treatment {{appointment?.attendance?.underTreatment | amTimeAgo | medFixTimeAgoToSince}}
+        </p>
+        <button md-button (click)="checkOut(appointment)" i18n="Check out button">CHECK OUT</button>
+      </md-list-item>
+    </md-list>
+
+    <h2 i18n="Header for section of finished patients">Finished</h2>
+    <div *ngIf="!appointmentsFinished || appointmentsFinished.length <= 0"
+      i18n="Blank message">No patients finished yet.</div>
+    <md-list>
+      <md-list-item *ngFor="let appointment of appointmentsFinished">
+        <md-icon md-list-avatar>person</md-icon>
+        <h3 md-line>{{appointment?.patient?.givenName}} {{appointment?.patient?.surname}}</h3>
+        <p md-line>{{appointment.examinations && appointment?.examinations[0]?.name}}</p>
+        <p md-line class="md-list-third-line" i18n="Appointment finished duration info">
+          Has been under treatment for {{appointment?.attendance?.finished | amDifference : appointment?.attendance?.underTreatment : 'minutes'}} minutes
+        </p>
+      </md-list-item>
+    </md-list>
+  </md-card>
+</div>
