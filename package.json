@@ -111,7 +111,7 @@
     "@types/core-js": "0.9.35",
     "@types/hammerjs": "2.0.34",
     "@types/handlebars": "^4.0.31",
-    "@types/jasmine": "2.5.41",
+    "@types/jasmine": "2.5.46",
     "@types/jquery": "2.0.39",
     "@types/node": "7.0.4",
     "@types/socket.io-client": "1.4.29",
