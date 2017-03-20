@@ -22,6 +22,7 @@
     "ci:testall": "npm run lint && npm run test && npm run build:prod && npm run e2e && npm run build:aot && npm run e2e",
     "ci:travis": "npm run lint && npm run test && npm run build:aot && npm run e2e:travis",
     "ci": "npm run ci:testall",
+    "ci:noAOTnoE2E": "npm run lint && npm run test && npm run build:prod && npm run build:dev",
     "clean:dll": "npm run rimraf -- dll",
     "clean:aot": "npm run rimraf -- compiled",
     "clean:dist": "npm run rimraf -- dist",
