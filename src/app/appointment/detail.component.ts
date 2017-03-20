@@ -214,9 +214,18 @@ export class AppointmentDetailComponent implements OnInit {
       .appointmentPrototypeUpdateAttributes(this.model.id.toString(), newAppointment)
       .subscribe(
         (x) => {
-          for (let examination of examinations) {
-            this.linkExaminationWithAppointment(x, examination);
-          }
+          // Before linking examinations, we actually have to get rid of existing ones
+          this.appointmentService.appointmentPrototypeDeleteExaminations(String(x.id))
+          .subscribe(
+            null,
+            null,
+            () => {
+              for (let examination of examinations) {
+                this.linkExaminationWithAppointment(x, examination);
+              }
+            }
+          );
+
           // TODO Reminders currently being ignored on update
         },
         (e) => { console.log('onError: %o', e); },
