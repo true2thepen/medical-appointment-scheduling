@@ -3,6 +3,7 @@ import { ViewChild }              from '@angular/core';
 import { Router }                 from '@angular/router';
 
 import * as moment                from 'moment';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
 import { AppState }               from '../app.service';
 import { Appointment }            from '../api/model/appointment';
@@ -22,6 +23,7 @@ export class AppointmentTodayComponent implements OnInit {
   constructor(
     private _state: AppState,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private viewAppointmentService: ViewAppointmentService
   ) {}
 
@@ -55,6 +57,7 @@ export class AppointmentTodayComponent implements OnInit {
   }
 
   private getTodaysAppointments(): void {
+    this.slimLoadingBarService.start();
     let start = moment.utc().startOf('day');
     let end = moment.utc().endOf('day');
     this.viewAppointmentService
@@ -62,7 +65,10 @@ export class AppointmentTodayComponent implements OnInit {
     .subscribe(
       (x) => this.appointments = x,
       (e) => console.log(e),
-      () => console.log('Get today\'s appointments complete')
+      () => {
+        console.log('Get today\'s appointments complete');
+        this.slimLoadingBarService.complete();
+      }
     );
   }
 }

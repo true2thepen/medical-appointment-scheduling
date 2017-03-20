@@ -4,6 +4,7 @@ import { Router }                 from '@angular/router';
 
 import * as moment                from 'moment';
 import { Schedule }               from 'primeng/primeng';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
 import { AppState }               from '../app.service';
 import { ViewAppointment }        from './appointment.viewmodel';
@@ -28,6 +29,7 @@ export class AppointmentScheduleComponent implements OnInit {
   constructor(
     private _state: AppState,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private viewAppointmentService: ViewAppointmentService,
     private patientService: PatientService) {}
 
@@ -74,12 +76,16 @@ export class AppointmentScheduleComponent implements OnInit {
   }
 
   private getAllAppointments(): void {
+    this.slimLoadingBarService.start();
     this.viewAppointmentService
     .appointmentFind()
     .subscribe(
       (x) => this.appointments = x,
       (e) => console.log(e),
-      () => console.log('Get all appointments complete')
+      () => {
+        console.log('Get all appointments complete');
+        this.slimLoadingBarService.complete();
+      }
     );
   }
 

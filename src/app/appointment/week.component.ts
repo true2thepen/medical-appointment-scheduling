@@ -3,13 +3,14 @@ import { ViewChild }              from '@angular/core';
 import { Router }                 from '@angular/router';
 import { AppState, Action }       from '../app.service';
 
+import * as moment                from 'moment';
+import { Schedule }               from 'primeng/primeng';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
+
 import { ViewAppointment }        from './appointment.viewmodel';
 import { Appointment }            from '../api/model/appointment';
 import { ViewAppointmentService } from './appointment.service';
 import { PatientService }         from '../api/api/patient.service';
-
-import * as moment                from 'moment';
-import { Schedule }               from 'primeng/primeng';
 
 @Component({
   templateUrl: './week.component.html',
@@ -32,6 +33,7 @@ export class WeekComponent implements OnInit {
   constructor(
     private _state: AppState,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private viewAppointmentService: ViewAppointmentService,
     private patientService: PatientService
   ) {}
@@ -66,12 +68,16 @@ export class WeekComponent implements OnInit {
   }
 
   private getAllAppointments(): void {
+    this.slimLoadingBarService.start();
     this.viewAppointmentService
     .appointmentFind()
     .subscribe(
       (x) => this.appointments = x,
       (e) => console.log(e),
-      () => console.log('Get all appointments complete')
+      () => {
+        console.log('Get all appointments complete');
+        this.slimLoadingBarService.complete();
+      }
     );
   }
 

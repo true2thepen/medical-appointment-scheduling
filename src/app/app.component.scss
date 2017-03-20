@@ -1,5 +1,6 @@
 @import '~@angular/material/core/theming/theming';
 @import 'app.theme';
+@import '~ng2-slim-loading-bar/bundles/style';
 
 md-sidenav-container, .my-content {
   margin: 0;
@@ -36,4 +37,17 @@ md-sidenav-container, .my-content {
 
 .md-toolbar-fill-remaining-space {
   flex: 1 1 auto;
+}
+
+.slim-loading-bar {
+  position: absolute;
+  top: 64px;
+  z-index: 9999;
+  width: 100%;
+}
+
+@media (max-width:600px) {
+  .slim-loading-bar {
+    top: 56px;
+  }
 }

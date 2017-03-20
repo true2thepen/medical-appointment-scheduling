@@ -2,6 +2,7 @@ import { Component, OnInit }      from '@angular/core';
 import { ActivatedRoute }         from '@angular/router';
 
 import * as moment                from 'moment';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
 import { AppState }               from '../app.service';
 import { Appointment }            from '../api/model/appointment';
@@ -19,6 +20,7 @@ export class AcceptOfferComponent implements OnInit {
   constructor(
     private _state: AppState,
     private route: ActivatedRoute,
+    private slimLoadingBarService: SlimLoadingBarService,
     private appointmentService: AppointmentService
   ) {}
 
@@ -36,6 +38,7 @@ export class AcceptOfferComponent implements OnInit {
     this._state.primaryAction.next();
 
     // Retrieve data
+    this.slimLoadingBarService.start();
     this.appointmentService.appointmentAcceptOffer(this.route.snapshot.params['secret'])
     .subscribe(
       (appointment) => this.acceptedAppointment = appointment,
@@ -47,7 +50,10 @@ export class AcceptOfferComponent implements OnInit {
           console.log(err);
         }
       },
-      () => console.log('Accepted offer successfully.')
+      () => {
+        this.slimLoadingBarService.complete();
+        console.log('Accepted offer successfully.');
+      }
     );
   }
 

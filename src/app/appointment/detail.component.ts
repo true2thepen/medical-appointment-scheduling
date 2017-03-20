@@ -10,7 +10,7 @@ import { ActivatedRoute, Router }  from '@angular/router';
 
 import { AutoComplete }            from 'primeng/primeng';
 import { Observable }              from 'rxjs';
-
+import { SlimLoadingBarService }   from 'ng2-slim-loading-bar';
 import * as moment                 from 'moment';
 import * as humanizeDuration       from 'humanize-duration';
 
@@ -73,6 +73,7 @@ export class AppointmentDetailComponent implements OnInit {
     private _state: AppState,
     private route: ActivatedRoute,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private appointmentService: AppointmentService,
     private examinationService: ExaminationService,
     private roomService: RoomService,
@@ -145,6 +146,7 @@ export class AppointmentDetailComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.slimLoadingBarService.start();
     let newAppointment: Appointment  = {
       title: this.model.title,
       description: this.model.description,
@@ -197,7 +199,13 @@ export class AppointmentDetailComponent implements OnInit {
 
         },
         (e) => { console.log('onError: %o', e); },
-        () => { console.log('Completed insert.'); }
+        () => {
+          this.slimLoadingBarService.complete();
+          console.log('Completed insert.');
+
+          // Navigate back to schedule view
+          this.router.navigateByUrl('appointment');
+        }
       );
 
     // ...or update
@@ -212,12 +220,15 @@ export class AppointmentDetailComponent implements OnInit {
           // TODO Reminders currently being ignored on update
         },
         (e) => { console.log('onError: %o', e); },
-        () => { console.log('Completed update.'); }
+        () => {
+          this.slimLoadingBarService.complete();
+          console.log('Completed update.');
+
+          // Navigate back to schedule view
+          this.router.navigateByUrl('appointment');
+        }
       );
     }
-
-    // Navigate back to schedule view
-    this.router.navigateByUrl('appointment');
   }
 
   /**

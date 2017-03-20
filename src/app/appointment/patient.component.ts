@@ -5,6 +5,7 @@ import { MdDialogRef, MdDialog, MdDialogConfig }   from '@angular/material';
 
 import * as moment                                 from 'moment';
 import * as humanizeDuration                       from 'humanize-duration';
+import { SlimLoadingBarService }                   from 'ng2-slim-loading-bar';
 
 import { AppState }                                from '../app.service';
 import { Appointment }                             from '../api/model/appointment';
@@ -29,6 +30,7 @@ export class PatientComponent implements OnInit {
 
   constructor(
     private _state: AppState,
+    private slimLoadingBarService: SlimLoadingBarService,
     private appointmentService: AppointmentService,
     private viewAppointmentService: ViewAppointmentService,
     private patientService: PatientService,
@@ -51,6 +53,7 @@ export class PatientComponent implements OnInit {
     // Retrieve patient to be displayed from route and retrieve data from service
     let param: string = this.route.snapshot.params['id'];
 
+    this.slimLoadingBarService.start();
     this.patientService.patientFindById(param)
     .subscribe(
       (patient) => {
@@ -114,7 +117,8 @@ export class PatientComponent implements OnInit {
     this.viewAppointmentService.appointmentFind(JSON.stringify(filter))
     .subscribe(
       (appointments) => this.appointments = appointments,
-      (err) => console.log(err)
+      (err) => console.log(err),
+      () => this.slimLoadingBarService.complete()
     );
   }
 }

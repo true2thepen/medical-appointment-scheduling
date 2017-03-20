@@ -5,6 +5,7 @@ import { HttpModule }                   from '@angular/http';
 import { MaterialModule }               from '@angular/material';
 
 import { Md2Module }                    from 'md2';
+import { SlimLoadingBarModule }         from 'ng2-slim-loading-bar';
 
 import { BASE_PATH }                    from './api/variables';
 import { CANTY_CTI_HOST }               from './cantyCti.service';
@@ -29,6 +30,7 @@ import { XLargeDirective }              from './home/x-large/x-large.directive';
     HomeModule,
     MaterialModule.forRoot(),
     Md2Module.forRoot(),
+    SlimLoadingBarModule.forRoot(),
     AppRoutingModule
   ],
   declarations: [

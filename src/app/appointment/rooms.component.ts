@@ -3,8 +3,10 @@ import { ViewChildren }           from '@angular/core';
 import { QueryList }              from '@angular/core';
 import { Router }                 from '@angular/router';
 
+import { Observable }             from 'rxjs';
 import * as moment                from 'moment';
 import { Schedule }               from 'primeng/primeng';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
 import { AppState }               from '../app.service';
 import { Appointment }            from '../api/model/appointment';
@@ -31,6 +33,7 @@ export class AppointmentRoomsComponent implements OnInit {
   constructor(
     private _state: AppState,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private viewAppointmentService: ViewAppointmentService,
     private roomService: RoomService
   ) {}
@@ -77,28 +80,38 @@ export class AppointmentRoomsComponent implements OnInit {
     this.router.navigate(['appointment', event.calEvent.id]);
   }
 
-  private getAppointmentsByRoom(room: Room): void {
-    this.viewAppointmentService
+  private getAppointmentsByRoom(room: Room): Observable<Appointment[]> {
+    return this.viewAppointmentService
     .appointmentFind(`{"where": {"roomId": "${room.id}"}}`)
-    .subscribe(
-      (x) => this.appointmentsByRoom[room.id] = x,
-      (e) => console.log(e),
-      () => console.log(`Get all appointments for room ${room.name} complete`)
+    .do(
+      (x) => {
+        this.appointmentsByRoom[room.id] = x;
+      }
     );
   }
 
   private getAllRooms(): void {
+    this.slimLoadingBarService.start();
+    let appointmentObservables: Array<Observable<Appointment[]>> = [];
     this.roomService
     .roomFind()
     .subscribe(
       (x) =>  {
         this.rooms = x;
-        for (let room of x) {
-          this.getAppointmentsByRoom(room);
-        }
-      },
-      (e) => console.log(e),
-      () => console.log('Get all rooms complete')
+        this.rooms.map(
+          (room) => {
+            appointmentObservables.push(this.getAppointmentsByRoom(room));
+          }
+        );
+        Observable.forkJoin(appointmentObservables).subscribe(
+          () => this.slimLoadingBarService.progress +=
+            (100 / appointmentObservables.length),
+          (e) => console.log(e),
+          () => {
+            this.slimLoadingBarService.complete();
+          }
+        );
+      }
     );
   }
 

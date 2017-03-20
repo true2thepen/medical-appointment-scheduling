@@ -3,6 +3,7 @@ import { ViewChild }              from '@angular/core';
 
 import * as moment                from 'moment';
 import { Schedule }               from 'primeng/primeng';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
 import { AppState, Action }       from '../app.service';
 import { ViewAppointment }        from './appointment.viewmodel';
@@ -30,6 +31,7 @@ export class AnonComponent implements OnInit {
 
   constructor(
     private _state: AppState,
+    private slimLoadingBarService: SlimLoadingBarService,
     private viewAppointmentService: ViewAppointmentService,
     private patientService: PatientService
   ) {}
@@ -54,12 +56,16 @@ export class AnonComponent implements OnInit {
   }
 
   private getAllAppointments(): void {
+    this.slimLoadingBarService.start();
     this.viewAppointmentService
     .appointmentFindAnonymous()
     .subscribe(
       (x) => this.appointments = x,
       (e) => console.log(e),
-      () => console.log('Get all appointments complete')
+      () => {
+        console.log('Get all appointments complete');
+        this.slimLoadingBarService.complete();
+      }
     );
   }
 

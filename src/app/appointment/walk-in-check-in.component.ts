@@ -2,8 +2,11 @@
 
 import { Component, OnInit }      from '@angular/core';
 import { NgForm }                 from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router }                 from '@angular/router';
 import { FormControl }            from '@angular/forms';
+
+import * as moment                from 'moment';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 import { Observable }             from 'rxjs/Observable';
 
 import { AppState }               from '../app.service';
@@ -18,8 +21,6 @@ import { Room }                   from '../api/model/room';
 import { RoomService }            from '../api/api/room.service';
 import { Translation,
   getI18nStrings }                from './appointment.translations';
-
-import * as moment                from 'moment';
 
 @Component({
   templateUrl: './walk-in-check-in.component.html',
@@ -61,8 +62,8 @@ export class WalkInCheckInComponent implements OnInit {
 
   constructor(
     private _state: AppState,
-    private route: ActivatedRoute,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private appointmentService: AppointmentService,
     private examinationService: ExaminationService,
     private roomService: RoomService,
@@ -118,6 +119,7 @@ export class WalkInCheckInComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.slimLoadingBarService.start();
     let newAppointment: Appointment  = {
       title: this.model.title,
       description: this.model.description,
@@ -155,6 +157,8 @@ export class WalkInCheckInComponent implements OnInit {
           null,
           (err) => console.log(err),
           () => {
+            this.slimLoadingBarService.complete();
+
             // Navigate back to schedule view
             this.router.navigateByUrl('appointment/attendance');
           }

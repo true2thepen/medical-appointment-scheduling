@@ -1,12 +1,13 @@
-import { Component, OnInit }  from '@angular/core';
+import { Component, OnInit }      from '@angular/core';
 
-import * as moment            from 'moment';
-import * as async             from 'async';
+import * as moment                from 'moment';
+import * as async                 from 'async';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
-import { AppState }           from '../app.service';
-import { Attendance }         from '../api/model/attendance';
-import { AppointmentService } from '../api/api/appointment.service';
-import { AttendanceService }  from '../api/api/attendance.service';
+import { AppState }               from '../app.service';
+import { Attendance }             from '../api/model/attendance';
+import { AppointmentService }     from '../api/api/appointment.service';
+import { AttendanceService }      from '../api/api/attendance.service';
 
 declare var Plotly: any;
 
@@ -23,6 +24,7 @@ export class StatisticsComponent implements OnInit {
 
   constructor(
     private _state: AppState,
+    private slimLoadingBarService: SlimLoadingBarService,
     private attendanceService: AttendanceService,
     private appointmentService: AppointmentService
   ) {}
@@ -39,6 +41,7 @@ export class StatisticsComponent implements OnInit {
     this._state.primaryAction.next();
 
     // Retrieve data for statistics
+    this.slimLoadingBarService.start();
     this.attendanceService.attendanceFind()
     .subscribe(
       (attendances) => {
@@ -109,6 +112,7 @@ export class StatisticsComponent implements OnInit {
     };
 
     Plotly.newPlot('boxplot', plotData, layout, {displayModeBar: false});
+    this.slimLoadingBarService.complete();
   }
 }
 

@@ -1,8 +1,9 @@
 import { Component, OnInit }      from '@angular/core';
 import { NgForm }                 from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router }                 from '@angular/router';
 
 import * as moment                from 'moment';
+import { SlimLoadingBarService }  from 'ng2-slim-loading-bar';
 
 import { AppState }               from '../app.service';
 import { CantyCTIService }        from '../cantyCti.service';
@@ -29,8 +30,8 @@ export class AppointmentAttendanceComponent implements OnInit {
 
   constructor(
     private _state: AppState,
-    private route: ActivatedRoute,
     private router: Router,
+    private slimLoadingBarService: SlimLoadingBarService,
     private appointmentService: AppointmentService,
     private cantyCTIService: CantyCTIService) {}
 
@@ -60,6 +61,8 @@ export class AppointmentAttendanceComponent implements OnInit {
    * (present) patients.
    */
   public checkIn(appointment: any): void { // TODO Fix any ViewAppointment
+    this.slimLoadingBarService.start();
+
     // Prepare data
     let data: Attendance = {
       checkedIn: new Date()
@@ -75,6 +78,7 @@ export class AppointmentAttendanceComponent implements OnInit {
       (x) => appointment.attendance = x,
       (e) => console.log(e),
       () => {
+        this.slimLoadingBarService.complete();
         console.log('Written attendance successfully.');
         let index = this.appointmentsScheduled.indexOf(appointment);
         if (index > -1) {
@@ -91,6 +95,8 @@ export class AppointmentAttendanceComponent implements OnInit {
    * patients currently under treatment.
    */
   public underTreatment(appointment: any): void { // TODO Fix any ViewAppointment
+    this.slimLoadingBarService.start();
+
     // Prepare data
     let data: Attendance = {
       underTreatment: new Date()
@@ -106,6 +112,7 @@ export class AppointmentAttendanceComponent implements OnInit {
       (x) => appointment.attendance = x,
       (e) => console.log(e),
       () => {
+        this.slimLoadingBarService.complete();
         console.log('Updated attendance successfully.');
         let index = this.appointmentsCheckedIn.indexOf(appointment);
         if (index > -1) {
@@ -122,6 +129,8 @@ export class AppointmentAttendanceComponent implements OnInit {
    * of patients that are finished.
    */
   public checkOut(appointment: any): void { // TODO Fix any ViewAppointment
+    this.slimLoadingBarService.start();
+
     // Prepare data
     let data: Attendance = {
       finished: new Date()
@@ -138,6 +147,7 @@ export class AppointmentAttendanceComponent implements OnInit {
       (e) => console.log(e),
       () => {
         console.log('Updated attendance successfully.');
+        this.slimLoadingBarService.complete();
         let index = this.appointmentsUnderTreatment.indexOf(appointment);
         if (index > -1) {
           this.appointmentsUnderTreatment.splice(index, 1);
@@ -155,6 +165,7 @@ export class AppointmentAttendanceComponent implements OnInit {
   }
 
   private getTodaysAppointments(): void {
+    this.slimLoadingBarService.start();
     let start = moment.utc().startOf('day');
     let end = moment.utc().endOf('day');
     this.appointmentService
@@ -215,7 +226,10 @@ export class AppointmentAttendanceComponent implements OnInit {
         }
       },
       (e) => console.log(e),
-      () => console.log('Get today\'s appointments completed.')
+      () => {
+        this.slimLoadingBarService.complete();
+        console.log('Get today\'s appointments completed.');
+      }
     );
   }
 }
