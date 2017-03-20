@@ -50,15 +50,16 @@ export class PatientComponent implements OnInit {
 
     // Retrieve patient to be displayed from route and retrieve data from service
     let param: string = this.route.snapshot.params['id'];
+
     this.patientService.patientFindById(param)
     .subscribe(
       (patient) => {
         this.patient = patient;
         this._state.title.next(patient.givenName + ' ' + patient.surname);
+        this.findAppointmentsForPatient(this.patient.id);
       },
       (err) => console.log(err)
     );
-    this.findAppointmentsForPatient(this.patient.id);
 
     // Set up localized humanizer for durations
     this.localeHumanizer = humanizeDuration.humanizer({
