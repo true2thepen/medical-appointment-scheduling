@@ -57,14 +57,10 @@ export class ViewAppointmentService {
             x[i].backgroundColor = x[i].examinations[0].backgroundColor;
             x[i].borderColor = x[i].backgroundColor;
           }
-          x.examinations = undefined;
-          // Event title display
-          if (!x[i].title) {
-            if (x[i].patient) {
-              x[i].title = null;
-            }
-          }
-          x.patient = undefined;
+          x[i].examinations = undefined;
+          x[i].title = undefined;
+          x[i].patient = undefined;
+          x[i].description = undefined;
         }
         return x;
       });
