@@ -1,18 +1,20 @@
-<md-grid-list *ngIf="rooms" [cols]="rooms.length" rowHeight="750px" gutterSize="12px">
-   <md-grid-tile *ngFor="let room of rooms">
-     <md-card class="appointment-by-room-card">
+<md-grid-list *ngIf="rooms" [cols]="3" rowHeight="750px" gutterSize="32px">
+   <md-grid-tile *ngFor="let room of rooms" class="mat-elevation-z2">
+     <md-card>
       <md-card-title>
         {{ room.name }}
       </md-card-title>
       <md-card-content>
         <p-schedule
-        header="false"
+        [header]="false"
+        [nowIndicator]="true"
         defaultView="agendaDay"
+        [allDaySlot]="false"
         [locale]="locale"
         [minTime]=minTime
         [maxTime]=maxTime
         [events]="appointmentsByRoom[room.id]"
-        [height]="750"
+        [height]="700"
         [locale]="locale"
         timezone="local"
         (onEventClick)="handleEventClick($event)">

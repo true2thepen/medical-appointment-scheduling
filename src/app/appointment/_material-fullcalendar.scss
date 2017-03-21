@@ -1,3 +1,5 @@
+@import '../app.theme.scss';
+
 /*!
  * FullCalendar v3.0.1 Stylesheet
  * Docs & License: http://fullcalendar.io/
@@ -335,6 +337,7 @@ previous button's border...
 :host /deep/ .fc-divider {
   border-style: solid;
   border-width: 1px;
+  border-color: mat-color($primary);
 }
 
 hr.fc-divider {
@@ -782,7 +785,7 @@ tr:first-child > td > .fc-day-grid-event {
   padding: 12px 8px 12px 8px;
   border-width: 0;
   font-weight: normal; // overwrites browser default bold for th
-  color: rgba(black, 0.8); // TODO
+  color: rgba(black, 0.6); // TODO
   text-align: left;
 }
 
@@ -833,7 +836,7 @@ tr:first-child > td > .fc-day-grid-event {
 
 :host /deep/ .fc-now-indicator {
   position: absolute;
-  border: 0 solid red;
+  border: 0 solid mat-color($accent);
 }
 
 
