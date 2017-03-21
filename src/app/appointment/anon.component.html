@@ -1,14 +1,20 @@
-<div class="schedule-container" style="height: calc(100vh - 64px);">
-  <p-schedule *ngIf="!refreshCalendar"
-              [events]=appointments
-              contentHeight="auto"
-              header="false"
-              [defaultView]=viewMode
-              [hiddenDays]=hiddenDays
-              eventLimit="true"
-              [locale]="locale"
-              [minTime]=minTime
-              [maxTime]=maxTime
-              [defaultDate]=viewDate
-              timezone="local"></p-schedule>
-</div>
+<md-card>
+  <md-card-content>
+    <div class="schedule-container">
+      <p-schedule *ngIf="!refreshCalendar"
+                  [events]=appointments
+                  [height]="700"
+                  [allDaySlot]="false"
+                  header="false"
+                  [defaultView]=viewMode
+                  [hiddenDays]=hiddenDays
+                  [eventLimit]="true"
+                  [locale]="locale"
+                  [minTime]=minTime
+                  [maxTime]=maxTime
+                  [defaultDate]=viewDate
+                  timezone="local">
+      </p-schedule>
+    </div>
+  </md-card-content>
+</md-card>

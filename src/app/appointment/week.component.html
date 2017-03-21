@@ -1,16 +1,22 @@
-<div class="schedule-container" style="height: calc(100vh - 64px);">
-  <p-schedule *ngIf="!refreshCalendar"
-              (onEventClick)="handleEventClick($event)"
-              [defaultDate]=viewDate
-              [defaultView]=viewMode
-              [events]=appointments
-              [hiddenDays]=hiddenDays
-              [locale]="locale"
-              [maxTime]=maxTime
-              [minTime]=minTime
-              contentHeight="auto"
-              eventLimit="true"
-              header="false"
-              timezone="local">
-  </p-schedule>
-</div>
+<md-card>
+  <md-card-content>
+    <div class="schedule-container">
+      <p-schedule *ngIf="!refreshCalendar"
+                  (onEventClick)="handleEventClick($event)"
+                  [defaultDate]=viewDate
+                  [defaultView]=viewMode
+                  [events]=appointments
+                  [hiddenDays]=hiddenDays
+                  [locale]="locale"
+                  [maxTime]=maxTime
+                  [minTime]=minTime
+                  [height]="700"
+                  [allDaySlot]="false"
+                  [eventLimit]="false"
+                  [nowIndicator]="true"
+                  header="false"
+                  timezone="local">
+      </p-schedule>
+    </div>
+  </md-card-content>
+</md-card>

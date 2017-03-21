@@ -400,6 +400,15 @@ hr.fc-divider {
   background-color: rgba(#009688, 0.1);
 }
 
+:host /deep/ .fc th.fc-today {
+  color: mat-color($primary);
+  font-weight: 500;
+}
+
+:host /deep/ .fc td.fc-today {
+  background-color: transparentize(mat-color($primary), 0.9);
+}
+
 :host /deep/ .fc .fc-agendaDay-view th,
 :host /deep/ .fc .fc-agendaDay-view td {
   border-left-style: none;
@@ -1040,6 +1049,8 @@ tr:first-child > td > .fc-day-grid-event {
   vertical-align: middle;
   padding: 0 4px;
   white-space: nowrap;
+  border: none;
+  padding-right: 42px;
 }
 
 :host /deep/ .fc-ltr .fc-axis {
