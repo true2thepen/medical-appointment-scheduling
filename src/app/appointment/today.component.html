@@ -1,6 +1,16 @@
-<p-schedule [events]="appointments"
-            header="false"
-            [defaultView]="defaultView"
-            timezone="local"
-            [locale]="locale"
-            (onEventClick)="handleEventClick($event)"></p-schedule>
+<div id="wrapper" class="card-centered-wrapper">
+  <md-card class="card-centered-600">
+    <md-card-content>
+      <div class="schedule-container">
+        <p-schedule [events]="appointments"
+                    header="false"
+                    [height]="700"
+                    [defaultView]="defaultView"
+                    timezone="local"
+                    [locale]="locale"
+                    (onEventClick)="handleEventClick($event)">
+        </p-schedule>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

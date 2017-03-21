@@ -400,12 +400,13 @@ hr.fc-divider {
   background-color: rgba(#009688, 0.1);
 }
 
-:host /deep/ .fc th.fc-today {
+:host /deep/ .fc .fc-basicWeek-view th.fc-today {
   color: mat-color($primary);
   font-weight: 500;
 }
 
-:host /deep/ .fc td.fc-today {
+// Active day background color
+:host /deep/ .fc .fc-basicWeek-view td.fc-today {
   background-color: transparentize(mat-color($primary), 0.9);
 }
 
