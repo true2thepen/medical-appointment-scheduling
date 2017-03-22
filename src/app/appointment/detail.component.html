@@ -53,18 +53,18 @@
 
         <h3 i18n="Section header for appointment form">Details</h3>
 
-        <!-- Date and time input -->
-        <div>
-          <md2-datepicker [(ngModel)]="model.date" type="date" name="date" required="true" [placeholder]="trans.date"></md2-datepicker>
-          <md2-datepicker [(ngModel)]="model.time" type="time" name="time" required="true" [placeholder]="trans.time"></md2-datepicker>
-        </div>
-
         <!-- Duration input -->
         <div>
           <md-input-container class="duration-input">
             <input mdInput [formControl]="durationControl" [(ngModel)]="model.duration" [placeholder]="trans.duration" required="true" name="duration" pattern="^[0-9]+H[0-9]+M|[0-9]+[M|H]$">
             <md-hint align="end" i18n class="example-input-hint">e.g.: 30M, 1H, 1H40M etc.</md-hint>
           </md-input-container>
+        </div>
+
+        <!-- Date and time input -->
+        <div class="datetime-input">
+          <md2-datepicker [(ngModel)]="model.date" type="date" name="date" required="true" [placeholder]="trans.date"></md2-datepicker>
+          <md2-datepicker [(ngModel)]="model.time" type="time" name="time" required="true" [placeholder]="trans.time"></md2-datepicker>
         </div>
 
         <!-- Title input -->
