@@ -15,7 +15,7 @@
   </md-card>
 
   <!-- Section title -->
-  <div class="section-title" i18n>UPCOMING APPOINTMENTS</div>
+  <div *ngIf="appointments && appointments.length" class="section-title" i18n>UPCOMING APPOINTMENTS</div>
 
   <!-- Show scheduled appointments for patient -->
   <md-card *ngFor="let appointment of appointments" class="card-centered-600">
