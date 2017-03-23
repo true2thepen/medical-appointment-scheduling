@@ -2,6 +2,136 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="d3f7a01d1b5f1aec94e094c66b94e6d2c29943d4" datatype="html">
+        <source>Insert test examinations</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="1c1a2d23e5359482e96c4d86662a59ec9e2b1127" datatype="html">
+        <source>Examination group</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="1b8c2008ce5428bd8dabf6980d3163af4c7b02f0" datatype="html">
+        <source>CANCEL</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="7e6c975ebea8b5f8b120905ca7acf9f8edf59d8e" datatype="html">
+        <source>OK</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c027751710e0aea7fd9e9be5d048aa2cdb87ff04" datatype="html">
+        <source>Attendance List</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="5bb4a09a669f55893c9a37a8480c8fa3f7ce5702" datatype="html">
+        <source>Month</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="73339760fe932d2b494728d4366947755d127e00" datatype="html">
+        <source>Week</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="7fb1099e29660162f9154d5b2feee7743a423df6" datatype="html">
+        <source>Today</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="d3dfb1ca49bb491ad804012a2ea1838e9e263cfd" datatype="html">
+        <source>Rooms</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="61e0f26d843eec0b33ff475e111b0c2f7a80b835" datatype="html">
+        <source>Statistics</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="ca1c51c72432f13b344689dd3ba108f27ab10f5c" datatype="html">
+        <source>Anonymized View</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="8f6dbe6f9be27ce81f3c93224b137fd6961144c0" datatype="html">
+        <source>
+        Insert Test-Examinations
+      </source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="965e90bee6f44c2bee46d748b24bd7165f052f42" datatype="html">
+        <source>Insert Test-Rooms</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="537f18ac18b5713da99d08564d4085425c7cba14" datatype="html">
+        <source>Insert Test-Patients</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="1d13badbb66e3f6b78d2507d5d5d94d63529669e" datatype="html">
+        <source>
+        Create random appointments
+      </source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="383b528f8c906e90b6495f7152a6aabcae1a07ad" datatype="html">
+        <source>
+        Create random attendances
+      </source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="24775b72f6757ca4477f42e355c68939404b02fb" datatype="html">
+        <source>Delete All Appointments</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="4e79d428eb96a0f41a95982a9c34644653898c84" datatype="html">
+        <source>Delete All Attendances</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="ba452fca523c8f994cbddf19aced5e2f01c5b2e1" datatype="html">
+        <source>Delete All Rooms</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="263e20979f90f9286e89c33273756c7c76d68261" datatype="html">
+        <source>Delete All Patients</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="a33ba5d49ddb7a797c154e91cad54fc02f019e4f" datatype="html">
+        <source>Delete All Examinations</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="830c890473655e8cc093f145d07425bc4d7ef826" datatype="html">
+        <source>Appointment Accepted</source>
+        <target/>
+        <note priority="1" from="description">Title for appointment accepted card</note>
+      </trans-unit>
+      <trans-unit id="9452d64b8d65fe0aa443fcb48ae1dfe3637c2478" datatype="html">
+        <source>You have successfully accepted your appointment.</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="2b70e86801585d4edc8b7cec76c76fd0eb4f59a2" datatype="html">
+        <source>Details:</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="7a0cbea7e43e15e42416155d65a801116342b3e1" datatype="html">
+        <source><x id="INTERPOLATION"/></source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="b1eb1ef5e2e9e258f143e9854cd5f5dbd191d846" datatype="html">
+        <source>Appointment Expired</source>
+        <target/>
+        <note priority="1" from="description">Title for offer error</note>
+      </trans-unit>
+      <trans-unit id="a6caf908bfffb0308bc41c6d9fde4e385180b2e4" datatype="html">
+        <source>
+        It looks like this offer for an appointment already expired.
+      </source>
+        <target/>
+        <note priority="1" from="description">Error message telling an offer has expired</note>
+      </trans-unit>
+      <trans-unit id="18567f0f642aacc0adddce8af84716c68e51d2a3" datatype="html">
+        <source>
+        You can always get a new one by mailing to
+        <x id="START_LINK" ctype="x-a"/>
+          auto-appointment@sebastianhaas.online
+        <x id="CLOSE_LINK" ctype="x-a"/>
+        or calling us directly at 269-852-0681.
+      </source>
+        <target/>
+        <note priority="1" from="description">Hint that it&apos;s always possible to get a new offer</note>
+      </trans-unit>
       <trans-unit id="5e420747842373fa99a75a7a18df068cc81e46fb" datatype="html">
         <source>Scheduled</source>
         <target/>
@@ -12,7 +142,7 @@
         <target/>
         <note priority="1" from="description">Blank message</note>
       </trans-unit>
-      <trans-unit id="73fd32dac256d794e963fc804d303d63949dd4c5" datatype="html">
+      <trans-unit id="885cfa4a43287d1dcea77693f8200ac7bbff5278" datatype="html">
         <source>
           Scheduled for <x id="INTERPOLATION"/>, <x id="INTERPOLATION_1"/>
         </source>
@@ -34,9 +164,9 @@
         <target/>
         <note priority="1" from="description">Blank message</note>
       </trans-unit>
-      <trans-unit id="7b6f214d132da1ff1d10b811e4a1b8223f0a09fb" datatype="html">
+      <trans-unit id="df8518a97c477ce73e9b44e01ff9e6765b7c8a9b" datatype="html">
         <source>
-          Waiting since <x id="INTERPOLATION"/>
+          Waiting <x id="INTERPOLATION"/>
         </source>
         <target/>
         <note priority="1" from="description">Appointment waiting duration info</note>
@@ -56,9 +186,9 @@
         <target/>
         <note priority="1" from="description">Blank message</note>
       </trans-unit>
-      <trans-unit id="ac3d8689fb5d88458762da70fc56497d49ac0fff" datatype="html">
+      <trans-unit id="17306f1186a06f2ba7118ef0da315e990d773925" datatype="html">
         <source>
-          Under treatment since <x id="INTERPOLATION"/>
+          Under treatment <x id="INTERPOLATION"/>
         </source>
         <target/>
         <note priority="1" from="description">Appointment under treatment duration info</note>
@@ -84,6 +214,159 @@
         </source>
         <target/>
         <note priority="1" from="description">Appointment finished duration info</note>
+      </trans-unit>
+      <trans-unit id="552701d0f112c8f94efd9efbd1dd1d8d022782d4" datatype="html">
+        <source>Go to patient</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="f64e8394736747ed3ba715808e1be2be6264e015" datatype="html">
+        <source>On <x id="INTERPOLATION"/> at <x id="INTERPOLATION_1"/></source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c579a35156940ef439082b06bdaea30f4f778073" datatype="html">
+        <source>EDIT</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="c7c1fe4a9939b04b36b9856e2dc831d1fb334651" datatype="html">
+        <source>New Appointment</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="967c9a5297edd4fb99dc049fa515d4cbfe1b7cec" datatype="html">
+        <source>Update Appointment</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="b71c79465c4cce3c41df67f60697bf77fc515e4d" datatype="html">
+        <source>Patient</source>
+        <target/>
+        <note priority="1" from="description">Section header for appointment form</note>
+      </trans-unit>
+      <trans-unit id="dc9c320e0f608c980d86b92777ac55cdbc9d5825" datatype="html">
+        <source>Examinations</source>
+        <target/>
+        <note priority="1" from="description">Section header for appointment form</note>
+      </trans-unit>
+      <trans-unit id="4f8b2bb476981727ab34ed40fde1218361f92c45" datatype="html">
+        <source>Details</source>
+        <target/>
+        <note priority="1" from="description">Section header for appointment form</note>
+      </trans-unit>
+      <trans-unit id="a02ea1d4e7424ca989929da5e598f379940fdbf2" datatype="html">
+        <source>Duration</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="70242d5078edbdc8705bf2ee0fc4824e6913c1ad" datatype="html">
+        <source>e.g.: 30M, 1H, 1H40M etc.</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="2f933b826a570836cab04f683970a2d22068458c" datatype="html">
+        <source>Date</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="b24f1cd32cbc1ec9537af28c4fe1b8204097714b" datatype="html">
+        <source>Time</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e" datatype="html">
+        <source>Title</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
+        <source>Description</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="02969438a91ab2201026e0f585ac971cb6f59338" datatype="html">
+        <source>Room</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="791102e6d464cd44242ae8856a50f224b4038709" datatype="html">
+        <source>
+            Reminders
+          </source>
+        <target/>
+        <note priority="1" from="description">Section hedaer for appointment form</note>
+      </trans-unit>
+      <trans-unit id="5ebf64a14a50f1608533866c5a8ba4a08c5192cf" datatype="html">
+        <source>
+                Send email reminder <x id="START_TAG_SPAN" ctype="x-span"/>(<x id="INTERPOLATION"/>)<x id="CLOSE_TAG_SPAN" ctype="x-span"/>
+              </source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="b28566572b3a60f9fece81421e9aafb0376deded" datatype="html">
+        <source>
+                Send text message reminder <x id="START_TAG_SPAN" ctype="x-span"/>(<x id="INTERPOLATION"/>)<x id="CLOSE_TAG_SPAN" ctype="x-span"/>
+              </source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="cf272d006ff8c0b60e61b14e17fa6a39b30d614a" datatype="html">
+        <source>SAVE</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="8332d7e70c7971eeee54f4570945f1b4aaaeb961" datatype="html">
+        <source>SUGGESTED TIME SLOTS</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="1e45671af4261dad201f848d6dcd4c05adfba4fe" datatype="html">
+        <source>In <x id="INTERPOLATION"/></source>
+        <target/>
+        <note priority="1" from="description">Date overview in suggested appoitment</note>
+      </trans-unit>
+      <trans-unit id="18c3261ac8722dc5eae2a6d30a3fef0f01270b63" datatype="html">
+        <source><x id="INTERPOLATION"/>, <x id="INTERPOLATION_1"/> Minutes</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="0d5c2bf17eba2a348c7fc8d642eaacf7c82d76ed" datatype="html">
+        <source>APPLY</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="970452e99d5672d1fa9b8641448315bcfe5ad444" datatype="html">
+        <source>Do you really want to cancel this appointment?</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="83944638a9e91f0dc697e473bc81256088177caf" datatype="html">
+        <source>YES</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="125e145c96fb5463c13ad84ffaab4ba46b12b9d2" datatype="html">
+        <source>NO</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="5dcb894e221f60eabc864b9e47a2ea4ebae11979" datatype="html">
+        <source>Patient Data</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="8079ba78306e191313f854f09971e299b065635d" datatype="html">
+        <source>Loading patient data...</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="a2fcbded07f3c944c5bba5fa657437ff49a780b4" datatype="html">
+        <source>UPCOMING APPOINTMENTS</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="26a1f8650331f43394e332ae915b871ec08093a3" datatype="html">
+        <source>
+      <x id="INTERPOLATION"/>, <x id="INTERPOLATION_1"/>
+    </source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="6bf68f9f3b6d0ecc512f3d6ffc9206b2a9a8d8c2" datatype="html">
+        <source>CANCEL APPOINTMENT</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="a4fa463dd713afa46c5e049ba31300c2647a123e" datatype="html">
+        <source>Delays by Day</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="2591b387626ae983224ca6c91d9c206edfe12c69" datatype="html">
+        <source>Sorry, no attendances yet.</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="aa93a1a5fca4fbd02af503a505ed78e87351a967" datatype="html">
+        <source>Check in walk-in patient</source>
+        <target/>
+      </trans-unit>
+      <trans-unit id="bf07965e5f5783a6c41324493195cb6d8be4d79b" datatype="html">
+        <source>SAVE &amp; CHECK IN</source>
+        <target/>
       </trans-unit>
     </body>
   </file>

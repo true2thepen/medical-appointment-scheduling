@@ -25,8 +25,6 @@ import { Room }                    from '../api/model/room';
 import { RoomService }             from '../api/api/room.service';
 import { NotificationService }     from '../api/api/notification.service';
 import { NotificationBuilder }     from './notificationBuilder';
-import { Translation,
-  getI18nStrings }                 from './appointment.translations';
 
 @Component({
   templateUrl: './detail.component.html',
@@ -36,7 +34,6 @@ import { Translation,
 export class AppointmentDetailComponent implements OnInit {
 
   public editing: boolean = false;
-  public trans: Translation;
   public rooms: Room[] = undefined;
 
   // Patient autocomplete field
@@ -101,7 +98,6 @@ export class AppointmentDetailComponent implements OnInit {
 
     // Set up localization
     this.isTwelveHours = this.isCurrentLocaleUsingTwelveHours();
-    this.trans = getI18nStrings();
 
     // Set up rooms control (retrieve all rooms)
     this.getAllRooms();

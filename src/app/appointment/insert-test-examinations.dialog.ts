@@ -4,9 +4,12 @@ import { MdDialogRef } from '@angular/material';
 @Component({
   selector: 'insert-test-examinations-dialog',
   template: `
-    <h1 i18n md-dialog-title>Insert examinations</h1>
+    <h1 i18n md-dialog-title>Insert test examinations</h1>
     <div md-dialog-content>
-      <md-select #examinationSelect placeholder="Examination group" required="true">
+      <md-select #examinationSelect
+        i18n-placeholder
+        placeholder="Examination group"
+        required="true">
         <md-option *ngFor="let group of examinationGroups" [value]="group.sectionNumber">
           {{ group.title }}
         </md-option>
