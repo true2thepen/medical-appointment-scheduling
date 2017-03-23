@@ -5,8 +5,8 @@ import { MdDialogRef } from '@angular/material';
   selector: 'patient-cancel-appointment-dialog',
   template: `
   <p i18n>Do you really want to cancel this appointment?</p>
-  <button i18n type="button" (click)="dialogRef.close('yes')">YES</button>
-  <button i18n type="button" (click)="dialogRef.close('no')">NO</button>
+  <button md-button i18n type="button" (click)="dialogRef.close('yes')">YES</button>
+  <button md-button i18n type="button" (click)="dialogRef.close('no')">NO</button>
   `
 })
 export class PatientCancelAppointmentDialogComponent {

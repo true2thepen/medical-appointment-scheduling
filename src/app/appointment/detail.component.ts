@@ -214,7 +214,7 @@ export class AppointmentDetailComponent implements OnInit {
     // ...or update
     } else {
       this.appointmentService
-      .appointmentPrototypeUpdateAttributes(this.model.id.toString(), newAppointment)
+      .appointmentPrototypePatchAttributes(this.model.id.toString(), newAppointment)
       .subscribe(
         (x) => {
           // Before linking examinations, we actually have to get rid of existing ones
