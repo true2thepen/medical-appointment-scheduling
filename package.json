@@ -34,7 +34,7 @@
     "e2e:travis": "npm-run-all -p -r server:prod:ci protractor:delay",
     "e2e": "npm-run-all -p -r server:prod:ci protractor",
     "heroku-postbuild": "npm run build:prod && mv dist/index.html dist/200.html",
-    "i18n": "ng-xi18n -p ./tsconfig.json",
+    "i18n": "ng-xi18n --i18nFormat=xmb -p ./tsconfig.json -o",
     "lint": "npm run tslint",
     "postinstall": "npm run webdriver:update && sh bin/third-party-fixes.sh",
     "postversion": "git push && git push --tags",

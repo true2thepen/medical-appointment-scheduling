@@ -21,7 +21,7 @@ import { AboutComponent }                 from './about/about.component';
 import { NoContentComponent }             from './no-content/no-content.component';
 import { XLargeDirective }                from './home/x-large/x-large.directive';
 import {
-  InsertTestExaminationsDialogComponent } from './appointment/insert-test-examinations.dialog';
+  InsertTestExaminationsDialogComponent } from './insert-test-examinations.dialog';
 
 @NgModule({
   imports: [

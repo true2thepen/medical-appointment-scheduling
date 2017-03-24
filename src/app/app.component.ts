@@ -23,7 +23,7 @@ import { RoomService }                    from './api/api/room.service';
 import { CantyCTIService,
   IncomingCallState }                     from './cantyCti.service';
 import {
-  InsertTestExaminationsDialogComponent } from './appointment/insert-test-examinations.dialog';
+  InsertTestExaminationsDialogComponent } from './insert-test-examinations.dialog';
 
 /*
  * App Component
@@ -63,7 +63,6 @@ export class AppComponent implements OnInit {
     private viewContainerRef: ViewContainerRef) {}
 
   public ngOnInit() {
-    this._state.ensureLocale(); // Make sure locale is set
     console.log('Locale is %s', localStorage.getItem('locale'));
 
     // Listen for title changes

@@ -20,7 +20,7 @@
   <!-- Show scheduled appointments for patient -->
   <md-card *ngFor="let appointment of appointments" class="card-centered-600">
     <md-card-title>{{appointment.start | amDateFormat:'LL'}}</md-card-title>
-    <md-card-subtitle i18n>
+    <md-card-subtitle>
       {{appointment.start | amDateFormat:'LT'}}, {{formatDuration(appointment)}}
     </md-card-subtitle>
     <md-card-content>

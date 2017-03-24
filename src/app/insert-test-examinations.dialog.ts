@@ -1,5 +1,5 @@
-import { Component }   from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MdDialogRef }       from '@angular/material';
 
 @Component({
   selector: 'insert-test-examinations-dialog',
@@ -35,9 +35,11 @@ import { MdDialogRef } from '@angular/material';
     h1 { font-family: "Roboto"; }
   `]
 })
-export class InsertTestExaminationsDialogComponent {
+export class InsertTestExaminationsDialogComponent implements OnInit {
 
-  public examinationGroups = [
+  public examinationGroups = [];
+
+  private examinationGroupsEn = [
     {
       sectionNumber: '0',
       title: 'Procedures And Interventions, Not Elsewhere Classified'
@@ -112,5 +114,86 @@ export class InsertTestExaminationsDialogComponent {
     }
   ];
 
+  private examinationGroupsDe = [
+    {
+      sectionNumber: '0',
+      title: 'Nicht anderweitig klassifizierte Behandlungen'
+    },
+    {
+      sectionNumber: '1',
+      title: 'Behandlungen am Nervensystem'
+    },
+    {
+      sectionNumber: '2',
+      title: 'Behandlungen am endokrinen System'
+    },
+    {
+      sectionNumber: '3',
+      title: 'Behandlungen am Auge'
+    },
+    {
+      sectionNumber: '3A',
+      title: 'Andere diagnostische und therapeuthische Prozeduren'
+    },
+    {
+      sectionNumber: '4',
+      title: 'Behandlungen am Ohr'
+    },
+    {
+      sectionNumber: '5',
+      title: 'Behandlungen an Nase, Mund und Pharynx'
+    },
+    {
+      sectionNumber: '6',
+      title: 'Behandlungen am Atemtrakt'
+    },
+    {
+      sectionNumber: '7',
+      title: 'Behandlungen am kardiovaskulären System'
+    },
+    {
+      sectionNumber: '8',
+      title: 'Behandlungen am hämatologischen und lymphatischen System'
+    },
+    {
+      sectionNumber: '9',
+      title: 'Behandlungen am Verdauungstrakt'
+    },
+    {
+      sectionNumber: '10',
+      title: 'Behandlungen an den Harnwegen'
+    },
+    {
+      sectionNumber: '11',
+      title: 'Behandlungen am männlichen Genitaltrakt'
+    },
+    {
+      sectionNumber: '12',
+      title: 'Behandlungen am weiblichen Genitaltrakt'
+    },
+    {
+      sectionNumber: '13',
+      title: 'Geburtshilfe'
+    },
+    {
+      sectionNumber: '14',
+      title: 'Behandlungen am Bewegungsapparat'
+    },
+    {
+      sectionNumber: '15',
+      title: 'Behandlungen der Haut'
+    },
+    {
+      sectionNumber: '16',
+      title: 'Verschiedene diagnostische und therapeuthische Prozeduren'
+    }
+  ];
+
   constructor(public dialogRef: MdDialogRef<InsertTestExaminationsDialogComponent>) {}
+
+  public ngOnInit() {
+    this.examinationGroups = localStorage.getItem('locale').startsWith('de') ?
+      this.examinationGroupsDe :
+      this.examinationGroupsEn;
+  }
 }
