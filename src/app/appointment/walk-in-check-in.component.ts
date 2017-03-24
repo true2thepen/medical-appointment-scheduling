@@ -181,8 +181,8 @@ export class WalkInCheckInComponent implements OnInit {
 
   private linkExaminationWithAppointment(appointment: Appointment, examination: Examination) {
     this.appointmentService.appointmentPrototypeLinkExaminations(
-      examination.id.toString(),
-      appointment.id.toString())
+      appointment.id.toString(),
+      examination.id.toString())
     .subscribe(
       (x) => console.log(
         `Linked examination ${x.examinationId} with appointment ${x.appointmentId}`
