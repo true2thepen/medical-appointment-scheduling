@@ -55,3 +55,7 @@ md-sidenav-container, .my-content {
     top: 48px;
   }
 }
+
+.md-toolbar-fill-remaining-space {
+  flex: 1 1 auto;
+}
