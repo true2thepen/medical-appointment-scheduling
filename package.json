@@ -110,7 +110,7 @@
     "@angular/compiler-cli": "2.4.10",
     "@angular/platform-server": "2.4.10",
     "@types/async": "2.0.40",
-    "@types/core-js": "0.9.39",
+    "@types/core-js": "0.9.41",
     "@types/hammerjs": "2.0.34",
     "@types/handlebars": "^4.0.31",
     "@types/jasmine": "2.5.46",
